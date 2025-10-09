@@ -1,0 +1,197 @@
+import AdminSidebar from "@/components/admin/Sidebar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
+
+const stats = [
+  {
+    title: "Doanh thu hôm nay",
+    value: "15.450.000đ",
+    change: "+12.5%",
+    trend: "up",
+    icon: DollarSign,
+  },
+  {
+    title: "Đơn hàng",
+    value: "156",
+    change: "+8.2%",
+    trend: "up",
+    icon: ShoppingCart,
+  },
+  {
+    title: "Khách hàng mới",
+    value: "24",
+    change: "-3.1%",
+    trend: "down",
+    icon: Users,
+  },
+  {
+    title: "Sản phẩm bán chạy",
+    value: "89",
+    change: "+15.3%",
+    trend: "up",
+    icon: Package,
+  },
+];
+
+const recentOrders = [
+  { id: "ORD001", customer: "Nguyễn Văn A", total: 165000, status: "preparing", time: "10 phút trước" },
+  { id: "ORD002", customer: "Trần Thị B", total: 95000, status: "completed", time: "25 phút trước" },
+  { id: "ORD003", customer: "Lê Văn C", total: 120000, status: "preparing", time: "35 phút trước" },
+  { id: "ORD004", customer: "Phạm Thị D", total: 75000, status: "completed", time: "1 giờ trước" },
+];
+
+const AdminDashboard = () => {
+  return (
+    <div className="flex min-h-screen bg-background">
+      <AdminSidebar />
+      
+      <main className="flex-1 p-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
+          <p className="text-muted-foreground">Theo dõi hoạt động kinh doanh</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
+            return (
+              <Card key={index} className="animate-fade-up" style={{ animationDelay: `${index * 50}ms` }}>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    {stat.title}
+                  </CardTitle>
+                  <Icon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                  <div className="flex items-center gap-1 text-sm mt-1">
+                    <TrendIcon className={`h-4 w-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"}`} />
+                    <span className={stat.trend === "up" ? "text-green-500" : "text-red-500"}>
+                      {stat.change}
+                    </span>
+                    <span className="text-muted-foreground">so với hôm qua</span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Charts & Tables */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Revenue Chart Placeholder */}
+          <Card className="animate-fade-up" style={{ animationDelay: "200ms" }}>
+            <CardHeader>
+              <CardTitle>Doanh thu 7 ngày</CardTitle>
+              <CardDescription>Biểu đồ doanh thu theo ngày</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 flex items-center justify-center bg-secondary/20 rounded-lg">
+                <p className="text-muted-foreground">Biểu đồ doanh thu</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recent Orders */}
+          <Card className="animate-fade-up" style={{ animationDelay: "300ms" }}>
+            <CardHeader>
+              <CardTitle>Đơn hàng gần đây</CardTitle>
+              <CardDescription>Cập nhật realtime</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentOrders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">#{order.id}</p>
+                      <p className="text-sm text-muted-foreground">{order.customer}</p>
+                      <p className="text-xs text-muted-foreground">{order.time}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-primary">{order.total.toLocaleString('vi-VN')}đ</p>
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {order.status === 'completed' ? 'Hoàn thành' : 'Đang làm'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Additional Stats */}
+        <div className="grid lg:grid-cols-3 gap-6 mt-6">
+          <Card className="animate-fade-up" style={{ animationDelay: "400ms" }}>
+            <CardHeader>
+              <CardTitle>Top sản phẩm</CardTitle>
+              <CardDescription>Bán chạy nhất tuần này</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {["Signature Latte", "Cappuccino", "Croissant Bơ"].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center">
+                    <span className="text-sm">{item}</span>
+                    <span className="font-bold text-primary">{(idx + 1) * 45} ly</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="animate-fade-up" style={{ animationDelay: "450ms" }}>
+            <CardHeader>
+              <CardTitle>Chi phí</CardTitle>
+              <CardDescription>Chi phí hôm nay</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Nguyên liệu</span>
+                  <span className="font-medium">3.250.000đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Nhân sự</span>
+                  <span className="font-medium">1.800.000đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Khác</span>
+                  <span className="font-medium">450.000đ</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="animate-fade-up" style={{ animationDelay: "500ms" }}>
+            <CardHeader>
+              <CardTitle>Thống kê</CardTitle>
+              <CardDescription>Tổng quan tháng này</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Tổng doanh thu</span>
+                  <span className="font-bold text-green-600">245.000.000đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Tổng chi phí</span>
+                  <span className="font-bold text-red-600">98.500.000đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Lợi nhuận</span>
+                  <span className="font-bold text-primary">146.500.000đ</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default AdminDashboard;
