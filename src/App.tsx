@@ -10,7 +10,6 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Profile from "./pages/Profile";
 import Events from "./pages/Events";
-import About from "./pages/About";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminEvents from "./pages/admin/AdminEvents";
@@ -35,7 +34,6 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/about" element={<About />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/events" element={<AdminEvents />} />
