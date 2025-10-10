@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload, Plus, Trash2, Eye, Palette, Type, Image, Layout, Link as LinkIcon, Calendar } from "lucide-react";
+import { Upload, Plus, Trash2, Eye, Palette, Type, Image, Layout, Link as LinkIcon, Calendar, Coffee, MapPin, Heart, Clock } from "lucide-react";
 import HomepagePreview from "@/components/admin/HomepagePreview";
 
 interface SiteSettings {
@@ -59,22 +59,6 @@ interface SiteSettings {
   stats_experience_label?: string;
   stats_experience_description?: string;
   
-  // CTA Section
-  cta_title?: string;
-  cta_subtitle?: string;
-  cta_address?: string;
-  cta_phone?: string;
-  cta_hours?: string;
-  cta_offer?: string;
-  cta_button_primary_text?: string;
-  cta_button_primary_link?: string;
-  cta_button_secondary_text?: string;
-  cta_button_secondary_link?: string;
-  cta_newsletter_title?: string;
-  cta_newsletter_description?: string;
-  cta_newsletter_benefit_1?: string;
-  cta_newsletter_benefit_2?: string;
-  cta_newsletter_benefit_3?: string;
   
   // About Section
   about_badge_text?: string;
@@ -163,22 +147,6 @@ const Appearance = () => {
     stats_experience_label: "Năm kinh nghiệm",
     stats_experience_description: "Phục vụ chuyên nghiệp",
     
-    // CTA Section
-    cta_title: "Sẵn sàng trải nghiệm Nova Souls?",
-    cta_subtitle: "Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời cùng không gian ấm cúng tại quán chúng tôi.",
-    cta_address: "123 Đường ABC, Quận 1, TP.HCM",
-    cta_phone: "0123 456 789",
-    cta_hours: "7:00 - 22:00 hàng ngày",
-    cta_offer: "Giảm 10% lần đầu",
-    cta_button_primary_text: "Đặt món ngay",
-    cta_button_primary_link: "/menu",
-    cta_button_secondary_text: "Liên hệ",
-    cta_button_secondary_link: "/contact",
-    cta_newsletter_title: "Nhận ưu đãi đặc biệt",
-    cta_newsletter_description: "Đăng ký nhận tin để nhận thông tin về ưu đãi và sản phẩm mới",
-    cta_newsletter_benefit_1: "Giảm 10% cho đơn hàng đầu tiên",
-    cta_newsletter_benefit_2: "Thông báo sớm về sản phẩm mới",
-    cta_newsletter_benefit_3: "Ưu đãi đặc biệt cho thành viên",
     
     // About Section
     about_badge_text: "Về chúng tôi",
@@ -336,10 +304,6 @@ const Appearance = () => {
                       <Type className="h-4 w-4" />
                       <span className="text-center leading-tight">Thống kê</span>
                     </TabsTrigger>
-                    <TabsTrigger value="cta" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
-                      <Eye className="h-4 w-4" />
-                      <span className="text-center leading-tight">CTA</span>
-                    </TabsTrigger>
                     <TabsTrigger value="about" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
                       <Image className="h-4 w-4" />
                       <span className="text-center leading-tight">Giới thiệu</span>
@@ -369,10 +333,6 @@ const Appearance = () => {
                     <TabsTrigger value="stats" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
                       <Type className="h-4 w-4" />
                       <span>Thống kê</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="cta" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
-                      <Eye className="h-4 w-4" />
-                      <span>CTA</span>
                     </TabsTrigger>
                     <TabsTrigger value="about" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
                       <Image className="h-4 w-4" />
@@ -952,167 +912,6 @@ const Appearance = () => {
             </Card>
           </TabsContent>
 
-          {/* CTA Section */}
-          <TabsContent value="cta" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5" />
-                  Call-to-Action
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div>
-                      <Label>Tiêu đề chính</Label>
-                      <Input
-                        value={settings.cta_title || ""}
-                        onChange={(e) => updateSetting('cta_title', e.target.value)}
-                        placeholder="Sẵn sàng trải nghiệm Nova Souls?"
-                      />
-                    </div>
-                    <div>
-                      <Label>Mô tả</Label>
-                      <Textarea
-                        value={settings.cta_subtitle || ""}
-                        onChange={(e) => updateSetting('cta_subtitle', e.target.value)}
-                        placeholder="Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời..."
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Thông tin liên hệ</h4>
-                    <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <Label>Địa chỉ</Label>
-                        <Input
-                          value={settings.cta_address || ""}
-                          onChange={(e) => updateSetting('cta_address', e.target.value)}
-                          placeholder="123 Đường ABC, Quận 1, TP.HCM"
-                        />
-                      </div>
-                      <div>
-                        <Label>Số điện thoại</Label>
-                        <Input
-                          value={settings.cta_phone || ""}
-                          onChange={(e) => updateSetting('cta_phone', e.target.value)}
-                          placeholder="0123 456 789"
-                        />
-                      </div>
-                      <div>
-                        <Label>Giờ mở cửa</Label>
-                        <Input
-                          value={settings.cta_hours || ""}
-                          onChange={(e) => updateSetting('cta_hours', e.target.value)}
-                          placeholder="7:00 - 22:00 hàng ngày"
-                        />
-                      </div>
-                      <div>
-                        <Label>Ưu đãi</Label>
-                        <Input
-                          value={settings.cta_offer || ""}
-                          onChange={(e) => updateSetting('cta_offer', e.target.value)}
-                          placeholder="Giảm 10% lần đầu"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <Separator />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Nút hành động</h4>
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Nút chính - Text</Label>
-                        <Input
-                          value={settings.cta_button_primary_text || ""}
-                          onChange={(e) => updateSetting('cta_button_primary_text', e.target.value)}
-                          placeholder="Đặt món ngay"
-                        />
-                      </div>
-                      <div>
-                        <Label>Nút chính - Link</Label>
-                        <Input
-                          value={settings.cta_button_primary_link || ""}
-                          onChange={(e) => updateSetting('cta_button_primary_link', e.target.value)}
-                          placeholder="/menu"
-                        />
-                      </div>
-                      <div>
-                        <Label>Nút phụ - Text</Label>
-                        <Input
-                          value={settings.cta_button_secondary_text || ""}
-                          onChange={(e) => updateSetting('cta_button_secondary_text', e.target.value)}
-                          placeholder="Liên hệ"
-                        />
-                      </div>
-                      <div>
-                        <Label>Nút phụ - Link</Label>
-                        <Input
-                          value={settings.cta_button_secondary_link || ""}
-                          onChange={(e) => updateSetting('cta_button_secondary_link', e.target.value)}
-                          placeholder="/contact"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Newsletter</h4>
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Tiêu đề newsletter</Label>
-                        <Input
-                          value={settings.cta_newsletter_title || ""}
-                          onChange={(e) => updateSetting('cta_newsletter_title', e.target.value)}
-                          placeholder="Nhận ưu đãi đặc biệt"
-                        />
-                      </div>
-                      <div>
-                        <Label>Mô tả newsletter</Label>
-                        <Textarea
-                          value={settings.cta_newsletter_description || ""}
-                          onChange={(e) => updateSetting('cta_newsletter_description', e.target.value)}
-                          placeholder="Đăng ký nhận tin để nhận thông tin về ưu đãi..."
-                          rows={2}
-                        />
-                      </div>
-                      <div>
-                        <Label>Lợi ích 1</Label>
-                        <Input
-                          value={settings.cta_newsletter_benefit_1 || ""}
-                          onChange={(e) => updateSetting('cta_newsletter_benefit_1', e.target.value)}
-                          placeholder="Giảm 10% cho đơn hàng đầu tiên"
-                        />
-                      </div>
-                      <div>
-                        <Label>Lợi ích 2</Label>
-                        <Input
-                          value={settings.cta_newsletter_benefit_2 || ""}
-                          onChange={(e) => updateSetting('cta_newsletter_benefit_2', e.target.value)}
-                          placeholder="Thông báo sớm về sản phẩm mới"
-                        />
-                      </div>
-                      <div>
-                        <Label>Lợi ích 3</Label>
-                        <Input
-                          value={settings.cta_newsletter_benefit_3 || ""}
-                          onChange={(e) => updateSetting('cta_newsletter_benefit_3', e.target.value)}
-                          placeholder="Ưu đãi đặc biệt cho thành viên"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Footer */}
           <TabsContent value="footer" className="space-y-6">
@@ -1122,88 +921,124 @@ const Appearance = () => {
                   <LinkIcon className="h-5 w-5" />
                   Footer
                 </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Tùy chỉnh thông tin hiển thị trong footer trang web
+                </p>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Brand & Description */}
+                  <div className="space-y-6">
                     <div>
-                      <Label>Mô tả</Label>
-                      <Textarea
-                        value={settings.footer_description || ""}
-                        onChange={(e) => updateSetting('footer_description', e.target.value)}
-                        placeholder="Nơi hội tụ những tâm hồn yêu cà phê..."
-                        rows={3}
-                      />
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <Coffee className="h-4 w-4" />
+                        Thông tin thương hiệu
+                      </h4>
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Mô tả thương hiệu</Label>
+                          <Textarea
+                            value={settings.footer_description || ""}
+                            onChange={(e) => updateSetting('footer_description', e.target.value)}
+                            placeholder="Nơi hội tụ những tâm hồn yêu cà phê, nơi mỗi ly cà phê là một câu chuyện..."
+                            rows={4}
+                          />
+                        </div>
+                      </div>
                     </div>
+
                     <div>
-                      <Label>Số điện thoại</Label>
-                      <Input
-                        value={settings.footer_phone || ""}
-                        onChange={(e) => updateSetting('footer_phone', e.target.value)}
-                        placeholder="(028) 1234 5678"
-                      />
-                    </div>
-                    <div>
-                      <Label>Email</Label>
-                      <Input
-                        value={settings.footer_email || ""}
-                        onChange={(e) => updateSetting('footer_email', e.target.value)}
-                        placeholder="hello@novasouls.com"
-                      />
-                    </div>
-                    <div>
-                      <Label>Địa chỉ</Label>
-                      <Input
-                        value={settings.footer_address || ""}
-                        onChange={(e) => updateSetting('footer_address', e.target.value)}
-                        placeholder="123 Đường Nguyễn Huệ, Quận 1, TP.HCM"
-                      />
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        Thông tin liên hệ
+                      </h4>
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Địa chỉ</Label>
+                          <Input
+                            value={settings.footer_address || ""}
+                            onChange={(e) => updateSetting('footer_address', e.target.value)}
+                            placeholder="123 Đường Nguyễn Huệ, Quận 1, TP.HCM"
+                          />
+                        </div>
+                        <div>
+                          <Label>Số điện thoại</Label>
+                          <Input
+                            value={settings.footer_phone || ""}
+                            onChange={(e) => updateSetting('footer_phone', e.target.value)}
+                            placeholder="(028) 1234 5678"
+                          />
+                        </div>
+                        <div>
+                          <Label>Email</Label>
+                          <Input
+                            value={settings.footer_email || ""}
+                            onChange={(e) => updateSetting('footer_email', e.target.value)}
+                            placeholder="hello@novasouls.com"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Social Media</h4>
+                  {/* Social Media & Hours */}
+                  <div className="space-y-6">
                     <div>
-                      <Label>Facebook URL</Label>
-                      <Input
-                        value={settings.footer_facebook_url || ""}
-                        onChange={(e) => updateSetting('footer_facebook_url', e.target.value)}
-                        placeholder="https://facebook.com/novasouls"
-                      />
-                    </div>
-                    <div>
-                      <Label>Instagram URL</Label>
-                      <Input
-                        value={settings.footer_instagram_url || ""}
-                        onChange={(e) => updateSetting('footer_instagram_url', e.target.value)}
-                        placeholder="https://instagram.com/novasouls"
-                      />
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <Heart className="h-4 w-4" />
+                        Mạng xã hội
+                      </h4>
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Facebook URL</Label>
+                          <Input
+                            value={settings.footer_facebook_url || ""}
+                            onChange={(e) => updateSetting('footer_facebook_url', e.target.value)}
+                            placeholder="https://facebook.com/novasouls"
+                          />
+                        </div>
+                        <div>
+                          <Label>Instagram URL</Label>
+                          <Input
+                            value={settings.footer_instagram_url || ""}
+                            onChange={(e) => updateSetting('footer_instagram_url', e.target.value)}
+                            placeholder="https://instagram.com/novasouls"
+                          />
+                        </div>
+                      </div>
                     </div>
                     
-                    <h4 className="font-semibold">Giờ mở cửa</h4>
                     <div>
-                      <Label>Thứ 2 - Thứ 6</Label>
-                      <Input
-                        value={settings.footer_weekday_hours || ""}
-                        onChange={(e) => updateSetting('footer_weekday_hours', e.target.value)}
-                        placeholder="7:00 - 22:00"
-                      />
-                    </div>
-                    <div>
-                      <Label>Thứ 7 - CN</Label>
-                      <Input
-                        value={settings.footer_weekend_hours || ""}
-                        onChange={(e) => updateSetting('footer_weekend_hours', e.target.value)}
-                        placeholder="8:00 - 23:00"
-                      />
-                    </div>
-                    <div>
-                      <Label>Giao hàng</Label>
-                      <Input
-                        value={settings.footer_delivery_hours || ""}
-                        onChange={(e) => updateSetting('footer_delivery_hours', e.target.value)}
-                        placeholder="8:00 - 21:00"
-                      />
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        Giờ hoạt động
+                      </h4>
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Thứ 2 - Thứ 6</Label>
+                          <Input
+                            value={settings.footer_weekday_hours || ""}
+                            onChange={(e) => updateSetting('footer_weekday_hours', e.target.value)}
+                            placeholder="7:00 - 22:00"
+                          />
+                        </div>
+                        <div>
+                          <Label>Thứ 7 - Chủ nhật</Label>
+                          <Input
+                            value={settings.footer_weekend_hours || ""}
+                            onChange={(e) => updateSetting('footer_weekend_hours', e.target.value)}
+                            placeholder="8:00 - 23:00"
+                          />
+                        </div>
+                        <div>
+                          <Label>Giao hàng tận nơi</Label>
+                          <Input
+                            value={settings.footer_delivery_hours || ""}
+                            onChange={(e) => updateSetting('footer_delivery_hours', e.target.value)}
+                            placeholder="8:00 - 21:00"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
