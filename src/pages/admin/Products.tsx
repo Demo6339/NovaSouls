@@ -172,7 +172,7 @@ const AdminProducts = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">24</div>
+                  <div className="text-2xl font-bold">0</div>
                 </CardContent>
               </Card>
               <Card>
@@ -182,7 +182,7 @@ const AdminProducts = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-destructive">2</div>
+                  <div className="text-2xl font-bold text-destructive">0</div>
                 </CardContent>
               </Card>
               <Card>

@@ -100,12 +100,9 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {["Signature Latte", "Cappuccino", "Croissant Bơ"].map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center">
-                    <span className="text-sm">{item}</span>
-                    <span className="font-bold text-primary">{(idx + 1) * 45} ly</span>
-                  </div>
-                ))}
+                <div className="text-center text-muted-foreground text-sm">
+                  Chưa có dữ liệu
+                </div>
               </div>
             </CardContent>
           </Card>
