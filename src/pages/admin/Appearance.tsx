@@ -240,78 +240,135 @@ const Appearance = () => {
   return (
     <div className="flex min-h-screen bg-background">
       <AdminSidebar />
-      <main className="flex-1 p-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Tùy chỉnh giao diện</h1>
-            <p className="text-muted-foreground">Thay đổi màu sắc, nội dung, hình ảnh</p>
+      <main className="flex-1 p-3 sm:p-4 lg:p-8 pt-16 lg:pt-8">
+        <div className="mb-4 lg:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold mb-1 sm:mb-2">Tùy chỉnh giao diện</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Thay đổi màu sắc, nội dung, hình ảnh</p>
           </div>
-          <Button onClick={saveSettings} disabled={loading} className="bg-gradient-hero">
+          <Button onClick={saveSettings} disabled={loading} className="bg-gradient-hero w-full sm:w-auto text-sm sm:text-base">
             {loading ? "Đang lưu..." : "Lưu thay đổi"}
           </Button>
         </div>
 
-        <Tabs defaultValue="homepage" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="homepage" className="flex items-center gap-2">
+        <Tabs defaultValue="homepage" className="space-y-4 lg:space-y-6">
+          <TabsList className="grid w-full grid-cols-2 h-auto">
+            <TabsTrigger value="homepage" className="flex items-center justify-center gap-2 text-xs lg:text-sm py-3">
               <Layout className="h-4 w-4" />
-              Trang Chủ
+              <span>Trang chủ</span>
             </TabsTrigger>
-            <TabsTrigger value="events" className="flex items-center gap-2">
+            <TabsTrigger value="events" className="flex items-center justify-center gap-2 text-xs lg:text-sm py-3">
               <Calendar className="h-4 w-4" />
-              Sự Kiện
+              <span>Sự kiện</span>
             </TabsTrigger>
           </TabsList>
 
           {/* Trang Chủ */}
           <TabsContent value="homepage" className="space-y-6">
-            <Tabs defaultValue="hero" className="space-y-6">
-              <div className="space-y-4">
-                <TabsList className="grid w-full grid-cols-6">
-                  <TabsTrigger value="hero" className="flex items-center gap-2">
-                    <Layout className="h-4 w-4" />
-                    Hero
-                  </TabsTrigger>
-                  <TabsTrigger value="products" className="flex items-center gap-2">
-                    <Image className="h-4 w-4" />
-                    Sản phẩm
-                  </TabsTrigger>
-                  <TabsTrigger value="features" className="flex items-center gap-2">
-                    <Type className="h-4 w-4" />
-                    Tính năng
-                  </TabsTrigger>
-                  <TabsTrigger value="testimonials" className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
-                    Đánh giá
-                  </TabsTrigger>
-                  <TabsTrigger value="about" className="flex items-center gap-2">
-                    <Image className="h-4 w-4" />
-                    Giới thiệu
-                  </TabsTrigger>
-                  <TabsTrigger value="footer" className="flex items-center gap-2">
-                    <LinkIcon className="h-4 w-4" />
-                    Footer
-                  </TabsTrigger>
-                </TabsList>
+            <Tabs defaultValue="hero" className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <div className="space-y-3 sm:space-y-4">
+                {/* Content Sections Tabs - Mobile: 2 rows of 3 columns */}
+                <div className="block sm:hidden">
+                  <TabsList className="grid w-full grid-cols-3 gap-1 h-auto">
+                    <TabsTrigger value="hero" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Layout className="h-4 w-4" />
+                      <span className="text-center leading-tight">Hero</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="products" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Image className="h-4 w-4" />
+                      <span className="text-center leading-tight">Sản phẩm</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="features" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Type className="h-4 w-4" />
+                      <span className="text-center leading-tight">Tính năng</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="testimonials" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Eye className="h-4 w-4" />
+                      <span className="text-center leading-tight">Đánh giá</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="about" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Image className="h-4 w-4" />
+                      <span className="text-center leading-tight">Giới thiệu</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="footer" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <LinkIcon className="h-4 w-4" />
+                      <span className="text-center leading-tight">Footer</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
                 
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="colors" className="flex items-center gap-2">
-                    <Palette className="h-4 w-4" />
-                    Màu sắc
-                  </TabsTrigger>
-                  <TabsTrigger value="layout" className="flex items-center gap-2">
-                    <Layout className="h-4 w-4" />
-                    Bố cục
-                  </TabsTrigger>
-                  <TabsTrigger value="typography" className="flex items-center gap-2">
-                    <Type className="h-4 w-4" />
-                    Typography
-                  </TabsTrigger>
-                  <TabsTrigger value="preview" className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
-                    Xem trước
-                  </TabsTrigger>
-                </TabsList>
+                {/* Content Sections Tabs - Desktop: Horizontal scroll */}
+                <div className="hidden sm:block w-full overflow-x-auto scrollbar-thin">
+                  <TabsList className="inline-flex w-max min-w-full">
+                    <TabsTrigger value="hero" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Layout className="h-4 w-4" />
+                      <span>Hero</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="products" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Image className="h-4 w-4" />
+                      <span>Sản phẩm</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="features" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Type className="h-4 w-4" />
+                      <span>Tính năng</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="testimonials" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Eye className="h-4 w-4" />
+                      <span>Đánh giá</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="about" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Image className="h-4 w-4" />
+                      <span>Giới thiệu</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="footer" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <LinkIcon className="h-4 w-4" />
+                      <span>Footer</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                {/* Settings Tabs - Mobile: 2x2 grid, Desktop: Horizontal */}
+                <div className="block sm:hidden">
+                  <TabsList className="grid w-full grid-cols-2 gap-1 h-auto">
+                    <TabsTrigger value="colors" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Palette className="h-4 w-4" />
+                      <span className="text-center leading-tight">Màu sắc</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="layout" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Layout className="h-4 w-4" />
+                      <span className="text-center leading-tight">Bố cục</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="typography" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Type className="h-4 w-4" />
+                      <span className="text-center leading-tight">Typography</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="preview" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Eye className="h-4 w-4" />
+                      <span className="text-center leading-tight">Xem trước</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                <div className="hidden sm:block w-full overflow-x-auto scrollbar-thin">
+                  <TabsList className="inline-flex w-max min-w-full">
+                    <TabsTrigger value="colors" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Palette className="h-4 w-4" />
+                      <span>Màu sắc</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="layout" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Layout className="h-4 w-4" />
+                      <span>Bố cục</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="typography" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Type className="h-4 w-4" />
+                      <span>Typography</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="preview" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Eye className="h-4 w-4" />
+                      <span>Xem trước</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
               </div>
 
           {/* Hero Section */}
@@ -323,69 +380,76 @@ const Appearance = () => {
                   Hero Section
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="space-y-4 lg:space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label>Badge Text</Label>
+                      <Label className="text-sm">Badge Text</Label>
                       <Input
                         value={settings.hero_badge_text || ""}
                         onChange={(e) => updateSetting('hero_badge_text', e.target.value)}
                         placeholder="Specialty Coffee & Artisan Bakery"
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label>Tiêu đề chính</Label>
+                      <Label className="text-sm">Tiêu đề chính</Label>
                       <Textarea
                         value={settings.hero_main_title || ""}
                         onChange={(e) => updateSetting('hero_main_title', e.target.value)}
                         placeholder="Chào mừng đến với Nova Souls"
                         rows={2}
+                        className="text-sm"
                       />
                     </div>
                     <div>
-                      <Label>Mô tả</Label>
+                      <Label className="text-sm">Mô tả</Label>
                       <Textarea
                         value={settings.hero_subtitle || ""}
                         onChange={(e) => updateSetting('hero_subtitle', e.target.value)}
                         placeholder="Khám phá hương vị độc đáo..."
                         rows={3}
+                        className="text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-4">
                     <div>
-                      <Label>Hình ảnh nền (URL)</Label>
+                      <Label className="text-sm">Hình ảnh nền (URL)</Label>
                       <Input
                         value={settings.hero_background_image || ""}
                         onChange={(e) => updateSetting('hero_background_image', e.target.value)}
                         placeholder="https://images.unsplash.com/..."
+                        className="text-sm"
                       />
                     </div>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <Label>Khách hàng</Label>
+                        <Label className="text-sm">Khách hàng</Label>
                         <Input
                           value={settings.hero_stats_customers || ""}
                           onChange={(e) => updateSetting('hero_stats_customers', e.target.value)}
                           placeholder="2,500+"
+                          className="text-sm"
                         />
                       </div>
                       <div>
-                        <Label>Sản phẩm</Label>
+                        <Label className="text-sm">Sản phẩm</Label>
                         <Input
                           value={settings.hero_stats_products || ""}
                           onChange={(e) => updateSetting('hero_stats_products', e.target.value)}
                           placeholder="80+"
+                          className="text-sm"
                         />
                       </div>
                       <div>
-                        <Label>Đánh giá</Label>
+                        <Label className="text-sm">Đánh giá</Label>
                         <Input
                           value={settings.hero_stats_rating || ""}
                           onChange={(e) => updateSetting('hero_stats_rating', e.target.value)}
                           placeholder="4.9"
+                          className="text-sm"
                         />
                       </div>
                     </div>
@@ -850,89 +914,94 @@ const Appearance = () => {
                   Màu sắc chủ đạo
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <CardContent className="space-y-4 lg:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                   <div className="space-y-2">
-                    <Label>Màu chính (Primary)</Label>
+                    <Label className="text-sm">Màu chính (Primary)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="color"
                         value={settings.primary_color || "#6B4423"}
                         onChange={(e) => updateSetting('primary_color', e.target.value)}
-                        className="w-12 h-10"
+                        className="w-12 h-10 flex-shrink-0"
                       />
                       <Input
                         value={settings.primary_color || "#6B4423"}
                         onChange={(e) => updateSetting('primary_color', e.target.value)}
                         placeholder="#6B4423"
+                        className="text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Màu phụ (Secondary)</Label>
+                    <Label className="text-sm">Màu phụ (Secondary)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="color"
                         value={settings.secondary_color || "#8B6F47"}
                         onChange={(e) => updateSetting('secondary_color', e.target.value)}
-                        className="w-12 h-10"
+                        className="w-12 h-10 flex-shrink-0"
                       />
                       <Input
                         value={settings.secondary_color || "#8B6F47"}
                         onChange={(e) => updateSetting('secondary_color', e.target.value)}
                         placeholder="#8B6F47"
+                        className="text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Màu nhấn (Accent)</Label>
+                    <Label className="text-sm">Màu nhấn (Accent)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="color"
                         value={settings.accent_color || "#22C55E"}
                         onChange={(e) => updateSetting('accent_color', e.target.value)}
-                        className="w-12 h-10"
+                        className="w-12 h-10 flex-shrink-0"
                       />
                       <Input
                         value={settings.accent_color || "#22C55E"}
                         onChange={(e) => updateSetting('accent_color', e.target.value)}
                         placeholder="#22C55E"
+                        className="text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Màu nền (Background)</Label>
+                    <Label className="text-sm">Màu nền (Background)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="color"
                         value={settings.background_color || "#FAFAFA"}
                         onChange={(e) => updateSetting('background_color', e.target.value)}
-                        className="w-12 h-10"
+                        className="w-12 h-10 flex-shrink-0"
                       />
                       <Input
                         value={settings.background_color || "#FAFAFA"}
                         onChange={(e) => updateSetting('background_color', e.target.value)}
                         placeholder="#FAFAFA"
+                        className="text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Màu chữ (Text)</Label>
+                    <Label className="text-sm">Màu chữ (Text)</Label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="color"
                         value={settings.text_color || "#1F2937"}
                         onChange={(e) => updateSetting('text_color', e.target.value)}
-                        className="w-12 h-10"
+                        className="w-12 h-10 flex-shrink-0"
                       />
                       <Input
                         value={settings.text_color || "#1F2937"}
                         onChange={(e) => updateSetting('text_color', e.target.value)}
                         placeholder="#1F2937"
+                        className="text-sm"
                       />
                     </div>
                   </div>
@@ -1132,27 +1201,52 @@ const Appearance = () => {
           </TabsContent>
 
           {/* Trang Sự Kiện */}
-          <TabsContent value="events" className="space-y-6">
-            <Tabs defaultValue="event-hero" className="space-y-6">
-              <div className="space-y-4">
-                <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="event-hero" className="flex items-center gap-2">
-                    <Layout className="h-4 w-4" />
-                    Hero
-                  </TabsTrigger>
-                  <TabsTrigger value="event-list" className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4" />
-                    Danh sách
-                  </TabsTrigger>
-                  <TabsTrigger value="event-details" className="flex items-center gap-2">
-                    <Type className="h-4 w-4" />
-                    Chi tiết
-                  </TabsTrigger>
-                  <TabsTrigger value="event-preview" className="flex items-center gap-2">
-                    <Eye className="h-4 w-4" />
-                    Xem trước
-                  </TabsTrigger>
-                </TabsList>
+          <TabsContent value="events" className="space-y-4 lg:space-y-6">
+            <Tabs defaultValue="event-hero" className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <div className="space-y-3 sm:space-y-4">
+                {/* Mobile: 2x2 grid */}
+                <div className="block sm:hidden">
+                  <TabsList className="grid w-full grid-cols-2 gap-1 h-auto">
+                    <TabsTrigger value="event-hero" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Layout className="h-4 w-4" />
+                      <span className="text-center leading-tight">Hero</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-list" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Calendar className="h-4 w-4" />
+                      <span className="text-center leading-tight">Danh sách</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-details" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Type className="h-4 w-4" />
+                      <span className="text-center leading-tight">Chi tiết</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-preview" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Eye className="h-4 w-4" />
+                      <span className="text-center leading-tight">Xem trước</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                {/* Desktop: Horizontal scroll */}
+                <div className="hidden sm:block w-full overflow-x-auto scrollbar-thin">
+                  <TabsList className="inline-flex w-max min-w-full">
+                    <TabsTrigger value="event-hero" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Layout className="h-4 w-4" />
+                      <span>Hero</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-list" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Calendar className="h-4 w-4" />
+                      <span>Danh sách</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-details" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Type className="h-4 w-4" />
+                      <span>Chi tiết</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="event-preview" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Eye className="h-4 w-4" />
+                      <span>Xem trước</span>
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
               </div>
 
               {/* Event Hero Section */}

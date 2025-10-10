@@ -45,14 +45,14 @@ const AdminDashboard = () => {
     <div className="flex min-h-screen bg-background">
       <AdminSidebar />
       
-      <main className="flex-1 p-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
+      <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
+        <div className="mb-6 lg:mb-8">
+          <h1 className="text-2xl lg:text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
           <p className="text-muted-foreground">Theo dõi hoạt động kinh doanh</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
@@ -65,13 +65,14 @@ const AdminDashboard = () => {
                   <Icon className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="flex items-center gap-1 text-sm mt-1">
-                    <TrendIcon className={`h-4 w-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"}`} />
+                  <div className="text-xl lg:text-2xl font-bold">{stat.value}</div>
+                  <div className="flex items-center gap-1 text-xs lg:text-sm mt-1">
+                    <TrendIcon className={`h-3 w-3 lg:h-4 lg:w-4 ${stat.trend === "up" ? "text-green-500" : "text-red-500"}`} />
                     <span className={stat.trend === "up" ? "text-green-500" : "text-red-500"}>
                       {stat.change}
                     </span>
-                    <span className="text-muted-foreground">so với hôm qua</span>
+                    <span className="text-muted-foreground hidden sm:inline">so với hôm qua</span>
+                    <span className="text-muted-foreground sm:hidden">vs hôm qua</span>
                   </div>
                 </CardContent>
               </Card>
@@ -80,7 +81,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Charts & Tables */}
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           {/* Revenue Chart Placeholder */}
           <Card className="animate-fade-up" style={{ animationDelay: "200ms" }}>
             <CardHeader>
@@ -88,8 +89,8 @@ const AdminDashboard = () => {
               <CardDescription>Biểu đồ doanh thu theo ngày</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="h-64 flex items-center justify-center bg-secondary/20 rounded-lg">
-                <p className="text-muted-foreground">Biểu đồ doanh thu</p>
+              <div className="h-48 lg:h-64 flex items-center justify-center bg-secondary/20 rounded-lg">
+                <p className="text-muted-foreground text-sm lg:text-base">Biểu đồ doanh thu</p>
               </div>
             </CardContent>
           </Card>
@@ -101,16 +102,16 @@ const AdminDashboard = () => {
               <CardDescription>Cập nhật realtime</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-3 lg:space-y-4">
                 {recentOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div>
-                      <p className="font-medium">#{order.id}</p>
-                      <p className="text-sm text-muted-foreground">{order.customer}</p>
+                  <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
+                    <div className="flex-1">
+                      <p className="font-medium text-sm lg:text-base">#{order.id}</p>
+                      <p className="text-xs lg:text-sm text-muted-foreground">{order.customer}</p>
                       <p className="text-xs text-muted-foreground">{order.time}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-bold text-primary">{order.total.toLocaleString('vi-VN')}đ</p>
+                    <div className="text-left sm:text-right">
+                      <p className="font-bold text-primary text-sm lg:text-base">{order.total.toLocaleString('vi-VN')}đ</p>
                       <span className={`text-xs px-2 py-1 rounded ${
                         order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                       }`}>
@@ -125,7 +126,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Additional Stats */}
-        <div className="grid lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-4 lg:mt-6">
           <Card className="animate-fade-up" style={{ animationDelay: "400ms" }}>
             <CardHeader>
               <CardTitle>Top sản phẩm</CardTitle>
