@@ -72,19 +72,19 @@ const StatsSection = () => {
     }
   ];
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-r from-primary/5 to-accent/5">
-      <div className="container px-6 sm:px-8 lg:px-12 xl:px-16">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-r from-primary/5 to-accent/5">
+      <div className="container px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
               {settings.stats_title}
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg lg:text-xl max-w-3xl mx-auto">
+            <p className="text-muted-foreground text-xs sm:text-sm md:text-base lg:text-lg max-w-3xl mx-auto">
               {settings.stats_subtitle}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
@@ -93,17 +93,17 @@ const StatsSection = () => {
                   className="text-center hover:shadow-xl transition-all duration-300 animate-fade-up bg-gradient-card border-border/50 hover:-translate-y-2"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <CardContent className="p-6 sm:p-8 lg:p-10">
-                    <div className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 mx-auto mb-4 sm:mb-6 bg-gradient-accent rounded-2xl flex items-center justify-center">
-                      <Icon className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 text-accent-foreground" />
+                  <CardContent className="p-3 sm:p-4 md:p-6 lg:p-8">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto mb-2 sm:mb-3 md:mb-4 bg-gradient-accent rounded-lg sm:rounded-xl flex items-center justify-center">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-accent-foreground" />
                     </div>
-                    <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-2 sm:mb-3">
+                    <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary mb-1 sm:mb-2">
                       {stat.value}
                     </div>
-                    <div className="text-sm sm:text-base font-semibold text-foreground mb-2">
+                    <div className="text-xs sm:text-sm font-semibold text-foreground mb-1">
                       {stat.label}
                     </div>
-                    <div className="text-xs sm:text-sm text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       {stat.description}
                     </div>
                   </CardContent>
