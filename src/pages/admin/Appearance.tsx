@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Upload, Plus, Trash2, Eye, Palette, Type, Image, Layout, Link as LinkIcon, Calendar, Coffee, MapPin, Heart, Clock } from "lucide-react";
+import { Upload, Plus, Trash2, Eye, Palette, Type, Image, Layout, Link as LinkIcon, Calendar, Coffee, MapPin, Heart, Clock, Gift, Sparkles, Search, Percent } from "lucide-react";
 import HomepagePreview from "@/components/admin/HomepagePreview";
 
 interface SiteSettings {
@@ -81,6 +81,25 @@ interface SiteSettings {
   footer_weekday_hours?: string;
   footer_weekend_hours?: string;
   footer_delivery_hours?: string;
+
+  // Events Page
+  events_badge_text?: string;
+  events_title?: string;
+  events_subtitle?: string;
+  events_search_placeholder?: string;
+  events_filter_all?: string;
+  events_filter_promotion?: string;
+  events_filter_event?: string;
+  events_filter_workshop?: string;
+  events_featured_badge?: string;
+  events_promo_title?: string;
+  events_promo_description?: string;
+  events_promo_code_1?: string;
+  events_promo_code_1_desc?: string;
+  events_promo_code_2?: string;
+  events_promo_code_2_desc?: string;
+  events_promo_code_3?: string;
+  events_promo_code_3_desc?: string;
   
   // Colors
   primary_color?: string;
@@ -174,6 +193,25 @@ const Appearance = () => {
     footer_weekday_hours: "7:00 - 22:00",
     footer_weekend_hours: "8:00 - 23:00",
     footer_delivery_hours: "8:00 - 21:00",
+    
+    // Events Page
+    events_badge_text: "Sự kiện đặc biệt",
+    events_title: "Sự kiện & Khuyến mãi",
+    events_subtitle: "Khám phá những ưu đãi hấp dẫn và sự kiện đặc biệt tại Nova Souls",
+    events_search_placeholder: "Tìm kiếm sự kiện...",
+    events_filter_all: "Tất cả",
+    events_filter_promotion: "Khuyến mãi",
+    events_filter_event: "Sự kiện",
+    events_filter_workshop: "Workshop",
+    events_featured_badge: "⭐ Nổi bật",
+    events_promo_title: "Mã giảm giá",
+    events_promo_description: "Sử dụng các mã này khi thanh toán",
+    events_promo_code_1: "WELCOME20",
+    events_promo_code_1_desc: "Giảm 20% đơn đầu tiên",
+    events_promo_code_2: "HAPPY15",
+    events_promo_code_2_desc: "Giảm 15% Happy Hour",
+    events_promo_code_3: "FREESHIP",
+    events_promo_code_3_desc: "Miễn phí giao hàng",
     
     // Colors
     primary_color: "#6B4423",
@@ -1398,16 +1436,42 @@ const Appearance = () => {
                       <Layout className="h-5 w-5" />
                       Hero Section - Sự kiện
                     </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Tùy chỉnh tiêu đề và mô tả cho trang sự kiện
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="text-center py-12">
-                      <Calendar className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">
-                        Tùy chỉnh Hero Section cho trang sự kiện
-                      </h3>
-                      <p className="text-gray-500">
-                        Tính năng đang được phát triển
-                      </p>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Badge Text</Label>
+                          <Input
+                            value={settings.events_badge_text || ""}
+                            onChange={(e) => updateSetting('events_badge_text', e.target.value)}
+                            placeholder="Sự kiện đặc biệt"
+                          />
+                        </div>
+                        <div>
+                          <Label>Tiêu đề chính</Label>
+                          <Input
+                            value={settings.events_title || ""}
+                            onChange={(e) => updateSetting('events_title', e.target.value)}
+                            placeholder="Sự kiện & Khuyến mãi"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Mô tả</Label>
+                          <Textarea
+                            value={settings.events_subtitle || ""}
+                            onChange={(e) => updateSetting('events_subtitle', e.target.value)}
+                            placeholder="Khám phá những ưu đãi hấp dẫn và sự kiện đặc biệt tại Nova Souls"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -1419,18 +1483,70 @@ const Appearance = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Calendar className="h-5 w-5" />
-                      Danh sách sự kiện
+                      Tìm kiếm & Lọc
                     </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Tùy chỉnh thanh tìm kiếm và các nút lọc
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="text-center py-12">
-                      <Calendar className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">
-                        Tùy chỉnh danh sách sự kiện
-                      </h3>
-                      <p className="text-gray-500">
-                        Tính năng đang được phát triển
-                      </p>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Placeholder tìm kiếm</Label>
+                          <Input
+                            value={settings.events_search_placeholder || ""}
+                            onChange={(e) => updateSetting('events_search_placeholder', e.target.value)}
+                            placeholder="Tìm kiếm sự kiện..."
+                          />
+                        </div>
+                        <div>
+                          <Label>Badge sự kiện nổi bật</Label>
+                          <Input
+                            value={settings.events_featured_badge || ""}
+                            onChange={(e) => updateSetting('events_featured_badge', e.target.value)}
+                            placeholder="⭐ Nổi bật"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="font-semibold">Nút lọc</h4>
+                        <div className="space-y-3">
+                          <div>
+                            <Label>Tất cả</Label>
+                            <Input
+                              value={settings.events_filter_all || ""}
+                              onChange={(e) => updateSetting('events_filter_all', e.target.value)}
+                              placeholder="Tất cả"
+                            />
+                          </div>
+                          <div>
+                            <Label>Khuyến mãi</Label>
+                            <Input
+                              value={settings.events_filter_promotion || ""}
+                              onChange={(e) => updateSetting('events_filter_promotion', e.target.value)}
+                              placeholder="Khuyến mãi"
+                            />
+                          </div>
+                          <div>
+                            <Label>Sự kiện</Label>
+                            <Input
+                              value={settings.events_filter_event || ""}
+                              onChange={(e) => updateSetting('events_filter_event', e.target.value)}
+                              placeholder="Sự kiện"
+                            />
+                          </div>
+                          <div>
+                            <Label>Workshop</Label>
+                            <Input
+                              value={settings.events_filter_workshop || ""}
+                              onChange={(e) => updateSetting('events_filter_workshop', e.target.value)}
+                              placeholder="Workshop"
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -1441,19 +1557,81 @@ const Appearance = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Type className="h-5 w-5" />
-                      Chi tiết sự kiện
+                      <Gift className="h-5 w-5" />
+                      Mã giảm giá
                     </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Tùy chỉnh phần mã giảm giá cuối trang
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="text-center py-12">
-                      <Type className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">
-                        Tùy chỉnh chi tiết sự kiện
-                      </h3>
-                      <p className="text-gray-500">
-                        Tính năng đang được phát triển
-                      </p>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Tiêu đề phần mã giảm giá</Label>
+                          <Input
+                            value={settings.events_promo_title || ""}
+                            onChange={(e) => updateSetting('events_promo_title', e.target.value)}
+                            placeholder="Mã giảm giá"
+                          />
+                        </div>
+                        <div>
+                          <Label>Mô tả phần mã giảm giá</Label>
+                          <Textarea
+                            value={settings.events_promo_description || ""}
+                            onChange={(e) => updateSetting('events_promo_description', e.target.value)}
+                            placeholder="Sử dụng các mã này khi thanh toán"
+                            rows={2}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="font-semibold">Mã giảm giá</h4>
+                        <div className="space-y-4">
+                          <div className="p-4 border rounded-lg space-y-2">
+                            <Label className="text-sm font-medium">Mã 1</Label>
+                            <Input
+                              value={settings.events_promo_code_1 || ""}
+                              onChange={(e) => updateSetting('events_promo_code_1', e.target.value)}
+                              placeholder="WELCOME20"
+                            />
+                            <Input
+                              value={settings.events_promo_code_1_desc || ""}
+                              onChange={(e) => updateSetting('events_promo_code_1_desc', e.target.value)}
+                              placeholder="Giảm 20% đơn đầu tiên"
+                            />
+                          </div>
+                          
+                          <div className="p-4 border rounded-lg space-y-2">
+                            <Label className="text-sm font-medium">Mã 2</Label>
+                            <Input
+                              value={settings.events_promo_code_2 || ""}
+                              onChange={(e) => updateSetting('events_promo_code_2', e.target.value)}
+                              placeholder="HAPPY15"
+                            />
+                            <Input
+                              value={settings.events_promo_code_2_desc || ""}
+                              onChange={(e) => updateSetting('events_promo_code_2_desc', e.target.value)}
+                              placeholder="Giảm 15% Happy Hour"
+                            />
+                          </div>
+                          
+                          <div className="p-4 border rounded-lg space-y-2">
+                            <Label className="text-sm font-medium">Mã 3</Label>
+                            <Input
+                              value={settings.events_promo_code_3 || ""}
+                              onChange={(e) => updateSetting('events_promo_code_3', e.target.value)}
+                              placeholder="FREESHIP"
+                            />
+                            <Input
+                              value={settings.events_promo_code_3_desc || ""}
+                              onChange={(e) => updateSetting('events_promo_code_3_desc', e.target.value)}
+                              placeholder="Miễn phí giao hàng"
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -1467,16 +1645,116 @@ const Appearance = () => {
                       <Eye className="h-5 w-5" />
                       Xem trước trang sự kiện
                     </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Xem trước các thay đổi cho trang sự kiện
+                    </p>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="text-center py-12">
-                      <Eye className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-600 mb-2">
-                        Xem trước trang sự kiện
-                      </h3>
-                      <p className="text-gray-500">
-                        Tính năng đang được phát triển
-                      </p>
+                  <CardContent className="space-y-6">
+                    <div className="border rounded-lg p-6 bg-gradient-to-br from-slate-50 to-white">
+                      {/* Header Preview */}
+                      <div className="text-center mb-8">
+                        <div className="inline-flex items-center gap-2 mb-4">
+                          <Sparkles className="h-5 w-5 text-accent" />
+                          <span className="text-accent font-semibold text-sm">
+                            {settings.events_badge_text || "Sự kiện đặc biệt"}
+                          </span>
+                        </div>
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4">
+                          {settings.events_title || "Sự kiện & Khuyến mãi"}
+                        </h1>
+                        <p className="text-muted-foreground text-sm max-w-2xl mx-auto">
+                          {settings.events_subtitle || "Khám phá những ưu đãi hấp dẫn và sự kiện đặc biệt tại Nova Souls"}
+                        </p>
+                      </div>
+
+                      {/* Search & Filter Preview */}
+                      <div className="mb-8 space-y-4">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                          <input
+                            type="text"
+                            placeholder={settings.events_search_placeholder || "Tìm kiếm sự kiện..."}
+                            className="w-full pl-10 pr-4 py-3 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent bg-white/50 backdrop-blur-sm text-sm"
+                            readOnly
+                          />
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button variant="default" size="sm" className="rounded-xl text-xs px-3 py-2">
+                            {settings.events_filter_all || "Tất cả"}
+                          </Button>
+                          <Button variant="outline" size="sm" className="rounded-xl text-xs px-3 py-2">
+                            {settings.events_filter_promotion || "Khuyến mãi"}
+                          </Button>
+                          <Button variant="outline" size="sm" className="rounded-xl text-xs px-3 py-2">
+                            {settings.events_filter_event || "Sự kiện"}
+                          </Button>
+                          <Button variant="outline" size="sm" className="rounded-xl text-xs px-3 py-2">
+                            {settings.events_filter_workshop || "Workshop"}
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Promo Codes Preview */}
+                      <div className="bg-gradient-to-br from-white to-slate-50 rounded-xl p-6 border">
+                        <div className="text-center mb-6">
+                          <div className="flex justify-center mb-4">
+                            <div className="h-12 w-12 rounded-full bg-gradient-to-r from-accent to-accent-light flex items-center justify-center shadow-lg">
+                              <Gift className="h-6 w-6 text-white" />
+                            </div>
+                          </div>
+                          <h3 className="text-xl font-bold mb-2">
+                            {settings.events_promo_title || "Mã giảm giá"}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {settings.events_promo_description || "Sử dụng các mã này khi thanh toán"}
+                          </p>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 text-center">
+                            <div className="p-2 rounded-full bg-accent/10 w-fit mx-auto mb-2">
+                              <Percent className="h-5 w-5 text-accent" />
+                            </div>
+                            <p className="font-bold text-sm mb-1">
+                              {settings.events_promo_code_1 || "WELCOME20"}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {settings.events_promo_code_1_desc || "Giảm 20% đơn đầu tiên"}
+                            </p>
+                          </div>
+                          <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 text-center">
+                            <div className="p-2 rounded-full bg-accent/10 w-fit mx-auto mb-2">
+                              <Percent className="h-5 w-5 text-accent" />
+                            </div>
+                            <p className="font-bold text-sm mb-1">
+                              {settings.events_promo_code_2 || "HAPPY15"}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {settings.events_promo_code_2_desc || "Giảm 15% Happy Hour"}
+                            </p>
+                          </div>
+                          <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 text-center">
+                            <div className="p-2 rounded-full bg-accent/10 w-fit mx-auto mb-2">
+                              <Percent className="h-5 w-5 text-accent" />
+                            </div>
+                            <p className="font-bold text-sm mb-1">
+                              {settings.events_promo_code_3 || "FREESHIP"}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {settings.events_promo_code_3_desc || "Miễn phí giao hàng"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-4 pt-4">
+                      <Button className="flex-1" onClick={() => window.open('/events', '_blank')}>
+                        <Eye className="h-4 w-4 mr-2" />
+                        Mở trang sự kiện thực tế
+                      </Button>
+                      <Button variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                        Lên đầu trang
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
