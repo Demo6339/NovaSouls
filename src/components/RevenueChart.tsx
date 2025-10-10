@@ -20,31 +20,31 @@ import {
 } from 'recharts';
 import { RefreshCw, TrendingUp, Activity, Clock } from 'lucide-react';
 
-// Dữ liệu mẫu cho các khoảng thời gian khác nhau với nhiều metrics
+// Dữ liệu trống cho các khoảng thời gian khác nhau
 const revenueData = {
   '1': [
     { time: '00:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '04:00', revenue: 120000, orders: 3, profit: 24000 },
-    { time: '08:00', revenue: 350000, orders: 8, profit: 70000 },
-    { time: '12:00', revenue: 680000, orders: 15, profit: 136000 },
-    { time: '16:00', revenue: 920000, orders: 22, profit: 184000 },
-    { time: '20:00', revenue: 1150000, orders: 28, profit: 230000 },
-    { time: '24:00', revenue: 1280000, orders: 32, profit: 256000 },
+    { time: '04:00', revenue: 0, orders: 0, profit: 0 },
+    { time: '08:00', revenue: 0, orders: 0, profit: 0 },
+    { time: '12:00', revenue: 0, orders: 0, profit: 0 },
+    { time: '16:00', revenue: 0, orders: 0, profit: 0 },
+    { time: '20:00', revenue: 0, orders: 0, profit: 0 },
+    { time: '24:00', revenue: 0, orders: 0, profit: 0 },
   ],
   '7': [
-    { time: 'T2', revenue: 1200000, orders: 45, profit: 240000 },
-    { time: 'T3', revenue: 1500000, orders: 52, profit: 300000 },
-    { time: 'T4', revenue: 1100000, orders: 38, profit: 220000 },
-    { time: 'T5', revenue: 1800000, orders: 65, profit: 360000 },
-    { time: 'T6', revenue: 2200000, orders: 78, profit: 440000 },
-    { time: 'T7', revenue: 2500000, orders: 89, profit: 500000 },
-    { time: 'CN', revenue: 1900000, orders: 68, profit: 380000 },
+    { time: 'T2', revenue: 0, orders: 0, profit: 0 },
+    { time: 'T3', revenue: 0, orders: 0, profit: 0 },
+    { time: 'T4', revenue: 0, orders: 0, profit: 0 },
+    { time: 'T5', revenue: 0, orders: 0, profit: 0 },
+    { time: 'T6', revenue: 0, orders: 0, profit: 0 },
+    { time: 'T7', revenue: 0, orders: 0, profit: 0 },
+    { time: 'CN', revenue: 0, orders: 0, profit: 0 },
   ],
   '30': [
-    { time: 'Tuần 1', revenue: 8500000, orders: 320, profit: 1700000 },
-    { time: 'Tuần 2', revenue: 9200000, orders: 345, profit: 1840000 },
-    { time: 'Tuần 3', revenue: 8800000, orders: 330, profit: 1760000 },
-    { time: 'Tuần 4', revenue: 10500000, orders: 395, profit: 2100000 },
+    { time: 'Tuần 1', revenue: 0, orders: 0, profit: 0 },
+    { time: 'Tuần 2', revenue: 0, orders: 0, profit: 0 },
+    { time: 'Tuần 3', revenue: 0, orders: 0, profit: 0 },
+    { time: 'Tuần 4', revenue: 0, orders: 0, profit: 0 },
   ],
 };
 
