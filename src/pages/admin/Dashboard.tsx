@@ -1,6 +1,7 @@
 import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
+import RevenueChart from "@/components/RevenueChart";
 
 const stats = [];
 
@@ -46,68 +47,45 @@ const AdminDashboard = () => {
           })}
         </div>
 
-        {/* Charts & Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          {/* Revenue Chart Placeholder */}
-          <Card className="animate-fade-up" style={{ animationDelay: "200ms" }}>
-            <CardHeader>
-              <CardTitle>Doanh thu 7 ngày</CardTitle>
-              <CardDescription>Biểu đồ doanh thu theo ngày</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-48 lg:h-64 flex items-center justify-center bg-secondary/20 rounded-lg">
-                <p className="text-muted-foreground text-sm lg:text-base">Biểu đồ doanh thu</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Orders */}
-          <Card className="animate-fade-up" style={{ animationDelay: "300ms" }}>
-            <CardHeader>
-              <CardTitle>Đơn hàng gần đây</CardTitle>
-              <CardDescription>Cập nhật realtime</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 lg:space-y-4">
-                {recentOrders.map((order) => (
-                  <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
-                    <div className="flex-1">
-                      <p className="font-medium text-sm lg:text-base">#{order.id}</p>
-                      <p className="text-xs lg:text-sm text-muted-foreground">{order.customer}</p>
-                      <p className="text-xs text-muted-foreground">{order.time}</p>
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="font-bold text-primary text-sm lg:text-base">{order.total.toLocaleString('vi-VN')}đ</p>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                      }`}>
-                        {order.status === 'completed' ? 'Hoàn thành' : 'Đang làm'}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        {/* Revenue Chart - Full Width */}
+        <div className="mb-6 lg:mb-8">
+          <div className="animate-fade-up" style={{ animationDelay: "200ms" }}>
+            <RevenueChart />
+          </div>
         </div>
 
-        {/* Additional Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-4 lg:mt-6">
-          <Card className="animate-fade-up" style={{ animationDelay: "400ms" }}>
-            <CardHeader>
-              <CardTitle>Top sản phẩm</CardTitle>
-              <CardDescription>Bán chạy nhất tuần này</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="text-center text-muted-foreground text-sm">
-                  Chưa có dữ liệu
+        {/* Recent Orders - Full Width */}
+        <Card className="animate-fade-up mb-6 lg:mb-8" style={{ animationDelay: "300ms" }}>
+          <CardHeader>
+            <CardTitle>Đơn hàng gần đây</CardTitle>
+            <CardDescription>Cập nhật realtime</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 lg:space-y-4">
+              {recentOrders.map((order) => (
+                <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
+                  <div className="flex-1">
+                    <p className="font-medium text-sm lg:text-base">#{order.id}</p>
+                    <p className="text-xs lg:text-sm text-muted-foreground">{order.customer}</p>
+                    <p className="text-xs text-muted-foreground">{order.time}</p>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <p className="font-bold text-primary text-sm lg:text-base">{order.total.toLocaleString('vi-VN')}đ</p>
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {order.status === 'completed' ? 'Hoàn thành' : 'Đang làm'}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="animate-fade-up" style={{ animationDelay: "450ms" }}>
+        {/* Additional Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+          <Card className="animate-fade-up" style={{ animationDelay: "400ms" }}>
             <CardHeader>
               <CardTitle>Chi phí</CardTitle>
               <CardDescription>Chi phí hôm nay</CardDescription>
@@ -130,7 +108,7 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="animate-fade-up" style={{ animationDelay: "500ms" }}>
+          <Card className="animate-fade-up" style={{ animationDelay: "450ms" }}>
             <CardHeader>
               <CardTitle>Thống kê</CardTitle>
               <CardDescription>Tổng quan tháng này</CardDescription>
