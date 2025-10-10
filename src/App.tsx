@@ -20,6 +20,12 @@ import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivities from "./pages/admin/events/Activities";
 import AdminCoupons from "./pages/admin/events/Coupons";
 import Appearance from "./pages/admin/Appearance";
+import AdminHomeContent from "./pages/admin/appearance/HomeContent";
+import AdminHomeImages from "./pages/admin/appearance/HomeImages";
+import AdminHomeLayout from "./pages/admin/appearance/HomeLayout";
+import AdminEventContent from "./pages/admin/appearance/EventContent";
+import AdminEventImages from "./pages/admin/appearance/EventImages";
+import AdminEventLayout from "./pages/admin/appearance/EventLayout";
 import Accounts from "./pages/admin/Accounts";
 import History from "./pages/admin/History";
 import NotFound from "./pages/NotFound";
@@ -55,6 +61,12 @@ const App = () => (
           <Route path="/admin/events/activities" element={<AdminActivities />} />
           <Route path="/admin/events/coupons" element={<AdminCoupons />} />
           <Route path="/admin/appearance" element={<Appearance />} />
+          <Route path="/admin/appearance/home/content" element={<AdminHomeContent />} />
+          <Route path="/admin/appearance/home/images" element={<AdminHomeImages />} />
+          <Route path="/admin/appearance/home/layout" element={<AdminHomeLayout />} />
+          <Route path="/admin/appearance/events/content" element={<AdminEventContent />} />
+          <Route path="/admin/appearance/events/images" element={<AdminEventImages />} />
+          <Route path="/admin/appearance/events/layout" element={<AdminEventLayout />} />
           <Route path="/admin/accounts" element={<Accounts />} />
           <Route path="/admin/history" element={<History />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

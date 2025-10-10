@@ -19,6 +19,11 @@ import {
   PlusCircle,
   Activity,
   Tag,
+  Home,
+  Type,
+  Image as ImageIcon,
+  Layout,
+  Settings,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -44,7 +49,33 @@ const menuItems = [
       { icon: Tag, label: "Mã giảm giá", path: "/admin/events/coupons" },
     ]
   },
-  { icon: Palette, label: "Giao diện", path: "/admin/appearance" },
+  { 
+    icon: Palette, 
+    label: "Giao diện", 
+    path: "/admin/appearance",
+    subItems: [
+      { 
+        icon: Home, 
+        label: "Trang chủ", 
+        path: "/admin/appearance/home",
+        subItems: [
+          { icon: Type, label: "Nội dung", path: "/admin/appearance/home/content" },
+          { icon: ImageIcon, label: "Hình ảnh", path: "/admin/appearance/home/images" },
+          { icon: Layout, label: "Bố cục", path: "/admin/appearance/home/layout" },
+        ]
+      },
+      { 
+        icon: Calendar, 
+        label: "Sự kiện", 
+        path: "/admin/appearance/events",
+        subItems: [
+          { icon: Type, label: "Nội dung", path: "/admin/appearance/events/content" },
+          { icon: ImageIcon, label: "Hình ảnh", path: "/admin/appearance/events/images" },
+          { icon: Layout, label: "Bố cục", path: "/admin/appearance/events/layout" },
+        ]
+      },
+    ]
+  },
   { icon: Users, label: "Tài khoản", path: "/admin/accounts" },
   { icon: History, label: "Lịch sử", path: "/admin/history" },
 ];
@@ -55,18 +86,36 @@ const AdminSidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  // Auto-expand products menu if on any products page
+  // Auto-expand menus if on any sub-pages
   useEffect(() => {
     if (location.pathname.startsWith('/admin/products')) {
       setExpandedItems(prev => 
         prev.includes('/admin/products') ? prev : [...prev, '/admin/products']
       );
     }
-    // Auto-expand events menu if on any events page
     if (location.pathname.startsWith('/admin/events')) {
       setExpandedItems(prev => 
         prev.includes('/admin/events') ? prev : [...prev, '/admin/events']
       );
+    }
+    if (location.pathname.startsWith('/admin/appearance')) {
+      setExpandedItems(prev => {
+        const newItems = [...prev];
+        if (!newItems.includes('/admin/appearance')) {
+          newItems.push('/admin/appearance');
+        }
+        if (location.pathname.startsWith('/admin/appearance/home')) {
+          if (!newItems.includes('/admin/appearance/home')) {
+            newItems.push('/admin/appearance/home');
+          }
+        }
+        if (location.pathname.startsWith('/admin/appearance/events')) {
+          if (!newItems.includes('/admin/appearance/events')) {
+            newItems.push('/admin/appearance/events');
+          }
+        }
+        return newItems;
+      });
     }
   }, [location.pathname]);
 
@@ -97,6 +146,18 @@ const AdminSidebar = () => {
       if (item.path === '/admin/events') {
         navigate('/admin/events/activities');
       }
+      // If clicking on appearance, navigate to home content by default
+      if (item.path === '/admin/appearance') {
+        navigate('/admin/appearance/home/content');
+      }
+      // If clicking on home, navigate to content by default
+      if (item.path === '/admin/appearance/home') {
+        navigate('/admin/appearance/home/content');
+      }
+      // If clicking on events appearance, navigate to content by default
+      if (item.path === '/admin/appearance/events') {
+        navigate('/admin/appearance/events/content');
+      }
     } else {
       navigate(item.path);
     }
@@ -104,8 +165,13 @@ const AdminSidebar = () => {
 
   const isItemActive = (item: any) => {
     if (item.subItems) {
-      return item.subItems.some((subItem: any) => location.pathname === subItem.path) || 
-             location.pathname === item.path;
+      return item.subItems.some((subItem: any) => {
+        if (subItem.subItems) {
+          return subItem.subItems.some((subSubItem: any) => location.pathname === subSubItem.path) ||
+                 location.pathname === subItem.path;
+        }
+        return location.pathname === subItem.path;
+      }) || location.pathname === item.path;
     }
     return location.pathname === item.path;
   };
@@ -186,30 +252,83 @@ const AdminSidebar = () => {
                     )}
                   </button>
                   
-                  {isExpanded && (
-                    <div className="ml-4 mt-2 space-y-1">
-                      {item.subItems.map((subItem) => {
-                        const SubIcon = subItem.icon;
-                        const isSubActive = isSubItemActive(subItem);
-                        return (
-                          <Link
-                            key={subItem.path}
-                            to={subItem.path}
-                            onClick={closeMobileMenu}
-                            className={cn(
-                              "flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-200 text-sm",
-                              isSubActive
-                                ? "bg-gradient-hero text-primary-foreground shadow-md"
-                                : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                            )}
-                          >
-                            <SubIcon className="h-4 w-4" />
-                            <span className="font-medium">{subItem.label}</span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
+                   {isExpanded && (
+                     <div className="ml-6 mt-2 space-y-1 border-l border-border/30 pl-4">
+                       {item.subItems.map((subItem) => {
+                         const SubIcon = subItem.icon;
+                         const isSubActive = isSubItemActive(subItem);
+                         const isSubExpanded = expandedItems.includes(subItem.path);
+                         
+                         if (subItem.subItems) {
+                           return (
+                             <div key={subItem.path} className="space-y-1">
+                               <button
+                                 onClick={() => toggleExpanded(subItem.path)}
+                                 className={cn(
+                                   "flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all duration-200 text-sm",
+                                   isSubActive
+                                     ? "bg-gradient-hero text-primary-foreground shadow-md"
+                                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                                 )}
+                               >
+                                 <div className="flex items-center gap-3">
+                                   <SubIcon className="h-4 w-4" />
+                                   <span className="font-medium">{subItem.label}</span>
+                                 </div>
+                                 {isSubExpanded ? (
+                                   <ChevronDown className="h-4 w-4" />
+                                 ) : (
+                                   <ChevronRight className="h-4 w-4" />
+                                 )}
+                               </button>
+                               
+                               {isSubExpanded && (
+                                 <div className="ml-6 space-y-1 border-l border-border/20 pl-4">
+                                   {subItem.subItems.map((subSubItem) => {
+                                     const SubSubIcon = subSubItem.icon;
+                                     const isSubSubActive = isSubItemActive(subSubItem);
+                                     return (
+                                       <Link
+                                         key={subSubItem.path}
+                                         to={subSubItem.path}
+                                         onClick={closeMobileMenu}
+                                         className={cn(
+                                           "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 text-sm",
+                                           isSubSubActive
+                                             ? "bg-gradient-hero text-primary-foreground shadow-md"
+                                             : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                                         )}
+                                       >
+                                         <SubSubIcon className="h-4 w-4" />
+                                         <span className="font-medium">{subSubItem.label}</span>
+                                       </Link>
+                                     );
+                                   })}
+                                 </div>
+                               )}
+                             </div>
+                           );
+                         }
+                         
+                         return (
+                           <Link
+                             key={subItem.path}
+                             to={subItem.path}
+                             onClick={closeMobileMenu}
+                             className={cn(
+                               "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm",
+                               isSubActive
+                                 ? "bg-gradient-hero text-primary-foreground shadow-md"
+                                 : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                             )}
+                           >
+                             <SubIcon className="h-4 w-4" />
+                             <span className="font-medium">{subItem.label}</span>
+                           </Link>
+                         );
+                       })}
+                     </div>
+                   )}
                 </div>
               );
             }
