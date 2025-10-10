@@ -43,13 +43,38 @@ interface SiteSettings {
   features_title?: string;
   features_subtitle?: string;
   
-  // Testimonials
-  testimonials_badge_text?: string;
-  testimonials_title?: string;
-  testimonials_subtitle?: string;
-  testimonials_stats_rating?: string;
-  testimonials_stats_customers?: string;
-  testimonials_stats_return?: string;
+  // Stats Section
+  stats_title?: string;
+  stats_subtitle?: string;
+  stats_customers_value?: string;
+  stats_customers_label?: string;
+  stats_customers_description?: string;
+  stats_products_value?: string;
+  stats_products_label?: string;
+  stats_products_description?: string;
+  stats_rating_value?: string;
+  stats_rating_label?: string;
+  stats_rating_description?: string;
+  stats_experience_value?: string;
+  stats_experience_label?: string;
+  stats_experience_description?: string;
+  
+  // CTA Section
+  cta_title?: string;
+  cta_subtitle?: string;
+  cta_address?: string;
+  cta_phone?: string;
+  cta_hours?: string;
+  cta_offer?: string;
+  cta_button_primary_text?: string;
+  cta_button_primary_link?: string;
+  cta_button_secondary_text?: string;
+  cta_button_secondary_link?: string;
+  cta_newsletter_title?: string;
+  cta_newsletter_description?: string;
+  cta_newsletter_benefit_1?: string;
+  cta_newsletter_benefit_2?: string;
+  cta_newsletter_benefit_3?: string;
   
   // About Section
   about_badge_text?: string;
@@ -122,13 +147,38 @@ const Appearance = () => {
     features_title: "Trải nghiệm đặt món hiện đại",
     features_subtitle: "Công nghệ tiên tiến kết hợp với dịch vụ chuyên nghiệp, mang đến trải nghiệm tuyệt vời cho khách hàng",
     
-    // Testimonials
-    testimonials_badge_text: "Đánh giá khách hàng",
-    testimonials_title: "Khách hàng nói gì về chúng tôi",
-    testimonials_subtitle: "Những phản hồi chân thực từ khách hàng đã trải nghiệm dịch vụ của chúng tôi",
-    testimonials_stats_rating: "4.9/5",
-    testimonials_stats_customers: "2,500+",
-    testimonials_stats_return: "98%",
+    // Stats Section
+    stats_title: "Nova Souls trong số liệu",
+    stats_subtitle: "Những con số biết nói về chất lượng dịch vụ và sự tin tưởng của khách hàng",
+    stats_customers_value: "1000+",
+    stats_customers_label: "Khách hàng hài lòng",
+    stats_customers_description: "Mỗi tháng",
+    stats_products_value: "50+",
+    stats_products_label: "Món ngon đa dạng",
+    stats_products_description: "Cà phê & đồ ăn",
+    stats_rating_value: "4.9",
+    stats_rating_label: "Đánh giá trung bình",
+    stats_rating_description: "Từ khách hàng",
+    stats_experience_value: "5+",
+    stats_experience_label: "Năm kinh nghiệm",
+    stats_experience_description: "Phục vụ chuyên nghiệp",
+    
+    // CTA Section
+    cta_title: "Sẵn sàng trải nghiệm Nova Souls?",
+    cta_subtitle: "Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời cùng không gian ấm cúng tại quán chúng tôi.",
+    cta_address: "123 Đường ABC, Quận 1, TP.HCM",
+    cta_phone: "0123 456 789",
+    cta_hours: "7:00 - 22:00 hàng ngày",
+    cta_offer: "Giảm 10% lần đầu",
+    cta_button_primary_text: "Đặt món ngay",
+    cta_button_primary_link: "/menu",
+    cta_button_secondary_text: "Liên hệ",
+    cta_button_secondary_link: "/contact",
+    cta_newsletter_title: "Nhận ưu đãi đặc biệt",
+    cta_newsletter_description: "Đăng ký nhận tin để nhận thông tin về ưu đãi và sản phẩm mới",
+    cta_newsletter_benefit_1: "Giảm 10% cho đơn hàng đầu tiên",
+    cta_newsletter_benefit_2: "Thông báo sớm về sản phẩm mới",
+    cta_newsletter_benefit_3: "Ưu đãi đặc biệt cho thành viên",
     
     // About Section
     about_badge_text: "Về chúng tôi",
@@ -282,9 +332,13 @@ const Appearance = () => {
                       <Type className="h-4 w-4" />
                       <span className="text-center leading-tight">Tính năng</span>
                     </TabsTrigger>
-                    <TabsTrigger value="testimonials" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                    <TabsTrigger value="stats" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
+                      <Type className="h-4 w-4" />
+                      <span className="text-center leading-tight">Thống kê</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="cta" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
                       <Eye className="h-4 w-4" />
-                      <span className="text-center leading-tight">Đánh giá</span>
+                      <span className="text-center leading-tight">CTA</span>
                     </TabsTrigger>
                     <TabsTrigger value="about" className="flex flex-col items-center gap-1 p-2 text-xs min-h-[60px]">
                       <Image className="h-4 w-4" />
@@ -312,9 +366,13 @@ const Appearance = () => {
                       <Type className="h-4 w-4" />
                       <span>Tính năng</span>
                     </TabsTrigger>
-                    <TabsTrigger value="testimonials" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                    <TabsTrigger value="stats" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
+                      <Type className="h-4 w-4" />
+                      <span>Thống kê</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="cta" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
                       <Eye className="h-4 w-4" />
-                      <span>Đánh giá</span>
+                      <span>CTA</span>
                     </TabsTrigger>
                     <TabsTrigger value="about" className="flex items-center gap-2 px-3 py-2 text-xs whitespace-nowrap">
                       <Image className="h-4 w-4" />
@@ -635,70 +693,156 @@ const Appearance = () => {
             </Card>
           </TabsContent>
 
-          {/* Testimonials */}
-          <TabsContent value="testimonials" className="space-y-6">
+          {/* Stats Section */}
+          <TabsContent value="stats" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Eye className="h-5 w-5" />
-                  Đánh giá khách hàng
+                  <Type className="h-5 w-5" />
+                  Thống kê số liệu
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label>Badge Text</Label>
-                      <Input
-                        value={settings.testimonials_badge_text || ""}
-                        onChange={(e) => updateSetting('testimonials_badge_text', e.target.value)}
-                        placeholder="Đánh giá khách hàng"
-                      />
-                    </div>
-                    <div>
                       <Label>Tiêu đề</Label>
                       <Input
-                        value={settings.testimonials_title || ""}
-                        onChange={(e) => updateSetting('testimonials_title', e.target.value)}
-                        placeholder="Khách hàng nói gì về chúng tôi"
+                        value={settings.stats_title || ""}
+                        onChange={(e) => updateSetting('stats_title', e.target.value)}
+                        placeholder="Nova Souls trong số liệu"
                       />
                     </div>
                     <div>
                       <Label>Mô tả</Label>
                       <Textarea
-                        value={settings.testimonials_subtitle || ""}
-                        onChange={(e) => updateSetting('testimonials_subtitle', e.target.value)}
-                        placeholder="Những phản hồi chân thực từ khách hàng..."
+                        value={settings.stats_subtitle || ""}
+                        onChange={(e) => updateSetting('stats_subtitle', e.target.value)}
+                        placeholder="Những con số biết nói về chất lượng dịch vụ..."
                         rows={3}
                       />
                     </div>
                   </div>
                   
                   <div className="space-y-4">
-                    <h4 className="font-semibold">Thống kê</h4>
+                    <h4 className="font-semibold">Thống kê 1 - Khách hàng</h4>
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <Label>Đánh giá trung bình</Label>
+                        <Label>Giá trị</Label>
                         <Input
-                          value={settings.testimonials_stats_rating || ""}
-                          onChange={(e) => updateSetting('testimonials_stats_rating', e.target.value)}
-                          placeholder="4.9/5"
+                          value={settings.stats_customers_value || ""}
+                          onChange={(e) => updateSetting('stats_customers_value', e.target.value)}
+                          placeholder="1000+"
                         />
                       </div>
                       <div>
-                        <Label>Khách hàng hài lòng</Label>
+                        <Label>Nhãn</Label>
                         <Input
-                          value={settings.testimonials_stats_customers || ""}
-                          onChange={(e) => updateSetting('testimonials_stats_customers', e.target.value)}
-                          placeholder="2,500+"
+                          value={settings.stats_customers_label || ""}
+                          onChange={(e) => updateSetting('stats_customers_label', e.target.value)}
+                          placeholder="Khách hàng hài lòng"
                         />
                       </div>
                       <div>
-                        <Label>Tỷ lệ quay lại</Label>
+                        <Label>Mô tả</Label>
                         <Input
-                          value={settings.testimonials_stats_return || ""}
-                          onChange={(e) => updateSetting('testimonials_stats_return', e.target.value)}
-                          placeholder="98%"
+                          value={settings.stats_customers_description || ""}
+                          onChange={(e) => updateSetting('stats_customers_description', e.target.value)}
+                          placeholder="Mỗi tháng"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Thống kê 2 - Sản phẩm</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Giá trị</Label>
+                        <Input
+                          value={settings.stats_products_value || ""}
+                          onChange={(e) => updateSetting('stats_products_value', e.target.value)}
+                          placeholder="50+"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nhãn</Label>
+                        <Input
+                          value={settings.stats_products_label || ""}
+                          onChange={(e) => updateSetting('stats_products_label', e.target.value)}
+                          placeholder="Món ngon đa dạng"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.stats_products_description || ""}
+                          onChange={(e) => updateSetting('stats_products_description', e.target.value)}
+                          placeholder="Cà phê & đồ ăn"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Thống kê 3 - Đánh giá</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Giá trị</Label>
+                        <Input
+                          value={settings.stats_rating_value || ""}
+                          onChange={(e) => updateSetting('stats_rating_value', e.target.value)}
+                          placeholder="4.9"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nhãn</Label>
+                        <Input
+                          value={settings.stats_rating_label || ""}
+                          onChange={(e) => updateSetting('stats_rating_label', e.target.value)}
+                          placeholder="Đánh giá trung bình"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.stats_rating_description || ""}
+                          onChange={(e) => updateSetting('stats_rating_description', e.target.value)}
+                          placeholder="Từ khách hàng"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Thống kê 4 - Kinh nghiệm</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Giá trị</Label>
+                        <Input
+                          value={settings.stats_experience_value || ""}
+                          onChange={(e) => updateSetting('stats_experience_value', e.target.value)}
+                          placeholder="5+"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nhãn</Label>
+                        <Input
+                          value={settings.stats_experience_label || ""}
+                          onChange={(e) => updateSetting('stats_experience_label', e.target.value)}
+                          placeholder="Năm kinh nghiệm"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.stats_experience_description || ""}
+                          onChange={(e) => updateSetting('stats_experience_description', e.target.value)}
+                          placeholder="Phục vụ chuyên nghiệp"
                         />
                       </div>
                     </div>
@@ -801,6 +945,168 @@ const Appearance = () => {
                         placeholder="https://images.unsplash.com/photo-1...&#10;https://images.unsplash.com/photo-2..."
                         rows={4}
                       />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* CTA Section */}
+          <TabsContent value="cta" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Eye className="h-5 w-5" />
+                  Call-to-Action
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Tiêu đề chính</Label>
+                      <Input
+                        value={settings.cta_title || ""}
+                        onChange={(e) => updateSetting('cta_title', e.target.value)}
+                        placeholder="Sẵn sàng trải nghiệm Nova Souls?"
+                      />
+                    </div>
+                    <div>
+                      <Label>Mô tả</Label>
+                      <Textarea
+                        value={settings.cta_subtitle || ""}
+                        onChange={(e) => updateSetting('cta_subtitle', e.target.value)}
+                        placeholder="Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời..."
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Thông tin liên hệ</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      <div>
+                        <Label>Địa chỉ</Label>
+                        <Input
+                          value={settings.cta_address || ""}
+                          onChange={(e) => updateSetting('cta_address', e.target.value)}
+                          placeholder="123 Đường ABC, Quận 1, TP.HCM"
+                        />
+                      </div>
+                      <div>
+                        <Label>Số điện thoại</Label>
+                        <Input
+                          value={settings.cta_phone || ""}
+                          onChange={(e) => updateSetting('cta_phone', e.target.value)}
+                          placeholder="0123 456 789"
+                        />
+                      </div>
+                      <div>
+                        <Label>Giờ mở cửa</Label>
+                        <Input
+                          value={settings.cta_hours || ""}
+                          onChange={(e) => updateSetting('cta_hours', e.target.value)}
+                          placeholder="7:00 - 22:00 hàng ngày"
+                        />
+                      </div>
+                      <div>
+                        <Label>Ưu đãi</Label>
+                        <Input
+                          value={settings.cta_offer || ""}
+                          onChange={(e) => updateSetting('cta_offer', e.target.value)}
+                          placeholder="Giảm 10% lần đầu"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Nút hành động</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Nút chính - Text</Label>
+                        <Input
+                          value={settings.cta_button_primary_text || ""}
+                          onChange={(e) => updateSetting('cta_button_primary_text', e.target.value)}
+                          placeholder="Đặt món ngay"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nút chính - Link</Label>
+                        <Input
+                          value={settings.cta_button_primary_link || ""}
+                          onChange={(e) => updateSetting('cta_button_primary_link', e.target.value)}
+                          placeholder="/menu"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nút phụ - Text</Label>
+                        <Input
+                          value={settings.cta_button_secondary_text || ""}
+                          onChange={(e) => updateSetting('cta_button_secondary_text', e.target.value)}
+                          placeholder="Liên hệ"
+                        />
+                      </div>
+                      <div>
+                        <Label>Nút phụ - Link</Label>
+                        <Input
+                          value={settings.cta_button_secondary_link || ""}
+                          onChange={(e) => updateSetting('cta_button_secondary_link', e.target.value)}
+                          placeholder="/contact"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Newsletter</h4>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Tiêu đề newsletter</Label>
+                        <Input
+                          value={settings.cta_newsletter_title || ""}
+                          onChange={(e) => updateSetting('cta_newsletter_title', e.target.value)}
+                          placeholder="Nhận ưu đãi đặc biệt"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả newsletter</Label>
+                        <Textarea
+                          value={settings.cta_newsletter_description || ""}
+                          onChange={(e) => updateSetting('cta_newsletter_description', e.target.value)}
+                          placeholder="Đăng ký nhận tin để nhận thông tin về ưu đãi..."
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <Label>Lợi ích 1</Label>
+                        <Input
+                          value={settings.cta_newsletter_benefit_1 || ""}
+                          onChange={(e) => updateSetting('cta_newsletter_benefit_1', e.target.value)}
+                          placeholder="Giảm 10% cho đơn hàng đầu tiên"
+                        />
+                      </div>
+                      <div>
+                        <Label>Lợi ích 2</Label>
+                        <Input
+                          value={settings.cta_newsletter_benefit_2 || ""}
+                          onChange={(e) => updateSetting('cta_newsletter_benefit_2', e.target.value)}
+                          placeholder="Thông báo sớm về sản phẩm mới"
+                        />
+                      </div>
+                      <div>
+                        <Label>Lợi ích 3</Label>
+                        <Input
+                          value={settings.cta_newsletter_benefit_3 || ""}
+                          onChange={(e) => updateSetting('cta_newsletter_benefit_3', e.target.value)}
+                          placeholder="Ưu đãi đặc biệt cho thành viên"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -3,8 +3,51 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Clock, ArrowRight, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const CTASection = () => {
+  const [settings, setSettings] = useState({
+    cta_title: "Sẵn sàng trải nghiệm Nova Souls?",
+    cta_subtitle: "Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời cùng không gian ấm cúng tại quán chúng tôi.",
+    cta_address: "123 Đường ABC, Quận 1, TP.HCM",
+    cta_phone: "0123 456 789",
+    cta_hours: "7:00 - 22:00 hàng ngày",
+    cta_offer: "Giảm 10% lần đầu",
+    cta_button_primary_text: "Đặt món ngay",
+    cta_button_primary_link: "/menu",
+    cta_button_secondary_text: "Liên hệ",
+    cta_button_secondary_link: "/contact",
+    cta_newsletter_title: "Nhận ưu đãi đặc biệt",
+    cta_newsletter_description: "Đăng ký nhận tin để nhận thông tin về ưu đãi và sản phẩm mới",
+    cta_newsletter_benefit_1: "Giảm 10% cho đơn hàng đầu tiên",
+    cta_newsletter_benefit_2: "Thông báo sớm về sản phẩm mới",
+    cta_newsletter_benefit_3: "Ưu đãi đặc biệt cho thành viên"
+  });
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const { data } = await supabase
+        .from('site_settings')
+        .select('setting_value')
+        .eq('setting_key', 'appearance')
+        .single();
+
+      if (data) {
+        const appearanceSettings = data.setting_value as any;
+        setSettings(prev => ({
+          ...prev,
+          ...appearanceSettings
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading CTA settings:', error);
+    }
+  };
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-primary via-primary/90 to-accent">
       <div className="container px-6 sm:px-8 lg:px-12 xl:px-16">
@@ -14,14 +57,10 @@ const CTASection = () => {
           <div className="space-y-6 sm:space-y-8 text-primary-foreground">
             <div className="space-y-3 sm:space-y-4">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Sẵn sàng trải nghiệm
-                <span className="block text-accent-light">
-                  Nova Souls?
-                </span>
+                {settings.cta_title}
               </h2>
               <p className="text-base sm:text-lg lg:text-xl text-primary-foreground/90 leading-relaxed">
-                Đặt món ngay hôm nay và khám phá hương vị cà phê tuyệt vời cùng 
-                không gian ấm cúng tại quán chúng tôi.
+                {settings.cta_subtitle}
               </p>
             </div>
 
@@ -34,7 +73,7 @@ const CTASection = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-sm sm:text-base">Địa chỉ</div>
                   <div className="text-xs sm:text-sm text-primary-foreground/80 truncate">
-                    123 Đường ABC, Quận 1, TP.HCM
+                    {settings.cta_address}
                   </div>
                 </div>
               </div>
@@ -46,7 +85,7 @@ const CTASection = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-sm sm:text-base">Hotline</div>
                   <div className="text-xs sm:text-sm text-primary-foreground/80">
-                    0123 456 789
+                    {settings.cta_phone}
                   </div>
                 </div>
               </div>
@@ -58,7 +97,7 @@ const CTASection = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-sm sm:text-base">Giờ mở cửa</div>
                   <div className="text-xs sm:text-sm text-primary-foreground/80">
-                    7:00 - 22:00 hàng ngày
+                    {settings.cta_hours}
                   </div>
                 </div>
               </div>
@@ -70,7 +109,7 @@ const CTASection = () => {
                 <div className="min-w-0">
                   <div className="font-semibold text-sm sm:text-base">Ưu đãi</div>
                   <div className="text-xs sm:text-sm text-primary-foreground/80">
-                    Giảm 10% lần đầu
+                    {settings.cta_offer}
                   </div>
                 </div>
               </div>
@@ -83,8 +122,8 @@ const CTASection = () => {
                 size="lg"
                 className="bg-accent hover:bg-accent-light text-accent-foreground shadow-xl hover:shadow-2xl transition-all duration-300 group text-sm sm:text-base"
               >
-                <Link to="/menu" className="flex items-center justify-center">
-                  Đặt món ngay
+                <Link to={settings.cta_button_primary_link} className="flex items-center justify-center">
+                  {settings.cta_button_primary_text}
                   <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
@@ -94,7 +133,7 @@ const CTASection = () => {
                 variant="outline"
                 className="bg-primary-foreground/10 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 backdrop-blur-sm text-sm sm:text-base"
               >
-                <Link to="/contact">Liên hệ</Link>
+                <Link to={settings.cta_button_secondary_link}>{settings.cta_button_secondary_text}</Link>
               </Button>
             </div>
           </div>
@@ -108,10 +147,10 @@ const CTASection = () => {
                     <Mail className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-accent-light" />
                   </div>
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-primary-foreground mb-2">
-                    Nhận ưu đãi đặc biệt
+                    {settings.cta_newsletter_title}
                   </h3>
                   <p className="text-primary-foreground/80 text-sm sm:text-base">
-                    Đăng ký nhận tin để nhận thông tin về ưu đãi và sản phẩm mới
+                    {settings.cta_newsletter_description}
                   </p>
                 </div>
 
@@ -141,15 +180,15 @@ const CTASection = () => {
                 <div className="space-y-2 sm:space-y-3 pt-3 sm:pt-4 border-t border-white/20">
                   <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-primary-foreground/80">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-accent-light rounded-full flex-shrink-0"></div>
-                    <span>Giảm 10% cho đơn hàng đầu tiên</span>
+                    <span>{settings.cta_newsletter_benefit_1}</span>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-primary-foreground/80">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-accent-light rounded-full flex-shrink-0"></div>
-                    <span>Thông báo sớm về sản phẩm mới</span>
+                    <span>{settings.cta_newsletter_benefit_2}</span>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-primary-foreground/80">
                     <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-accent-light rounded-full flex-shrink-0"></div>
-                    <span>Ưu đãi đặc biệt cho thành viên</span>
+                    <span>{settings.cta_newsletter_benefit_3}</span>
                   </div>
                 </div>
               </div>

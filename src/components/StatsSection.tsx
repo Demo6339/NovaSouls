@@ -1,44 +1,86 @@
 import { Users, Coffee, Star, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-const stats = [
-  {
-    icon: Users,
-    value: "1000+",
-    label: "Khách hàng hài lòng",
-    description: "Mỗi tháng"
-  },
-  {
-    icon: Coffee,
-    value: "50+",
-    label: "Món ngon đa dạng",
-    description: "Cà phê & đồ ăn"
-  },
-  {
-    icon: Star,
-    value: "4.9",
-    label: "Đánh giá trung bình",
-    description: "Từ khách hàng"
-  },
-  {
-    icon: Award,
-    value: "5+",
-    label: "Năm kinh nghiệm",
-    description: "Phục vụ chuyên nghiệp"
-  }
-];
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const StatsSection = () => {
+  const [settings, setSettings] = useState({
+    stats_title: "Nova Souls trong số liệu",
+    stats_subtitle: "Những con số biết nói về chất lượng dịch vụ và sự tin tưởng của khách hàng",
+    stats_customers_value: "1000+",
+    stats_customers_label: "Khách hàng hài lòng",
+    stats_customers_description: "Mỗi tháng",
+    stats_products_value: "50+",
+    stats_products_label: "Món ngon đa dạng",
+    stats_products_description: "Cà phê & đồ ăn",
+    stats_rating_value: "4.9",
+    stats_rating_label: "Đánh giá trung bình",
+    stats_rating_description: "Từ khách hàng",
+    stats_experience_value: "5+",
+    stats_experience_label: "Năm kinh nghiệm",
+    stats_experience_description: "Phục vụ chuyên nghiệp"
+  });
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const { data } = await supabase
+        .from('site_settings')
+        .select('setting_value')
+        .eq('setting_key', 'appearance')
+        .single();
+
+      if (data) {
+        const appearanceSettings = data.setting_value as any;
+        setSettings(prev => ({
+          ...prev,
+          ...appearanceSettings
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading stats settings:', error);
+    }
+  };
+
+  const stats = [
+    {
+      icon: Users,
+      value: settings.stats_customers_value,
+      label: settings.stats_customers_label,
+      description: settings.stats_customers_description
+    },
+    {
+      icon: Coffee,
+      value: settings.stats_products_value,
+      label: settings.stats_products_label,
+      description: settings.stats_products_description
+    },
+    {
+      icon: Star,
+      value: settings.stats_rating_value,
+      label: settings.stats_rating_label,
+      description: settings.stats_rating_description
+    },
+    {
+      icon: Award,
+      value: settings.stats_experience_value,
+      label: settings.stats_experience_label,
+      description: settings.stats_experience_description
+    }
+  ];
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-r from-primary/5 to-accent/5">
       <div className="container px-6 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
-              Nova Souls trong số liệu
+              {settings.stats_title}
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg lg:text-xl max-w-3xl mx-auto">
-              Những con số biết nói về chất lượng dịch vụ và sự tin tưởng của khách hàng
+              {settings.stats_subtitle}
             </p>
           </div>
 
