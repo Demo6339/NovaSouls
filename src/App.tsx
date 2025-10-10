@@ -12,7 +12,13 @@ import Profile from "./pages/Profile";
 import Events from "./pages/Events";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
+import AdminMenu from "./pages/admin/products/Menu";
+import AdminInventory from "./pages/admin/products/Inventory";
+import AdminRecipes from "./pages/admin/products/Recipes";
+import AdminAddons from "./pages/admin/products/Addons";
 import AdminEvents from "./pages/admin/AdminEvents";
+import AdminActivities from "./pages/admin/events/Activities";
+import AdminCoupons from "./pages/admin/events/Coupons";
 import Appearance from "./pages/admin/Appearance";
 import Accounts from "./pages/admin/Accounts";
 import History from "./pages/admin/History";
@@ -41,7 +47,13 @@ const App = () => (
           <Route path="/events" element={<Events />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/menu" element={<AdminMenu />} />
+          <Route path="/admin/products/inventory" element={<AdminInventory />} />
+          <Route path="/admin/products/recipes" element={<AdminRecipes />} />
+          <Route path="/admin/products/addons" element={<AdminAddons />} />
           <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/events/activities" element={<AdminActivities />} />
+          <Route path="/admin/events/coupons" element={<AdminCoupons />} />
           <Route path="/admin/appearance" element={<Appearance />} />
           <Route path="/admin/accounts" element={<Accounts />} />
           <Route path="/admin/history" element={<History />} />
