@@ -16,32 +16,7 @@ import {
   RotateCcw
 } from "lucide-react";
 
-const layoutTemplates = [
-  {
-    id: 1,
-    name: "Layout 1 - Classic",
-    description: "Bố cục truyền thống với hero section lớn",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Features", "Products", "Testimonials"],
-    isActive: true
-  },
-  {
-    id: 2,
-    name: "Layout 2 - Modern",
-    description: "Bố cục hiện đại với grid layout",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Products", "Features", "CTA"],
-    isActive: false
-  },
-  {
-    id: 3,
-    name: "Layout 3 - Minimal",
-    description: "Bố cục tối giản tập trung vào nội dung",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Products", "Testimonials"],
-    isActive: false
-  }
-];
+const layoutTemplates = [];
 
 const AdminHomeLayout = () => {
   const [selectedLayout, setSelectedLayout] = useState(1);

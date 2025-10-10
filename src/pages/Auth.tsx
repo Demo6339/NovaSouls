@@ -48,7 +48,7 @@ const Auth = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder="Email"
                       required
                     />
                   </div>
@@ -57,7 +57,7 @@ const Auth = () => {
                     <Input
                       id="password"
                       type="password"
-                      placeholder="••••••••"
+                      placeholder="Mật khẩu"
                       required
                     />
                   </div>
@@ -78,7 +78,7 @@ const Auth = () => {
                     <Input
                       id="name"
                       type="text"
-                      placeholder="Nguyễn Văn A"
+                      placeholder="Họ và tên"
                       required
                     />
                   </div>
@@ -87,7 +87,7 @@ const Auth = () => {
                     <Input
                       id="register-email"
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder="Email"
                       required
                     />
                   </div>
@@ -96,7 +96,7 @@ const Auth = () => {
                     <Input
                       id="register-password"
                       type="password"
-                      placeholder="••••••••"
+                      placeholder="Mật khẩu"
                       required
                     />
                   </div>
@@ -105,7 +105,7 @@ const Auth = () => {
                     <Input
                       id="confirm-password"
                       type="password"
-                      placeholder="••••••••"
+                      placeholder="Mật khẩu"
                       required
                     />
                   </div>

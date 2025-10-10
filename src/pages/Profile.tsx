@@ -128,7 +128,7 @@ const Profile = () => {
                   <span className="truncate">{user.address}</span>
                 </span>
                 <span className="hidden sm:inline">•</span>
-                <span>Thành viên từ {new Date(user.joinDate).toLocaleDateString('vi-VN')}</span>
+                <span>Thành viên từ {user.joinDate ? new Date(user.joinDate).toLocaleDateString('vi-VN') : 'Chưa có thông tin'}</span>
               </div>
             </div>
             <Button variant="outline" size="sm" className="flex items-center gap-2 self-start">

@@ -56,12 +56,12 @@ const HomepagePreview = ({ settings }: HomepagePreviewProps) => {
               <div className="h-48 bg-gray-200"></div>
               <CardContent className="p-4">
                 <h3 className="font-semibold mb-2">Sản phẩm {i}</h3>
-                <p className="text-sm text-gray-600 mb-2">Mô tả sản phẩm...</p>
+                <p className="text-sm text-gray-600 mb-2">Mô tả sản phẩm</p>
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-accent">0đ</span>
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                    <span className="text-sm">4.9</span>
+                    <span className="text-sm">0.0</span>
                   </div>
                 </div>
               </CardContent>

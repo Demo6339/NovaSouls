@@ -87,16 +87,16 @@ const Checkout = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Họ và tên *</Label>
-                        <Input id="name" required placeholder="Nguyễn Văn A" />
+                        <Input id="name" required placeholder="Họ và tên" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Số điện thoại *</Label>
-                        <Input id="phone" type="tel" required placeholder="0123456789" />
+                        <Input id="phone" type="tel" required placeholder="Số điện thoại" />
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="email@example.com" />
+                      <Input id="email" type="email" placeholder="Email" />
                     </div>
                   </CardContent>
                 </Card>
@@ -110,16 +110,16 @@ const Checkout = () => {
                     <CardContent className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="address">Địa chỉ cụ thể *</Label>
-                        <Input id="address" required placeholder="Số nhà, tên đường" />
+                        <Input id="address" required placeholder="Địa chỉ" />
                       </div>
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="ward">Phường/Xã *</Label>
-                          <Input id="ward" required placeholder="Phường 1" />
+                          <Input id="ward" required placeholder="Phường/Xã" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="district">Quận/Huyện *</Label>
-                          <Input id="district" required placeholder="Quận 1" />
+                          <Input id="district" required placeholder="Quận/Huyện" />
                         </div>
                       </div>
                       <div className="space-y-2">

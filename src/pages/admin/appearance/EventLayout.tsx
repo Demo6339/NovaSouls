@@ -18,32 +18,7 @@ import {
   Tag
 } from "lucide-react";
 
-const eventLayoutTemplates = [
-  {
-    id: 1,
-    name: "Layout 1 - Grid Events",
-    description: "Bố cục lưới cho sự kiện và mã giảm giá",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Events Grid", "Coupons Grid", "CTA"],
-    isActive: true
-  },
-  {
-    id: 2,
-    name: "Layout 2 - Timeline",
-    description: "Bố cục timeline cho sự kiện theo thời gian",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Events Timeline", "Coupons List", "Footer"],
-    isActive: false
-  },
-  {
-    id: 3,
-    name: "Layout 3 - Cards",
-    description: "Bố cục card cho sự kiện và mã giảm giá",
-    preview: "/api/placeholder/400/300",
-    sections: ["Hero", "Events Cards", "Coupons Cards"],
-    isActive: false
-  }
-];
+const eventLayoutTemplates = [];
 
 const AdminEventLayout = () => {
   const [selectedLayout, setSelectedLayout] = useState(1);
