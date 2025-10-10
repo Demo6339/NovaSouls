@@ -2,59 +2,9 @@ import { QrCode, ShoppingBag, Clock, Shield, Zap, Award, Coffee, Heart } from "l
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const features = [
-  {
-    icon: QrCode,
-    title: "Đặt món qua QR",
-    description: "Quét mã QR tại bàn để gọi món nhanh chóng, không cần đăng nhập. Trải nghiệm đặt món hiện đại và tiện lợi",
-    highlight: "Nhanh chóng",
-    color: "from-blue-500 to-blue-600"
-  },
-  {
-    icon: ShoppingBag,
-    title: "Giao hàng tận nơi",
-    description: "Đặt hàng online và nhận tại nhà với dịch vụ giao hàng nhanh trong vòng 30 phút",
-    highlight: "Tiện lợi",
-    color: "from-green-500 to-green-600"
-  },
-  {
-    icon: Clock,
-    title: "Cập nhật realtime",
-    description: "Theo dõi trạng thái đơn hàng của bạn ngay lập tức với hệ thống thông báo thông minh",
-    highlight: "Thời gian thực",
-    color: "from-orange-500 to-orange-600"
-  },
-  {
-    icon: Shield,
-    title: "An toàn & Bảo mật",
-    description: "Thông tin cá nhân và thanh toán được bảo mật tuyệt đối với công nghệ mã hóa tiên tiến",
-    highlight: "Bảo mật",
-    color: "from-purple-500 to-purple-600"
-  },
-];
+const features = [];
 
-const additionalFeatures = [
-  {
-    icon: Coffee,
-    title: "Cà phê tươi mỗi ngày",
-    description: "Pha chế từ hạt cà phê chất lượng cao"
-  },
-  {
-    icon: Award,
-    title: "Chất lượng đảm bảo",
-    description: "Nguyên liệu tươi ngon, quy trình chuẩn"
-  },
-  {
-    icon: Heart,
-    title: "Dịch vụ tận tâm",
-    description: "Nhân viên thân thiện, phục vụ chuyên nghiệp"
-  },
-  {
-    icon: Zap,
-    title: "Phục vụ nhanh",
-    description: "Đơn hàng được xử lý và phục vụ trong thời gian ngắn"
-  }
-];
+const additionalFeatures = [];
 
 const Features = () => {
   return (

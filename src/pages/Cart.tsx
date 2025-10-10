@@ -20,10 +20,7 @@ interface CartItem {
 }
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: 1, name: "Signature Latte", price: 55000, quantity: 2, image: coffeeImage },
-    { id: 2, name: "Croissant Bơ", price: 35000, quantity: 1, image: coffeeImage },
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const updateQuantity = (id: number, delta: number) => {
     setCartItems(items =>

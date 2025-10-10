@@ -16,19 +16,9 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, Package } from "lucide-react";
 import coffeeImage from "@/assets/coffee-1.jpg";
 
-const products = [
-  { id: 1, name: "Signature Latte", category: "Cà phê", price: 55000, stock: 100, status: "active", image: coffeeImage },
-  { id: 2, name: "Cappuccino", category: "Cà phê", price: 50000, stock: 85, status: "active", image: coffeeImage },
-  { id: 3, name: "Croissant Bơ", category: "Bánh", price: 35000, stock: 45, status: "active", image: coffeeImage },
-  { id: 4, name: "Tiramisu", category: "Tráng miệng", price: 55000, stock: 30, status: "active", image: coffeeImage },
-];
+const products = [];
 
-const inventory = [
-  { id: 1, name: "Hạt cà phê Arabica", unit: "kg", stock: 50, minStock: 20, status: "good" },
-  { id: 2, name: "Sữa tươi", unit: "lít", stock: 15, minStock: 30, status: "low" },
-  { id: 3, name: "Đường", unit: "kg", stock: 25, minStock: 10, status: "good" },
-  { id: 4, name: "Bột mì", unit: "kg", stock: 8, minStock: 15, status: "low" },
-];
+const inventory = [];
 
 const AdminProducts = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -202,7 +192,7 @@ const AdminProducts = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">45.500.000đ</div>
+                  <div className="text-2xl font-bold">0đ</div>
                 </CardContent>
               </Card>
             </div>

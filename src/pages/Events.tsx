@@ -7,100 +7,7 @@ import { Calendar, Clock, MapPin, Gift, Percent, Star, Users, Heart, Share2, Fil
 import { useState } from "react";
 import coffeeImage from "@/assets/coffee-1.jpg";
 
-const events = [
-  {
-    id: 1,
-    title: "Happy Hour - Giảm 30%",
-    description: "Giảm 30% tất cả đồ uống từ 14:00 - 16:00 hàng ngày",
-    date: "Hàng ngày",
-    time: "14:00 - 16:00",
-    location: "Tất cả chi nhánh",
-    image: coffeeImage,
-    type: "promotion",
-    discount: "30%",
-    rating: 4.8,
-    participants: 120,
-    isLiked: false,
-    featured: false,
-    color: "from-orange-400 to-red-500",
-  },
-  {
-    id: 2,
-    title: "Sinh nhật Nova Souls",
-    description: "Mừng sinh nhật 2 năm - Ưu đãi đặc biệt cho thành viên",
-    date: "15/10/2025",
-    time: "Cả ngày",
-    location: "Chi nhánh Quận 1",
-    image: coffeeImage,
-    type: "event",
-    discount: "50%",
-    rating: 4.9,
-    participants: 200,
-    isLiked: true,
-    featured: true,
-    color: "from-purple-400 to-pink-500",
-  },
-  {
-    id: 3,
-    title: "Workshop: Pha chế cà phê cơ bản",
-    description: "Học cách pha chế cà phê từ barista chuyên nghiệp",
-    date: "20/10/2025",
-    time: "09:00 - 12:00",
-    location: "Chi nhánh Quận 1",
-    image: coffeeImage,
-    type: "workshop",
-    rating: 4.7,
-    participants: 15,
-    isLiked: false,
-    featured: false,
-    color: "from-green-400 to-blue-500",
-  },
-  {
-    id: 4,
-    title: "Mua 2 Tặng 1",
-    description: "Mua 2 đồ uống bất kỳ, tặng 1 đồ uống giá trị thấp hơn",
-    date: "Cuối tuần",
-    time: "Cả ngày",
-    location: "Tất cả chi nhánh",
-    image: coffeeImage,
-    type: "promotion",
-    rating: 4.6,
-    participants: 80,
-    isLiked: false,
-    featured: false,
-    color: "from-yellow-400 to-orange-500",
-  },
-  {
-    id: 5,
-    title: "Coffee Tasting Session",
-    description: "Thưởng thức các loại cà phê đặc sản từ khắp nơi trên thế giới",
-    date: "25/10/2025",
-    time: "19:00 - 21:00",
-    location: "Chi nhánh Quận 3",
-    image: coffeeImage,
-    type: "event",
-    rating: 4.8,
-    participants: 25,
-    isLiked: true,
-    featured: false,
-    color: "from-indigo-400 to-purple-500",
-  },
-  {
-    id: 6,
-    title: "Latte Art Workshop",
-    description: "Học tạo hình nghệ thuật trên cà phê với các chuyên gia",
-    date: "30/10/2025",
-    time: "14:00 - 17:00",
-    location: "Chi nhánh Quận 1",
-    image: coffeeImage,
-    type: "workshop",
-    rating: 4.9,
-    participants: 12,
-    isLiked: false,
-    featured: false,
-    color: "from-pink-400 to-rose-500",
-  },
-];
+const events = [];
 
 const Events = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -395,14 +302,14 @@ const Events = () => {
                     <Percent className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                   </div>
                   <p className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-foreground">WELCOME20</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Giảm 20% đơn đầu tiên</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Mã giảm giá</p>
                 </div>
                 <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 sm:p-6 text-center hover:border-accent hover:bg-accent/5 transition-all duration-200 cursor-pointer group">
                   <div className="p-2 sm:p-3 rounded-full bg-accent/10 w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-accent/20 transition-colors">
                     <Percent className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                   </div>
                   <p className="font-bold text-base sm:text-lg mb-1 sm:mb-2 text-foreground">HAPPY15</p>
-                  <p className="text-xs sm:text-sm text-muted-foreground">Giảm 15% Happy Hour</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Mã giảm giá</p>
                 </div>
                 <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 sm:p-6 text-center hover:border-accent hover:bg-accent/5 transition-all duration-200 cursor-pointer group sm:col-span-2 lg:col-span-1">
                   <div className="p-2 sm:p-3 rounded-full bg-accent/10 w-fit mx-auto mb-2 sm:mb-3 group-hover:bg-accent/20 transition-colors">

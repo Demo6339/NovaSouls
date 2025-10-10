@@ -11,8 +11,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [aboutContent, setAboutContent] = useState({
-    title: "Về chúng tôi",
-    content: "Nova Souls là không gian cà phê hiện đại, nơi hòa quyện giữa hương vị truyền thống và sự sáng tạo đương đại. Chúng tôi tự hào mang đến những ly cà phê được pha chế tỉ mỉ, các món ăn nhẹ tinh tế, trong không gian ấm cúng và thân thiện."
+    title: "",
+    content: ""
   });
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const Index = () => {
       if (data) {
         const settings = data.setting_value as any;
         setAboutContent({
-          title: settings.homepage_about_title || "Về chúng tôi",
-          content: settings.homepage_about_content || aboutContent.content
+          title: settings.about_title || "",
+          content: settings.about_content || ""
         });
       }
     } catch (error) {
@@ -62,11 +62,9 @@ const Index = () => {
                 <div className="space-y-4 sm:space-y-6">
                   <div className="inline-flex items-center gap-2 bg-accent/10 text-accent px-3 py-2 rounded-full text-xs font-semibold">
                     <Coffee className="h-3 w-3" />
-                    Về chúng tôi
                   </div>
                   
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
-                    Câu chuyện của Nova Souls
                   </h2>
                   
                   <div className="space-y-3 sm:space-y-4 text-muted-foreground leading-relaxed">
@@ -75,27 +73,26 @@ const Index = () => {
                     </p>
                     
                     <p className="text-xs sm:text-sm md:text-base">
-                      Từ những hạt cà phê được tuyển chọn kỹ lưỡng đến những chiếc bánh ngọt được làm thủ công, 
-                      chúng tôi cam kết mang đến trải nghiệm ẩm thực đặc biệt cho mỗi khách hàng.
+                      
                     </p>
                   </div>
 
                   {/* Features */}
                   <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-3 sm:pt-4">
                     <div className="text-center p-2 sm:p-3 bg-white/50 rounded-lg">
-                      <div className="text-base sm:text-lg font-bold text-accent mb-1">2019</div>
+                      <div className="text-base sm:text-lg font-bold text-accent mb-1">0</div>
                       <div className="text-xs text-muted-foreground">Năm thành lập</div>
                     </div>
                     <div className="text-center p-2 sm:p-3 bg-white/50 rounded-lg">
-                      <div className="text-base sm:text-lg font-bold text-accent mb-1">5+</div>
+                      <div className="text-base sm:text-lg font-bold text-accent mb-1">0</div>
                       <div className="text-xs text-muted-foreground">Năm kinh nghiệm</div>
                     </div>
                     <div className="text-center p-2 sm:p-3 bg-white/50 rounded-lg">
-                      <div className="text-base sm:text-lg font-bold text-accent mb-1">100%</div>
+                      <div className="text-base sm:text-lg font-bold text-accent mb-1">0%</div>
                       <div className="text-xs text-muted-foreground">Nguyên liệu tươi</div>
                     </div>
                     <div className="text-center p-2 sm:p-3 bg-white/50 rounded-lg">
-                      <div className="text-base sm:text-lg font-bold text-accent mb-1">24/7</div>
+                      <div className="text-base sm:text-lg font-bold text-accent mb-1">0</div>
                       <div className="text-xs text-muted-foreground">Hỗ trợ khách hàng</div>
                     </div>
                   </div>

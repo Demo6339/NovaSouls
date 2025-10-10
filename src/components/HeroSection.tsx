@@ -25,37 +25,36 @@ const HeroSection = () => {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 sm:gap-3 bg-accent/20 backdrop-blur-md border border-accent/40 rounded-full px-4 sm:px-6 py-2 sm:py-3 text-accent text-xs sm:text-sm font-semibold shadow-lg">
                 <Award className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="hidden sm:inline">Specialty Coffee & Artisan Bakery</span>
-                <span className="sm:hidden">Specialty Coffee</span>
+                <span className="hidden sm:inline"></span>
+                <span className="sm:hidden"></span>
               </div>
 
               {/* Main Heading */}
               <div className="space-y-3 sm:space-y-4 md:space-y-6">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.1]">
-                  Chào mừng đến với
+                  
                   <span className="block bg-gradient-to-r from-accent via-accent-light to-accent bg-clip-text text-transparent mt-1">
-                    Nova Souls
+                    
                   </span>
                 </h1>
                 <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-2xl">
-                  Khám phá hương vị độc đáo của cà phê specialty được pha chế tận tâm, 
-                  kết hợp với bánh ngọt artisan trong không gian ấm cúng và hiện đại.
+                  
                 </p>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 py-3 sm:py-4 md:py-6">
                 <div className="text-center group">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">2,500+</div>
-                  <div className="text-xs sm:text-sm text-white/80 font-medium">Khách hàng hài lòng</div>
+                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">0</div>
+                  <div className="text-xs sm:text-sm text-white/80 font-medium"></div>
                 </div>
                 <div className="text-center group">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">80+</div>
-                  <div className="text-xs sm:text-sm text-white/80 font-medium">Món đặc sản</div>
+                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">0</div>
+                  <div className="text-xs sm:text-sm text-white/80 font-medium"></div>
                 </div>
                 <div className="text-center group">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">4.9</div>
-                  <div className="text-xs sm:text-sm text-white/80 font-medium">Đánh giá trung bình</div>
+                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-accent mb-1 group-hover:scale-110 transition-transform duration-300">0</div>
+                  <div className="text-xs sm:text-sm text-white/80 font-medium"></div>
                 </div>
               </div>
 
@@ -67,7 +66,6 @@ const HeroSection = () => {
                   className="bg-gradient-to-r from-accent to-accent-light hover:from-accent-light hover:to-accent text-white shadow-2xl hover:shadow-accent/25 transition-all duration-300 group text-xs sm:text-sm md:text-base px-4 sm:px-6 py-3 sm:py-4 rounded-xl"
                 >
                   <Link to="/menu" className="flex items-center justify-center">
-                    Xem thực đơn
                     <ArrowRight className="ml-2 h-3 w-3 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
@@ -79,7 +77,6 @@ const HeroSection = () => {
                 >
                   <Link to="/events" className="flex items-center justify-center">
                     <Play className="mr-2 h-3 w-3 sm:h-4 sm:w-4 group-hover:scale-110 transition-transform" />
-                    Sự kiện
                   </Link>
                 </Button>
               </div>
@@ -94,8 +91,8 @@ const HeroSection = () => {
                       <Coffee className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                     </div>
                     <div>
-                      <div className="text-white font-bold text-xs sm:text-sm mb-1">Cà phê tươi</div>
-                      <div className="text-white/80 text-xs">Pha chế hàng ngày</div>
+                      <div className="text-white font-bold text-xs sm:text-sm mb-1"></div>
+                      <div className="text-white/80 text-xs"></div>
                     </div>
                   </div>
                 </div>
@@ -106,8 +103,8 @@ const HeroSection = () => {
                       <Star className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                     </div>
                     <div>
-                      <div className="text-white font-bold text-xs sm:text-sm mb-1">Chất lượng cao</div>
-                      <div className="text-white/80 text-xs">Nguyên liệu premium</div>
+                      <div className="text-white font-bold text-xs sm:text-sm mb-1"></div>
+                      <div className="text-white/80 text-xs"></div>
                     </div>
                   </div>
                 </div>
@@ -118,8 +115,8 @@ const HeroSection = () => {
                       <Users className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                     </div>
                     <div>
-                      <div className="text-white font-bold text-xs sm:text-sm mb-1">Không gian ấm cúng</div>
-                      <div className="text-white/80 text-xs">Thoải mái, thân thiện</div>
+                      <div className="text-white font-bold text-xs sm:text-sm mb-1"></div>
+                      <div className="text-white/80 text-xs"></div>
                     </div>
                   </div>
                 </div>
@@ -130,8 +127,8 @@ const HeroSection = () => {
                       <Award className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
                     </div>
                     <div>
-                      <div className="text-white font-bold text-xs sm:text-sm mb-1">Dịch vụ tốt</div>
-                      <div className="text-white/80 text-xs">Chuyên nghiệp</div>
+                      <div className="text-white font-bold text-xs sm:text-sm mb-1"></div>
+                      <div className="text-white/80 text-xs"></div>
                     </div>
                   </div>
                 </div>
@@ -146,24 +143,24 @@ const HeroSection = () => {
                         <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
                       </div>
                       <div>
-                        <div className="text-white font-semibold text-xs sm:text-sm">Mở cửa 7:00 - 22:00</div>
-                        <div className="text-white/80 text-xs">Hàng ngày</div>
+                        <div className="text-white font-semibold text-xs sm:text-sm"></div>
+                        <div className="text-white/80 text-xs"></div>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 sm:gap-2">
                       <Heart className="h-3 w-3 sm:h-4 sm:w-4 text-accent" />
-                      <span className="text-white font-semibold text-xs sm:text-sm">Yêu thích</span>
+                      <span className="text-white font-semibold text-xs sm:text-sm"></span>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-2 sm:gap-3 pt-1 sm:pt-2 border-t border-white/20">
                     <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-accent flex-shrink-0" />
-                    <span className="text-white/90 text-xs">123 Đường Nguyễn Huệ, Quận 1, TP.HCM</span>
+                    <span className="text-white/90 text-xs"></span>
                   </div>
                   
                   <div className="flex items-center gap-2 sm:gap-3">
                     <Phone className="h-3 w-3 sm:h-4 sm:w-4 text-accent flex-shrink-0" />
-                    <span className="text-white/90 text-xs">(028) 1234 5678</span>
+                    <span className="text-white/90 text-xs"></span>
                   </div>
                 </div>
               </div>

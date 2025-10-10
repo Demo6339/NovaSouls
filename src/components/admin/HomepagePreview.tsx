@@ -58,7 +58,7 @@ const HomepagePreview = ({ settings }: HomepagePreviewProps) => {
                 <h3 className="font-semibold mb-2">Sản phẩm {i}</h3>
                 <p className="text-sm text-gray-600 mb-2">Mô tả sản phẩm...</p>
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-accent">50,000đ</span>
+                  <span className="font-bold text-accent">0đ</span>
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 text-yellow-400 fill-current" />
                     <span className="text-sm">4.9</span>
@@ -118,22 +118,22 @@ const HomepagePreview = ({ settings }: HomepagePreviewProps) => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              value: settings.stats_customers_value || "1000+",
+              value: settings.stats_customers_value || "0",
               label: settings.stats_customers_label || "Khách hàng hài lòng",
               description: settings.stats_customers_description || "Mỗi tháng"
             },
             {
-              value: settings.stats_products_value || "50+",
+              value: settings.stats_products_value || "0",
               label: settings.stats_products_label || "Món ngon đa dạng",
               description: settings.stats_products_description || "Cà phê & đồ ăn"
             },
             {
-              value: settings.stats_rating_value || "4.9",
+              value: settings.stats_rating_value || "0",
               label: settings.stats_rating_label || "Đánh giá trung bình",
               description: settings.stats_rating_description || "Từ khách hàng"
             },
             {
-              value: settings.stats_experience_value || "5+",
+              value: settings.stats_experience_value || "0",
               label: settings.stats_experience_label || "Năm kinh nghiệm",
               description: settings.stats_experience_description || "Phục vụ chuyên nghiệp"
             }
@@ -179,7 +179,7 @@ const HomepagePreview = ({ settings }: HomepagePreviewProps) => {
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-xl">
                 <div className="text-2xl font-bold text-accent mb-2">
-                  {settings.about_experience_years || "5+"}
+                  {settings.about_experience_years || "0"}
                 </div>
                 <div className="text-sm text-gray-600">Năm kinh nghiệm</div>
               </div>

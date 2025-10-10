@@ -16,10 +16,7 @@ const Checkout = () => {
   const [orderType, setOrderType] = useState<"delivery" | "pickup">("delivery");
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
-  const cartItems = [
-    { id: 1, name: "Signature Latte", price: 55000, quantity: 2 },
-    { id: 2, name: "Croissant Bơ", price: 35000, quantity: 1 },
-  ];
+  const cartItems = [];
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = orderType === "delivery" ? 15000 : 0;
@@ -60,7 +57,7 @@ const Checkout = () => {
                             <MapPin className="h-5 w-5 text-accent" />
                             <div>
                               <p className="font-medium">Giao hàng tận nơi</p>
-                              <p className="text-sm text-muted-foreground">Phí giao hàng: 15.000đ</p>
+                              <p className="text-sm text-muted-foreground">Phí giao hàng: 0đ</p>
                             </div>
                           </div>
                         </Label>

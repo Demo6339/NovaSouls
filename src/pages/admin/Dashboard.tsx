@@ -2,43 +2,9 @@ import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
 
-const stats = [
-  {
-    title: "Doanh thu hôm nay",
-    value: "15.450.000đ",
-    change: "+12.5%",
-    trend: "up",
-    icon: DollarSign,
-  },
-  {
-    title: "Đơn hàng",
-    value: "156",
-    change: "+8.2%",
-    trend: "up",
-    icon: ShoppingCart,
-  },
-  {
-    title: "Khách hàng mới",
-    value: "24",
-    change: "-3.1%",
-    trend: "down",
-    icon: Users,
-  },
-  {
-    title: "Sản phẩm bán chạy",
-    value: "89",
-    change: "+15.3%",
-    trend: "up",
-    icon: Package,
-  },
-];
+const stats = [];
 
-const recentOrders = [
-  { id: "ORD001", customer: "Nguyễn Văn A", total: 165000, status: "preparing", time: "10 phút trước" },
-  { id: "ORD002", customer: "Trần Thị B", total: 95000, status: "completed", time: "25 phút trước" },
-  { id: "ORD003", customer: "Lê Văn C", total: 120000, status: "preparing", time: "35 phút trước" },
-  { id: "ORD004", customer: "Phạm Thị D", total: 75000, status: "completed", time: "1 giờ trước" },
-];
+const recentOrders = [];
 
 const AdminDashboard = () => {
   return (
@@ -153,15 +119,15 @@ const AdminDashboard = () => {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Nguyên liệu</span>
-                  <span className="font-medium">3.250.000đ</span>
+                  <span className="font-medium">0đ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Nhân sự</span>
-                  <span className="font-medium">1.800.000đ</span>
+                  <span className="font-medium">0đ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Khác</span>
-                  <span className="font-medium">450.000đ</span>
+                  <span className="font-medium">0đ</span>
                 </div>
               </div>
             </CardContent>
@@ -176,15 +142,15 @@ const AdminDashboard = () => {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Tổng doanh thu</span>
-                  <span className="font-bold text-green-600">245.000.000đ</span>
+                  <span className="font-bold text-green-600">0đ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Tổng chi phí</span>
-                  <span className="font-bold text-red-600">98.500.000đ</span>
+                  <span className="font-bold text-red-600">0đ</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">Lợi nhuận</span>
-                  <span className="font-bold text-primary">146.500.000đ</span>
+                  <span className="font-bold text-primary">0đ</span>
                 </div>
               </div>
             </CardContent>

@@ -7,16 +7,16 @@ const StatsSection = () => {
   const [settings, setSettings] = useState({
     stats_title: "Nova Souls trong số liệu",
     stats_subtitle: "Những con số biết nói về chất lượng dịch vụ và sự tin tưởng của khách hàng",
-    stats_customers_value: "1000+",
+    stats_customers_value: "0",
     stats_customers_label: "Khách hàng hài lòng",
     stats_customers_description: "Mỗi tháng",
-    stats_products_value: "50+",
+    stats_products_value: "0",
     stats_products_label: "Món ngon đa dạng",
     stats_products_description: "Cà phê & đồ ăn",
-    stats_rating_value: "4.9",
+    stats_rating_value: "0",
     stats_rating_label: "Đánh giá trung bình",
     stats_rating_description: "Từ khách hàng",
-    stats_experience_value: "5+",
+    stats_experience_value: "0",
     stats_experience_label: "Năm kinh nghiệm",
     stats_experience_description: "Phục vụ chuyên nghiệp"
   });

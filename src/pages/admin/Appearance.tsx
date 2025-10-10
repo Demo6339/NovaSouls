@@ -32,6 +32,16 @@ interface SiteSettings {
   hero_contact_phone?: string;
   hero_contact_hours?: string;
   
+  // Hero Feature Cards
+  hero_feature_1_title?: string;
+  hero_feature_1_description?: string;
+  hero_feature_2_title?: string;
+  hero_feature_2_description?: string;
+  hero_feature_3_title?: string;
+  hero_feature_3_description?: string;
+  hero_feature_4_title?: string;
+  hero_feature_4_description?: string;
+  
   // Featured Products
   featured_products_title?: string;
   featured_products_subtitle?: string;
@@ -124,101 +134,106 @@ const Appearance = () => {
   const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
     // Hero Section
-    hero_badge_text: "Specialty Coffee & Artisan Bakery",
-    hero_main_title: "Chào mừng đến với Nova Souls",
-    hero_subtitle: "Khám phá hương vị độc đáo của cà phê specialty được pha chế tận tâm, kết hợp với bánh ngọt artisan trong không gian ấm cúng và hiện đại.",
-    hero_background_image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-    hero_stats_customers: "2,500+",
-    hero_stats_products: "80+",
-    hero_stats_rating: "4.9",
-    hero_button_primary_text: "Xem thực đơn",
-    hero_button_primary_link: "/menu",
-    hero_button_secondary_text: "Sự kiện",
-    hero_button_secondary_link: "/events",
-    hero_contact_address: "123 Đường Nguyễn Huệ, Quận 1, TP.HCM",
-    hero_contact_phone: "(028) 1234 5678",
-    hero_contact_hours: "Mở cửa 7:00 - 22:00",
+    hero_badge_text: "",
+    hero_main_title: "",
+    hero_subtitle: "",
+    hero_background_image: "",
+    hero_stats_customers: "",
+    hero_stats_products: "",
+    hero_stats_rating: "",
+    hero_button_primary_text: "",
+    hero_button_primary_link: "",
+    hero_button_secondary_text: "",
+    hero_button_secondary_link: "",
+    hero_contact_address: "",
+    hero_contact_phone: "",
+    hero_contact_hours: "",
+    
+    // Hero Feature Cards
+    hero_feature_1_title: "",
+    hero_feature_1_description: "",
+    hero_feature_2_title: "",
+    hero_feature_2_description: "",
+    hero_feature_3_title: "",
+    hero_feature_3_description: "",
+    hero_feature_4_title: "",
+    hero_feature_4_description: "",
     
     // Featured Products
-    featured_products_title: "Thực đơn đặc sản",
-    featured_products_subtitle: "Những món ngon được yêu thích nhất, được chọn lọc kỹ lưỡng từ thực đơn của chúng tôi với nguyên liệu cao cấp",
-    featured_products_button_text: "Xem toàn bộ thực đơn",
-    featured_products_button_link: "/menu",
+    featured_products_title: "",
+    featured_products_subtitle: "",
+    featured_products_button_text: "",
+    featured_products_button_link: "",
     
     // Features Section
-    features_badge_text: "Tại sao chọn chúng tôi",
-    features_title: "Trải nghiệm đặt món hiện đại",
-    features_subtitle: "Công nghệ tiên tiến kết hợp với dịch vụ chuyên nghiệp, mang đến trải nghiệm tuyệt vời cho khách hàng",
+    features_badge_text: "",
+    features_title: "",
+    features_subtitle: "",
     
     // Stats Section
-    stats_title: "Nova Souls trong số liệu",
-    stats_subtitle: "Những con số biết nói về chất lượng dịch vụ và sự tin tưởng của khách hàng",
-    stats_customers_value: "1000+",
-    stats_customers_label: "Khách hàng hài lòng",
-    stats_customers_description: "Mỗi tháng",
-    stats_products_value: "50+",
-    stats_products_label: "Món ngon đa dạng",
-    stats_products_description: "Cà phê & đồ ăn",
-    stats_rating_value: "4.9",
-    stats_rating_label: "Đánh giá trung bình",
-    stats_rating_description: "Từ khách hàng",
-    stats_experience_value: "5+",
-    stats_experience_label: "Năm kinh nghiệm",
-    stats_experience_description: "Phục vụ chuyên nghiệp",
+    stats_title: "",
+    stats_subtitle: "",
+    stats_customers_value: "",
+    stats_customers_label: "",
+    stats_customers_description: "",
+    stats_products_value: "",
+    stats_products_label: "",
+    stats_products_description: "",
+    stats_rating_value: "",
+    stats_rating_label: "",
+    stats_rating_description: "",
+    stats_experience_value: "",
+    stats_experience_label: "",
+    stats_experience_description: "",
     
     
     // About Section
-    about_badge_text: "Về chúng tôi",
-    about_title: "Câu chuyện của Nova Souls",
-    about_content: "Nova Souls là không gian cà phê hiện đại, nơi hòa quyện giữa hương vị truyền thống và sự sáng tạo đương đại. Chúng tôi tự hào mang đến những ly cà phê được pha chế tỉ mỉ, các món ăn nhẹ tinh tế, trong không gian ấm cúng và thân thiện.",
-    about_additional_content: "Từ những hạt cà phê được tuyển chọn kỹ lưỡng đến những chiếc bánh ngọt được làm thủ công, chúng tôi cam kết mang đến trải nghiệm ẩm thực đặc biệt cho mỗi khách hàng.",
-    about_founded_year: "2019",
-    about_experience_years: "5+",
-    about_fresh_ingredients: "100%",
-    about_support_hours: "24/7",
-    about_images: [
-      "https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      "https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-      "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    ],
+    about_badge_text: "",
+    about_title: "",
+    about_content: "",
+    about_additional_content: "",
+    about_founded_year: "",
+    about_experience_years: "",
+    about_fresh_ingredients: "",
+    about_support_hours: "",
+    about_images: [],
     
     // Footer
-    footer_description: "Nơi hội tụ những tâm hồn yêu cà phê, mang đến trải nghiệm đặc biệt cho mỗi khách hàng với specialty coffee và artisan bakery.",
-    footer_phone: "(028) 1234 5678",
-    footer_email: "hello@novasouls.com",
-    footer_address: "123 Đường Nguyễn Huệ, Quận 1, TP.HCM",
-    footer_facebook_url: "https://facebook.com/novasouls",
-    footer_instagram_url: "https://instagram.com/novasouls",
-    footer_weekday_hours: "7:00 - 22:00",
-    footer_weekend_hours: "8:00 - 23:00",
-    footer_delivery_hours: "8:00 - 21:00",
+    footer_description: "",
+    footer_phone: "",
+    footer_email: "",
+    footer_address: "",
+    footer_facebook_url: "",
+    footer_instagram_url: "",
+    footer_weekday_hours: "",
+    footer_weekend_hours: "",
+    footer_delivery_hours: "",
     
     // Events Page
-    events_badge_text: "Sự kiện đặc biệt",
-    events_title: "Sự kiện & Khuyến mãi",
-    events_subtitle: "Khám phá những ưu đãi hấp dẫn và sự kiện đặc biệt tại Nova Souls",
-    events_search_placeholder: "Tìm kiếm sự kiện...",
-    events_filter_all: "Tất cả",
-    events_filter_promotion: "Khuyến mãi",
-    events_filter_event: "Sự kiện",
-    events_filter_workshop: "Workshop",
-    events_featured_badge: "⭐ Nổi bật",
-    events_promo_title: "Mã giảm giá",
-    events_promo_description: "Sử dụng các mã này khi thanh toán",
-    events_promo_code_1: "WELCOME20",
-    events_promo_code_1_desc: "Giảm 20% đơn đầu tiên",
-    events_promo_code_2: "HAPPY15",
-    events_promo_code_2_desc: "Giảm 15% Happy Hour",
-    events_promo_code_3: "FREESHIP",
-    events_promo_code_3_desc: "Miễn phí giao hàng",
+    events_badge_text: "",
+    events_title: "",
+    events_subtitle: "",
+    events_search_placeholder: "",
+    events_filter_all: "",
+    events_filter_promotion: "",
+    events_filter_event: "",
+    events_filter_workshop: "",
+    events_featured_badge: "",
+    events_promo_title: "",
+    events_promo_description: "",
+    events_promo_code_1: "",
+    events_promo_code_1_desc: "",
+    events_promo_code_2: "",
+    events_promo_code_2_desc: "",
+    events_promo_code_3: "",
+    events_promo_code_3_desc: "",
     
     // Colors
-    primary_color: "#6B4423",
-    secondary_color: "#8B6F47",
-    accent_color: "#22C55E",
-    background_color: "#FAFAFA",
-    text_color: "#1F2937",
+    primary_color: "",
+    secondary_color: "",
+    accent_color: "",
+    background_color: "",
+    text_color: "",
     
     // Layout
     hero_layout: 'left-right',
@@ -486,7 +501,7 @@ const Appearance = () => {
                         <Input
                           value={settings.hero_stats_customers || ""}
                           onChange={(e) => updateSetting('hero_stats_customers', e.target.value)}
-                          placeholder="2,500+"
+                          placeholder="0"
                           className="text-sm"
                         />
                       </div>
@@ -495,7 +510,7 @@ const Appearance = () => {
                         <Input
                           value={settings.hero_stats_products || ""}
                           onChange={(e) => updateSetting('hero_stats_products', e.target.value)}
-                          placeholder="80+"
+                          placeholder="0"
                           className="text-sm"
                         />
                       </div>
@@ -584,6 +599,93 @@ const Appearance = () => {
                         onChange={(e) => updateSetting('hero_contact_hours', e.target.value)}
                         placeholder="Mở cửa 7:00 - 22:00"
                       />
+                    </div>
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div className="space-y-4">
+                  <h4 className="font-semibold">Feature Cards (4 cards bên phải)</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h5 className="font-medium text-sm">Card 1</h5>
+                      <div>
+                        <Label>Tiêu đề</Label>
+                        <Input
+                          value={settings.hero_feature_1_title || ""}
+                          onChange={(e) => updateSetting('hero_feature_1_title', e.target.value)}
+                          placeholder="Cà phê tươi"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.hero_feature_1_description || ""}
+                          onChange={(e) => updateSetting('hero_feature_1_description', e.target.value)}
+                          placeholder="Pha chế hàng ngày"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h5 className="font-medium text-sm">Card 2</h5>
+                      <div>
+                        <Label>Tiêu đề</Label>
+                        <Input
+                          value={settings.hero_feature_2_title || ""}
+                          onChange={(e) => updateSetting('hero_feature_2_title', e.target.value)}
+                          placeholder="Chất lượng cao"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.hero_feature_2_description || ""}
+                          onChange={(e) => updateSetting('hero_feature_2_description', e.target.value)}
+                          placeholder="Nguyên liệu premium"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h5 className="font-medium text-sm">Card 3</h5>
+                      <div>
+                        <Label>Tiêu đề</Label>
+                        <Input
+                          value={settings.hero_feature_3_title || ""}
+                          onChange={(e) => updateSetting('hero_feature_3_title', e.target.value)}
+                          placeholder="Không gian ấm cúng"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.hero_feature_3_description || ""}
+                          onChange={(e) => updateSetting('hero_feature_3_description', e.target.value)}
+                          placeholder="Thoải mái, thân thiện"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h5 className="font-medium text-sm">Card 4</h5>
+                      <div>
+                        <Label>Tiêu đề</Label>
+                        <Input
+                          value={settings.hero_feature_4_title || ""}
+                          onChange={(e) => updateSetting('hero_feature_4_title', e.target.value)}
+                          placeholder="Dịch vụ tốt"
+                        />
+                      </div>
+                      <div>
+                        <Label>Mô tả</Label>
+                        <Input
+                          value={settings.hero_feature_4_description || ""}
+                          onChange={(e) => updateSetting('hero_feature_4_description', e.target.value)}
+                          placeholder="Chuyên nghiệp"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -730,7 +832,7 @@ const Appearance = () => {
                         <Input
                           value={settings.stats_customers_value || ""}
                           onChange={(e) => updateSetting('stats_customers_value', e.target.value)}
-                          placeholder="1000+"
+                          placeholder="0"
                         />
                       </div>
                       <div>
@@ -764,7 +866,7 @@ const Appearance = () => {
                         <Input
                           value={settings.stats_products_value || ""}
                           onChange={(e) => updateSetting('stats_products_value', e.target.value)}
-                          placeholder="50+"
+                          placeholder="0"
                         />
                       </div>
                       <div>
@@ -824,7 +926,7 @@ const Appearance = () => {
                         <Input
                           value={settings.stats_experience_value || ""}
                           onChange={(e) => updateSetting('stats_experience_value', e.target.value)}
-                          placeholder="5+"
+                          placeholder="0"
                         />
                       </div>
                       <div>
@@ -914,7 +1016,7 @@ const Appearance = () => {
                         <Input
                           value={settings.about_experience_years || ""}
                           onChange={(e) => updateSetting('about_experience_years', e.target.value)}
-                          placeholder="5+"
+                          placeholder="0"
                         />
                       </div>
                       <div>
@@ -922,7 +1024,7 @@ const Appearance = () => {
                         <Input
                           value={settings.about_fresh_ingredients || ""}
                           onChange={(e) => updateSetting('about_fresh_ingredients', e.target.value)}
-                          placeholder="100%"
+                          placeholder="0%"
                         />
                       </div>
                       <div>
@@ -1599,7 +1701,7 @@ const Appearance = () => {
                             <Input
                               value={settings.events_promo_code_1_desc || ""}
                               onChange={(e) => updateSetting('events_promo_code_1_desc', e.target.value)}
-                              placeholder="Giảm 20% đơn đầu tiên"
+                              placeholder="Mô tả mã giảm giá"
                             />
                           </div>
                           
@@ -1613,7 +1715,7 @@ const Appearance = () => {
                             <Input
                               value={settings.events_promo_code_2_desc || ""}
                               onChange={(e) => updateSetting('events_promo_code_2_desc', e.target.value)}
-                              placeholder="Giảm 15% Happy Hour"
+                              placeholder="Mô tả mã giảm giá"
                             />
                           </div>
                           
@@ -1718,7 +1820,7 @@ const Appearance = () => {
                               {settings.events_promo_code_1 || "WELCOME20"}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {settings.events_promo_code_1_desc || "Giảm 20% đơn đầu tiên"}
+                              {settings.events_promo_code_1_desc || "Mô tả mã giảm giá"}
                             </p>
                           </div>
                           <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 text-center">
@@ -1729,7 +1831,7 @@ const Appearance = () => {
                               {settings.events_promo_code_2 || "HAPPY15"}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              {settings.events_promo_code_2_desc || "Giảm 15% Happy Hour"}
+                              {settings.events_promo_code_2_desc || "Mô tả mã giảm giá"}
                             </p>
                           </div>
                           <div className="border-2 border-dashed border-accent/30 rounded-xl p-4 text-center">

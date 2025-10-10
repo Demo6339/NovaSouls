@@ -50,68 +50,20 @@ const Profile = () => {
   const isMobile = useIsMobile();
 
   const [user] = useState({
-    name: "Nguyễn Văn A",
-    email: "user@example.com",
-    phone: "0123456789",
+    name: "",
+    email: "",
+    phone: "",
     avatar: "",
-    address: "123 Đường ABC, Quận 1, TP.HCM",
-    joinDate: "2024-01-15",
-    totalOrders: 24,
-    totalSpent: 2450000,
-    loyaltyPoints: 1250
+    address: "",
+    joinDate: "",
+    totalOrders: 0,
+    totalSpent: 0,
+    loyaltyPoints: 0
   });
 
-  const currentOrders = [
-    {
-      id: "ORD001",
-      date: "2025-01-09 14:30",
-      total: 165000,
-      status: "preparing",
-      progress: 60,
-      items: ["Signature Latte x2", "Croissant Bơ x1"],
-      estimatedTime: "15 phút",
-      trackingNumber: "TRK123456789"
-    },
-    {
-      id: "ORD002", 
-      date: "2025-01-09 16:45",
-      total: 89000,
-      status: "shipping",
-      progress: 80,
-      items: ["Cappuccino x1", "Tiramisu x1"],
-      estimatedTime: "5 phút",
-      trackingNumber: "TRK987654321"
-    }
-  ];
+  const currentOrders = [];
 
-  const orderHistory = [
-    {
-      id: "ORD003",
-      date: "2025-01-08 10:15",
-      total: 95000,
-      status: "completed",
-      items: ["Cappuccino x1", "Tiramisu x1"],
-      rating: 5,
-      review: "Rất ngon và phục vụ nhanh!"
-    },
-    {
-      id: "ORD004",
-      date: "2025-01-07 16:45",
-      total: 50000,
-      status: "cancelled",
-      items: ["Americano x1"],
-      reason: "Thay đổi ý định"
-    },
-    {
-      id: "ORD005",
-      date: "2025-01-06 09:30",
-      total: 120000,
-      status: "completed",
-      items: ["Signature Latte x1", "Croissant x2"],
-      rating: 4,
-      review: "Tốt nhưng hơi chậm"
-    }
-  ];
+  const orderHistory = [];
 
   const getStatusBadge = (status: string) => {
     const variants = {

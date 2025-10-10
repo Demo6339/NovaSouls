@@ -5,15 +5,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Footer = () => {
   const [settings, setSettings] = useState({
-    footer_description: "Nơi hội tụ những tâm hồn yêu cà phê, nơi mỗi ly cà phê là một câu chuyện, mỗi hương vị là một kỷ niệm đẹp.",
-    footer_address: "123 Đường ABC, Quận 1, TP.HCM",
-    footer_phone: "0123 456 789",
-    footer_email: "info@novasouls.com",
-    footer_weekday_hours: "7:00 - 22:00",
-    footer_weekend_hours: "8:00 - 23:00",
-    footer_delivery_hours: "Giao hàng từ 8:00 - 21:00",
-    footer_facebook_url: "https://facebook.com/novasouls",
-    footer_instagram_url: "https://instagram.com/novasouls"
+    footer_description: "",
+    footer_address: "",
+    footer_phone: "",
+    footer_email: "",
+    footer_weekday_hours: "",
+    footer_weekend_hours: "",
+    footer_delivery_hours: "",
+    footer_facebook_url: "",
+    footer_instagram_url: ""
   });
 
   useEffect(() => {
