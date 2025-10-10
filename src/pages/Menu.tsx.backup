@@ -605,13 +605,13 @@ const Menu = () => {
             {/* Main Content */}
             <div className="flex-1">
               {/* Toolbar */}
-              <div className="flex flex-col gap-4 mb-6">
+              <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="flex items-center justify-between">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowSidebar(true)}
-                    className="lg:hidden"
+                    className="lg:hidden h-9 px-3"
                   >
                     <Filter className="h-4 w-4 mr-2" />
                     Bộ lọc
@@ -622,14 +622,14 @@ const Menu = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {/* View Mode Toggle */}
                   <div className="flex border rounded-lg w-fit">
                     <Button
                       variant={viewMode === "grid" ? "default" : "ghost"}
                       size="sm"
                       onClick={() => setViewMode("grid")}
-                      className="rounded-r-none px-3"
+                      className="rounded-r-none px-3 h-9"
                     >
                       <Grid3X3 className="h-4 w-4" />
                     </Button>
@@ -637,7 +637,7 @@ const Menu = () => {
                       variant={viewMode === "list" ? "default" : "ghost"}
                       size="sm"
                       onClick={() => setViewMode("list")}
-                      className="rounded-l-none px-3"
+                      className="rounded-l-none px-3 h-9"
                     >
                       <List className="h-4 w-4" />
                     </Button>
@@ -645,7 +645,7 @@ const Menu = () => {
 
                   {/* Sort */}
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-48">
+                    <SelectTrigger className="w-full sm:w-48 h-9">
                       <SelectValue placeholder="Sắp xếp theo" />
                     </SelectTrigger>
                     <SelectContent>
@@ -660,7 +660,7 @@ const Menu = () => {
                   <Button
                     variant="outline"
                     onClick={() => setShowCompare(true)}
-                    className="flex items-center gap-2 w-full sm:w-auto"
+                    className="flex items-center gap-2 w-full sm:w-auto h-9"
                     disabled={compareItems.length === 0}
                   >
                     <GitCompare className="h-4 w-4" />
@@ -676,20 +676,20 @@ const Menu = () => {
 
               {/* Products Grid/List */}
               {isLoading ? (
-                <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3" : "space-y-2"}>
+                <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6" : "space-y-3 sm:space-y-4"}>
                   {Array.from({ length: 8 }).map((_, index) => (
                     <Card key={index} className="overflow-hidden">
-                      <Skeleton className="h-24 sm:h-32 w-full" />
-                      <CardContent className="p-2">
-                        <Skeleton className="h-3 w-3/4 mb-1" />
-                        <Skeleton className="h-2 w-full mb-1" />
-                        <Skeleton className="h-2 w-1/2" />
+                      <Skeleton className="h-40 sm:h-48 lg:h-56 w-full" />
+                      <CardContent className="p-3 sm:p-4">
+                        <Skeleton className="h-4 w-3/4 mb-2" />
+                        <Skeleton className="h-3 w-full mb-2" />
+                        <Skeleton className="h-3 w-1/2" />
                       </CardContent>
                     </Card>
                   ))}
                 </div>
               ) : (
-                <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3" : "space-y-2"}>
+                <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6" : "space-y-3 sm:space-y-4"}>
                   {paginatedItems.map((item, index) => (
                     <Card
                       key={item.id}
@@ -698,7 +698,7 @@ const Menu = () => {
                       }`}
                       onClick={() => setSelectedItem(item)}
                     >
-                      <div className={`relative overflow-hidden ${viewMode === "list" ? "w-20 sm:w-24 h-20 sm:h-24" : "h-24 sm:h-32"}`}>
+                      <div className={`relative overflow-hidden ${viewMode === "list" ? "w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40" : "h-40 sm:h-48 lg:h-56"}`}>
                         <img
                           src={item.image}
                           alt={item.name}
@@ -707,33 +707,33 @@ const Menu = () => {
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         
                         {/* Badges */}
-                        <div className="absolute top-1 left-1 flex flex-col gap-1">
+                        <div className="absolute top-1 left-1 sm:top-2 sm:left-2 flex flex-col gap-1">
                           {item.badge && (
-                            <Badge className="bg-accent text-accent-foreground text-xs px-1 py-0.5">
+                            <Badge className="bg-accent text-accent-foreground text-xs px-2 py-1">
                               {item.badge}
                             </Badge>
                           )}
                           {item.isPopular && (
-                            <Badge variant="secondary" className="bg-orange-100 text-orange-800 text-xs px-1 py-0.5">
-                              <TrendingUp className="h-2 w-2 mr-1" />
+                            <Badge variant="secondary" className="bg-orange-100 text-orange-800 text-xs px-2 py-1">
+                              <TrendingUp className="h-3 w-3 mr-1" />
                               <span className="hidden sm:inline">Phổ biến</span>
                             </Badge>
                           )}
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="action-buttons absolute top-1 right-1 flex flex-col gap-0.5">
+                        <div className="action-buttons absolute top-1 right-1 sm:top-2 sm:right-2 flex flex-col gap-1">
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-5 w-5 p-0 bg-white/90 hover:bg-white shadow-md"
+                            className="h-7 w-7 sm:h-8 sm:w-8 p-0 bg-white/90 hover:bg-white shadow-md"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleFavorite(item.id);
                             }}
                           >
                             <Heart 
-                              className={`h-2 w-2 ${
+                              className={`h-4 w-4 ${
                                 favorites.has(item.id) 
                                   ? "text-red-500 fill-current" 
                                   : "text-gray-600"
@@ -744,7 +744,7 @@ const Menu = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-5 w-5 p-0 bg-white/90 hover:bg-white shadow-md"
+                            className="h-7 w-7 sm:h-8 sm:w-8 p-0 bg-white/90 hover:bg-white shadow-md"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleCompare(item);
@@ -752,7 +752,7 @@ const Menu = () => {
                             disabled={compareItems.length >= 3 && !compareItems.find(i => i.id === item.id)}
                           >
                             <GitCompare 
-                              className={`h-2 w-2 ${
+                              className={`h-4 w-4 ${
                                 compareItems.find(i => i.id === item.id)
                                   ? "text-blue-500 fill-current" 
                                   : "text-gray-600"
@@ -763,58 +763,58 @@ const Menu = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-5 w-5 p-0 bg-white/90 hover:bg-white shadow-md"
+                            className="h-7 w-7 sm:h-8 sm:w-8 p-0 bg-white/90 hover:bg-white shadow-md"
                             onClick={(e) => {
                               e.stopPropagation();
                               setSelectedItem(item);
                             }}
                           >
-                            <Eye className="h-2 w-2 text-gray-600" />
+                            <Eye className="h-4 w-4 text-gray-600" />
                           </Button>
                         </div>
 
                         {/* Hot/Cold Indicator */}
-                        <div className="absolute bottom-1 right-1">
-                          <Badge variant={item.isHot ? "destructive" : "secondary"} className="text-xs px-1 py-0.5">
+                        <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2">
+                          <Badge variant={item.isHot ? "destructive" : "secondary"} className="text-xs px-2 py-1">
                             {item.isHot ? "Nóng" : "Lạnh"}
                           </Badge>
                         </div>
                       </div>
 
-                      <div className={`p-2 ${viewMode === "list" ? "flex-1" : ""}`}>
-                        <div className="space-y-1">
-                          <h3 className="font-semibold text-xs line-clamp-1">{item.name}</h3>
-                          <p className="text-muted-foreground text-xs line-clamp-1">
+                      <div className={`p-3 sm:p-4 ${viewMode === "list" ? "flex-1" : ""}`}>
+                        <div className="space-y-2 sm:space-y-3">
+                          <h3 className="font-semibold text-base sm:text-lg line-clamp-1">{item.name}</h3>
+                          <p className="text-muted-foreground text-sm line-clamp-2">
                             {item.description}
                           </p>
                           
                           <div className="flex items-center gap-1">
                             {renderStars(item.rating)}
-                            <span className="text-xs text-muted-foreground ml-1">
+                            <span className="text-sm text-muted-foreground ml-1">
                               ({item.rating})
                             </span>
                           </div>
 
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
-                                <Clock className="h-2 w-2" />
-                                <span>{item.prepTime}m</span>
+                                <Clock className="h-4 w-4" />
+                                <span>{item.prepTime} phút</span>
                               </div>
                               <div className="flex items-center gap-1">
-                                <Flame className="h-2 w-2" />
-                                <span>{item.calories}</span>
+                                <Flame className="h-4 w-4" />
+                                <span>{item.calories} cal</span>
                               </div>
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-primary">
+                          <div className="flex items-center justify-between pt-2">
+                            <span className="text-lg font-bold text-primary">
                               {formatPrice(item.price)}
                             </span>
                             <Button 
                               size="sm"
-                              className="bg-accent hover:bg-accent/90 text-accent-foreground h-6 px-2 text-xs"
+                              className="btn-ecommerce bg-gradient-hero hover:opacity-90 text-sm px-3 h-8"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 // Add to cart logic here

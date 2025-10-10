@@ -27,11 +27,16 @@ const StatsSection = () => {
 
   const loadSettings = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('site_settings')
         .select('setting_value')
         .eq('setting_key', 'appearance')
         .single();
+
+      if (error) {
+        console.warn('No appearance settings found, using defaults');
+        return;
+      }
 
       if (data) {
         const appearanceSettings = data.setting_value as any;
@@ -41,7 +46,7 @@ const StatsSection = () => {
         }));
       }
     } catch (error) {
-      console.error('Error loading stats settings:', error);
+      console.warn('Error loading stats settings, using defaults:', error);
     }
   };
 

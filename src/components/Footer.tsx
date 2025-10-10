@@ -22,21 +22,23 @@ const Footer = () => {
 
   const loadSettings = async () => {
     try {
+      // Try to get settings by key instead of ID
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
-        .eq('id', 1)
-        .single();
+        .limit(1);
 
       if (error) {
         console.error('Error loading settings:', error);
         return;
       }
 
-      if (data) {
+      if (data && data.length > 0) {
+        // Convert array of settings to object
+        const settingsData = data[0];
         setSettings(prev => ({
           ...prev,
-          ...data
+          ...settingsData
         }));
       }
     } catch (error) {

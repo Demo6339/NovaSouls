@@ -21,11 +21,16 @@ const Index = () => {
 
   const loadAboutContent = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('site_settings')
         .select('setting_value')
         .eq('setting_key', 'appearance')
         .single();
+
+      if (error) {
+        console.warn('No appearance settings found, using defaults');
+        return;
+      }
 
       if (data) {
         const settings = data.setting_value as any;
@@ -35,7 +40,7 @@ const Index = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading about content:', error);
+      console.warn('Error loading about content, using defaults:', error);
     }
   };
 
