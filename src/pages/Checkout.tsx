@@ -26,7 +26,7 @@ const Checkout = () => {
     e.preventDefault();
     // Process order
     alert("Đặt hàng thành công!");
-    navigate("/profile");
+    navigate("/");
   };
 
   return (

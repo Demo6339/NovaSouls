@@ -8,7 +8,6 @@ import Menu from "./pages/Menu";
 import Auth from "./pages/Auth";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import Profile from "./pages/Profile";
 import Events from "./pages/Events";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
@@ -26,7 +25,6 @@ import AdminHomeLayout from "./pages/admin/appearance/HomeLayout";
 import AdminEventContent from "./pages/admin/appearance/EventContent";
 import AdminEventImages from "./pages/admin/appearance/EventImages";
 import AdminEventLayout from "./pages/admin/appearance/EventLayout";
-import Accounts from "./pages/admin/Accounts";
 import History from "./pages/admin/History";
 import NotFound from "./pages/NotFound";
 
@@ -49,7 +47,6 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/events" element={<Events />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/products" element={<AdminProducts />} />
@@ -67,7 +64,6 @@ const App = () => (
           <Route path="/admin/appearance/events/content" element={<AdminEventContent />} />
           <Route path="/admin/appearance/events/images" element={<AdminEventImages />} />
           <Route path="/admin/appearance/events/layout" element={<AdminEventLayout />} />
-          <Route path="/admin/accounts" element={<Accounts />} />
           <Route path="/admin/history" element={<History />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

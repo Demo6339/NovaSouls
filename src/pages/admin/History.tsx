@@ -12,9 +12,8 @@ const History = () => {
           <p className="text-muted-foreground">Theo dõi logs và lịch sử hệ thống</p>
         </div>
         <Tabs defaultValue="orders" className="space-y-4 lg:space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="orders" className="text-xs lg:text-sm">Đơn hàng</TabsTrigger>
-            <TabsTrigger value="accounts" className="text-xs lg:text-sm">Tài khoản</TabsTrigger>
             <TabsTrigger value="system" className="text-xs lg:text-sm">Hệ thống</TabsTrigger>
           </TabsList>
           <TabsContent value="orders">

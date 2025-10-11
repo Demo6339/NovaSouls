@@ -6,7 +6,6 @@ import {
   Package,
   Calendar,
   Palette,
-  Users,
   History,
   Coffee,
   Menu,
@@ -76,7 +75,6 @@ const menuItems = [
       },
     ]
   },
-  { icon: Users, label: "Tài khoản", path: "/admin/accounts" },
   { icon: History, label: "Lịch sử", path: "/admin/history" },
 ];
 

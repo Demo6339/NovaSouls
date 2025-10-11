@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Coffee, Menu, ShoppingCart, User, Home, QrCode, LogOut, UserCircle } from "lucide-react";
+import { Coffee, Menu, ShoppingCart, User, Home, QrCode, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -74,12 +74,6 @@ const Navbar = () => {
             <DropdownMenuContent align="end">
               {user ? (
                 <>
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile" className="flex items-center gap-2 cursor-pointer">
-                      <UserCircle className="h-4 w-4" />
-                      Hồ sơ
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="flex items-center gap-2 cursor-pointer">
                     <LogOut className="h-4 w-4" />
@@ -136,10 +130,6 @@ const Navbar = () => {
                 </Link>
                 {user ? (
                   <>
-                    <Link to="/profile" className="flex items-center gap-3 text-lg font-medium hover:text-primary transition-colors">
-                      <User className="h-5 w-5" />
-                      Hồ sơ
-                    </Link>
                     <Button variant="outline" onClick={handleLogout} className="w-full">
                       Đăng xuất
                     </Button>
