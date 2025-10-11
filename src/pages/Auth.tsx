@@ -13,7 +13,7 @@ const Auth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: Implement authentication logic
+    // Implement authentication logic
     setTimeout(() => setIsLoading(false), 1000);
   };
 

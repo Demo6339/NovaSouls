@@ -108,13 +108,13 @@ const RevenueChart: React.FC = () => {
     return () => clearInterval(interval);
   }, [isLive, selectedUpdateInterval]);
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: { dataKey: string; value: number; color: string }[]; label?: string }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-background/95 backdrop-blur-sm border border-border rounded-xl p-4 shadow-2xl">
           <p className="text-sm font-semibold text-foreground mb-2">{`Thời gian: ${label}`}</p>
           <div className="space-y-1">
-            {payload.map((entry: any, index: number) => (
+            {payload.map((entry: { dataKey: string; value: number; color: string }, index: number) => (
               <div key={index} className="flex items-center gap-2">
                 <div 
                   className="w-3 h-3 rounded-full" 

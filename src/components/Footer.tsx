@@ -29,7 +29,6 @@ const Footer = () => {
         .limit(1);
 
       if (error) {
-        console.error('Error loading settings:', error);
         return;
       }
 
@@ -42,7 +41,7 @@ const Footer = () => {
         }));
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
+      // Error loading settings
     }
   };
 

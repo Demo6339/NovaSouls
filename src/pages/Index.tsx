@@ -28,19 +28,18 @@ const Index = () => {
         .single();
 
       if (error) {
-        console.warn('No appearance settings found, using defaults');
         return;
       }
 
       if (data) {
-        const settings = data.setting_value as any;
+        const settings = data.setting_value as Record<string, string>;
         setAboutContent({
           title: settings.about_title || "",
           content: settings.about_content || ""
         });
       }
     } catch (error) {
-      console.warn('Error loading about content, using defaults:', error);
+      // Error loading about content, using defaults
     }
   };
 

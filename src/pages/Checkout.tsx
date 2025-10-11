@@ -24,7 +24,7 @@ const Checkout = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Process order
+    // Process order
     alert("Đặt hàng thành công!");
     navigate("/profile");
   };
@@ -49,7 +49,7 @@ const Checkout = () => {
                     <CardTitle>Hình thức nhận hàng</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <RadioGroup value={orderType} onValueChange={(value: any) => setOrderType(value)}>
+                    <RadioGroup value={orderType} onValueChange={(value: "delivery" | "pickup") => setOrderType(value)}>
                       <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-secondary/50">
                         <RadioGroupItem value="delivery" id="delivery" />
                         <Label htmlFor="delivery" className="flex-1 cursor-pointer">

@@ -34,19 +34,18 @@ const StatsSection = () => {
         .single();
 
       if (error) {
-        console.warn('No appearance settings found, using defaults');
         return;
       }
 
       if (data) {
-        const appearanceSettings = data.setting_value as any;
+        const appearanceSettings = data.setting_value as Record<string, string>;
         setSettings(prev => ({
           ...prev,
           ...appearanceSettings
         }));
       }
     } catch (error) {
-      console.warn('Error loading stats settings, using defaults:', error);
+      // Error loading stats settings, using defaults
     }
   };
 

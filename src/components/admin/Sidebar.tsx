@@ -135,7 +135,7 @@ const AdminSidebar = () => {
     );
   };
 
-  const handleItemClick = (item: any) => {
+  const handleItemClick = (item: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType }[] }) => {
     if (item.subItems) {
       toggleExpanded(item.path);
       // If clicking on products, navigate to menu by default
@@ -163,11 +163,11 @@ const AdminSidebar = () => {
     }
   };
 
-  const isItemActive = (item: any) => {
+  const isItemActive = (item: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType; subItems?: { path: string; label: string; icon: React.ComponentType }[] }[] }) => {
     if (item.subItems) {
-      return item.subItems.some((subItem: any) => {
+      return item.subItems.some((subItem: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType }[] }) => {
         if (subItem.subItems) {
-          return subItem.subItems.some((subSubItem: any) => location.pathname === subSubItem.path) ||
+          return subItem.subItems.some((subSubItem: { path: string; label: string; icon: React.ComponentType }) => location.pathname === subSubItem.path) ||
                  location.pathname === subItem.path;
         }
         return location.pathname === subItem.path;
@@ -176,7 +176,7 @@ const AdminSidebar = () => {
     return location.pathname === item.path;
   };
 
-  const isSubItemActive = (subItem: any) => {
+  const isSubItemActive = (subItem: { path: string }) => {
     return location.pathname === subItem.path;
   };
 
