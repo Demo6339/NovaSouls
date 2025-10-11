@@ -6,8 +6,7 @@ import Features from "@/components/Features";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Coffee } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const Index = () => {
   const [aboutContent, setAboutContent] = useState({
@@ -15,33 +14,6 @@ const Index = () => {
     content: ""
   });
 
-  useEffect(() => {
-    loadAboutContent();
-  }, []);
-
-  const loadAboutContent = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('setting_value')
-        .eq('setting_key', 'appearance')
-        .single();
-
-      if (error) {
-        return;
-      }
-
-      if (data) {
-        const settings = data.setting_value as Record<string, string>;
-        setAboutContent({
-          title: settings.about_title || "",
-          content: settings.about_content || ""
-        });
-      }
-    } catch (error) {
-      // Error loading about content, using defaults
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col">

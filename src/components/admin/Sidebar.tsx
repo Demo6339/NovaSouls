@@ -5,7 +5,6 @@ import {
   LayoutDashboard,
   Package,
   Calendar,
-  Palette,
   History,
   Coffee,
   Menu,
@@ -18,10 +17,6 @@ import {
   PlusCircle,
   Activity,
   Tag,
-  Home,
-  Type,
-  Image as ImageIcon,
-  Layout,
   Settings,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -48,33 +43,6 @@ const menuItems = [
       { icon: Tag, label: "Mã giảm giá", path: "/admin/events/coupons" },
     ]
   },
-  { 
-    icon: Palette, 
-    label: "Giao diện", 
-    path: "/admin/appearance",
-    subItems: [
-      { 
-        icon: Home, 
-        label: "Trang chủ", 
-        path: "/admin/appearance/home",
-        subItems: [
-          { icon: Type, label: "Nội dung", path: "/admin/appearance/home/content" },
-          { icon: ImageIcon, label: "Hình ảnh", path: "/admin/appearance/home/images" },
-          { icon: Layout, label: "Bố cục", path: "/admin/appearance/home/layout" },
-        ]
-      },
-      { 
-        icon: Calendar, 
-        label: "Sự kiện", 
-        path: "/admin/appearance/events",
-        subItems: [
-          { icon: Type, label: "Nội dung", path: "/admin/appearance/events/content" },
-          { icon: ImageIcon, label: "Hình ảnh", path: "/admin/appearance/events/images" },
-          { icon: Layout, label: "Bố cục", path: "/admin/appearance/events/layout" },
-        ]
-      },
-    ]
-  },
   { icon: History, label: "Lịch sử", path: "/admin/history" },
 ];
 
@@ -95,25 +63,6 @@ const AdminSidebar = () => {
       setExpandedItems(prev => 
         prev.includes('/admin/events') ? prev : [...prev, '/admin/events']
       );
-    }
-    if (location.pathname.startsWith('/admin/appearance')) {
-      setExpandedItems(prev => {
-        const newItems = [...prev];
-        if (!newItems.includes('/admin/appearance')) {
-          newItems.push('/admin/appearance');
-        }
-        if (location.pathname.startsWith('/admin/appearance/home')) {
-          if (!newItems.includes('/admin/appearance/home')) {
-            newItems.push('/admin/appearance/home');
-          }
-        }
-        if (location.pathname.startsWith('/admin/appearance/events')) {
-          if (!newItems.includes('/admin/appearance/events')) {
-            newItems.push('/admin/appearance/events');
-          }
-        }
-        return newItems;
-      });
     }
   }, [location.pathname]);
 
@@ -143,18 +92,6 @@ const AdminSidebar = () => {
       // If clicking on events, navigate to activities by default
       if (item.path === '/admin/events') {
         navigate('/admin/events/activities');
-      }
-      // If clicking on appearance, navigate to home content by default
-      if (item.path === '/admin/appearance') {
-        navigate('/admin/appearance/home/content');
-      }
-      // If clicking on home, navigate to content by default
-      if (item.path === '/admin/appearance/home') {
-        navigate('/admin/appearance/home/content');
-      }
-      // If clicking on events appearance, navigate to content by default
-      if (item.path === '/admin/appearance/events') {
-        navigate('/admin/appearance/events/content');
       }
     } else {
       navigate(item.path);

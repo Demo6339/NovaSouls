@@ -1,7 +1,6 @@
 import { Users, Coffee, Star, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const StatsSection = () => {
   const [settings, setSettings] = useState({
@@ -21,33 +20,6 @@ const StatsSection = () => {
     stats_experience_description: "Phục vụ chuyên nghiệp"
   });
 
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('setting_value')
-        .eq('setting_key', 'appearance')
-        .single();
-
-      if (error) {
-        return;
-      }
-
-      if (data) {
-        const appearanceSettings = data.setting_value as Record<string, string>;
-        setSettings(prev => ({
-          ...prev,
-          ...appearanceSettings
-        }));
-      }
-    } catch (error) {
-      // Error loading stats settings, using defaults
-    }
-  };
 
   const stats = [
     {
