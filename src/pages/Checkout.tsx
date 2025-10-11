@@ -1,250 +1,254 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { useCart } from "@/contexts/CartContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { CreditCard, Wallet, MapPin, Clock, CheckCircle } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { 
+  ArrowLeft, 
+  CheckCircle, 
+  CreditCard, 
+  MapPin, 
+  Phone,
+  User,
+  ShoppingCart
+} from "lucide-react";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const [orderType, setOrderType] = useState<"delivery" | "pickup">("delivery");
-  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const { cart, getTotalPrice, getTotalItems, clearCart } = useCart();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const cartItems = [];
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    note: "",
+    paymentMethod: "cash"
+  });
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = orderType === "delivery" ? 15000 : 0;
-  const total = subtotal + shipping;
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Process order
-    alert("Đặt hàng thành công!");
-    navigate("/");
+    setIsProcessing(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Clear cart after successful order
+    clearCart();
+    
+    setIsProcessing(false);
+    setIsCompleted(true);
   };
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 py-12 bg-gradient-to-b from-background to-secondary/20">
-        <div className="container px-4 max-w-5xl">
-          <div className="mb-8 animate-fade-in">
-            <h1 className="text-4xl font-bold text-foreground mb-2">Thanh toán</h1>
-            <p className="text-muted-foreground">Hoàn tất đơn hàng của bạn</p>
-          </div>
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
-          <form onSubmit={handleSubmit}>
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Left Column - Forms */}
-              <div className="lg:col-span-2 space-y-6">
-                {/* Order Type */}
-                <Card className="animate-fade-up">
-                  <CardHeader>
-                    <CardTitle>Hình thức nhận hàng</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup value={orderType} onValueChange={(value: "delivery" | "pickup") => setOrderType(value)}>
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-secondary/50">
-                        <RadioGroupItem value="delivery" id="delivery" />
-                        <Label htmlFor="delivery" className="flex-1 cursor-pointer">
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-5 w-5 text-accent" />
-                            <div>
-                              <p className="font-medium">Giao hàng tận nơi</p>
-                              <p className="text-sm text-muted-foreground">Phí giao hàng: 0đ</p>
-                            </div>
-                          </div>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-secondary/50">
-                        <RadioGroupItem value="pickup" id="pickup" />
-                        <Label htmlFor="pickup" className="flex-1 cursor-pointer">
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-5 w-5 text-accent" />
-                            <div>
-                              <p className="font-medium">Nhận tại quán</p>
-                              <p className="text-sm text-muted-foreground">Miễn phí</p>
-                            </div>
-                          </div>
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </CardContent>
-                </Card>
-
-                {/* Customer Info */}
-                <Card className="animate-fade-up" style={{ animationDelay: "100ms" }}>
-                  <CardHeader>
-                    <CardTitle>Thông tin khách hàng</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Họ và tên *</Label>
-                        <Input id="name" required placeholder="Họ và tên" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Số điện thoại *</Label>
-                        <Input id="phone" type="tel" required placeholder="Số điện thoại" />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="Email" />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Delivery Address */}
-                {orderType === "delivery" && (
-                  <Card className="animate-fade-up" style={{ animationDelay: "200ms" }}>
-                    <CardHeader>
-                      <CardTitle>Địa chỉ giao hàng</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="address">Địa chỉ cụ thể *</Label>
-                        <Input id="address" required placeholder="Địa chỉ" />
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="ward">Phường/Xã *</Label>
-                          <Input id="ward" required placeholder="Phường/Xã" />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="district">Quận/Huyện *</Label>
-                          <Input id="district" required placeholder="Quận/Huyện" />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="notes">Ghi chú</Label>
-                        <Textarea
-                          id="notes"
-                          placeholder="Ghi chú cho đơn hàng (không bắt buộc)"
-                          rows={3}
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Payment Method */}
-                <Card className="animate-fade-up" style={{ animationDelay: "300ms" }}>
-                  <CardHeader>
-                    <CardTitle>Phương thức thanh toán</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-secondary/50">
-                        <RadioGroupItem value="cash" id="cash" />
-                        <Label htmlFor="cash" className="flex-1 cursor-pointer">
-                          <div className="flex items-center gap-2">
-                            <Wallet className="h-5 w-5 text-accent" />
-                            <div>
-                              <p className="font-medium">Tiền mặt</p>
-                              <p className="text-sm text-muted-foreground">
-                                Thanh toán khi nhận hàng
-                              </p>
-                            </div>
-                          </div>
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 cursor-pointer hover:bg-secondary/50 opacity-50">
-                        <RadioGroupItem value="card" id="card" disabled />
-                        <Label htmlFor="card" className="flex-1 cursor-pointer">
-                          <div className="flex items-center gap-2">
-                            <CreditCard className="h-5 w-5" />
-                            <div>
-                              <p className="font-medium">Thẻ tín dụng</p>
-                              <p className="text-sm text-muted-foreground">
-                                Đang phát triển
-                              </p>
-                            </div>
-                          </div>
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Right Column - Order Summary */}
-              <div className="lg:col-span-1">
-                <Card className="sticky top-24 animate-fade-in">
-                  <CardHeader>
-                    <CardTitle>Đơn hàng của bạn</CardTitle>
-                    <CardDescription>{cartItems.length} món</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Items List */}
-                    <div className="space-y-3">
-                      {cartItems.map((item) => (
-                        <div key={item.id} className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">
-                            {item.name} x{item.quantity}
-                          </span>
-                          <span className="font-medium">
-                            {(item.price * item.quantity).toLocaleString('vi-VN')}đ
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <Separator />
-
-                    {/* Pricing */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Tạm tính</span>
-                        <span className="font-medium">
-                          {subtotal.toLocaleString('vi-VN')}đ
-                        </span>
-                      </div>
-                      {orderType === "delivery" && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Phí giao hàng</span>
-                          <span className="font-medium">
-                            {shipping.toLocaleString('vi-VN')}đ
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <Separator />
-
-                    <div className="flex justify-between text-lg font-bold">
-                      <span>Tổng cộng</span>
-                      <span className="text-primary">
-                        {total.toLocaleString('vi-VN')}đ
-                      </span>
-                    </div>
-
-                    {/* Submit Button */}
-                    <Button type="submit" className="w-full bg-gradient-hero mt-6">
-                      <CheckCircle className="mr-2 h-4 w-4" />
-                      Đặt hàng
-                    </Button>
-
-                    <p className="text-xs text-muted-foreground text-center mt-4">
-                      Bằng việc đặt hàng, bạn đồng ý với{" "}
-                      <a href="#" className="text-primary hover:underline">
-                        điều khoản dịch vụ
-                      </a>
-                    </p>
-                  </CardContent>
-                </Card>
+  if (isCompleted) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold mb-2">Đặt hàng thành công!</h2>
+              <p className="text-muted-foreground mb-6">
+                Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ chuẩn bị và giao hàng sớm nhất có thể.
+              </p>
+              <div className="space-y-2">
+                <Button 
+                  onClick={() => navigate('/')} 
+                  className="w-full"
+                >
+                  Quay về menu
+                </Button>
+                <Button 
+                  onClick={() => navigate('/admin')} 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  Xem admin
+                </Button>
               </div>
             </div>
-          </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="bg-card border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/')}
+              className="p-2"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-2xl font-bold">Thanh toán</h1>
+          </div>
         </div>
-      </main>
-      <Footer />
+      </div>
+
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Order Form */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Thông tin đặt hàng
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Họ và tên *</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        placeholder="Nhập họ và tên"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Số điện thoại *</Label>
+                      <Input
+                        id="phone"
+                        value={formData.phone}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
+                        placeholder="Nhập số điện thoại"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Địa chỉ giao hàng *</Label>
+                    <Textarea
+                      id="address"
+                      value={formData.address}
+                      onChange={(e) => handleInputChange('address', e.target.value)}
+                      placeholder="Nhập địa chỉ chi tiết"
+                      rows={3}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="note">Ghi chú</Label>
+                    <Textarea
+                      id="note"
+                      value={formData.note}
+                      onChange={(e) => handleInputChange('note', e.target.value)}
+                      placeholder="Ghi chú thêm cho đơn hàng"
+                      rows={2}
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label>Phương thức thanh toán</Label>
+                    <div className="space-y-2">
+                      <label className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="cash"
+                          checked={formData.paymentMethod === "cash"}
+                          onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
+                          className="text-primary"
+                        />
+                        <span className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4" />
+                          Thanh toán khi nhận hàng
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? "Đang xử lý..." : "Đặt hàng"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Order Summary */}
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  Đơn hàng của bạn
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {cart.map((item) => (
+                    <div key={item.id} className="flex items-center gap-3">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {item.price.toLocaleString('vi-VN')}đ x {item.quantity}
+                        </p>
+                      </div>
+                      <p className="font-medium">
+                        {(item.price * item.quantity).toLocaleString('vi-VN')}đ
+                      </p>
+                    </div>
+                  ))}
+                  
+                  <Separator />
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>Tạm tính:</span>
+                      <span>{getTotalPrice().toLocaleString('vi-VN')}đ</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Phí giao hàng:</span>
+                      <span>Miễn phí</span>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Tổng cộng:</span>
+                      <span className="text-primary">
+                        {getTotalPrice().toLocaleString('vi-VN')}đ
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
