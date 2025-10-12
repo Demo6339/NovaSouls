@@ -270,42 +270,22 @@ const Menu = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => setShowSidebar(!showSidebar)}
-                className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
-              >
-                <MenuIcon className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-gray-900 rounded-lg">
-                  <Coffee className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    H₂CO Bar
-                  </h1>
-                  <p className="text-sm text-gray-600">Drinks & Cocktails</p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Cart Button */}
+        <div className="flex items-center justify-center">
+          <div className="flex items-center gap-4">
             <Button 
-              className="relative bg-gray-900 hover:bg-gray-800 text-white font-medium px-6 py-2 rounded-lg transition-colors"
-              onClick={() => navigate('/checkout')}
+              variant="ghost" 
+              onClick={() => setShowSidebar(!showSidebar)}
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
             >
-              <ShoppingCart className="h-5 w-5 mr-2" />
-              Giỏ hàng
-              {getTotalItems() > 0 && (
-                <Badge className="absolute -top-2 -right-2 bg-red-600 text-white">
-                  {getTotalItems()}
-                </Badge>
-              )}
+              <MenuIcon className="h-5 w-5" />
             </Button>
+            <div className="flex items-center">
+              <img 
+                src="/logo.png" 
+                alt="H₂CO Bar Logo" 
+                className="h-28 w-28 object-contain"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -658,6 +638,21 @@ const Menu = () => {
             </div>
           </div>
         )}
+
+        {/* Floating Cart Button */}
+        <Button 
+          className="fixed bottom-6 right-6 bg-gray-900 hover:bg-gray-800 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 z-40"
+          onClick={() => navigate('/checkout')}
+        >
+          <div className="relative">
+            <ShoppingCart className="h-6 w-6" />
+            {getTotalItems() > 0 && (
+              <Badge className="absolute -top-2 -right-2 bg-red-600 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
+                {getTotalItems()}
+              </Badge>
+            )}
+          </div>
+        </Button>
       </div>
     </div>
   );
