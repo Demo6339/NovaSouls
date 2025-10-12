@@ -1,6 +1,6 @@
 import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package, Calendar, History } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
 import RevenueChart from "@/components/RevenueChart";
 
 const stats = [
@@ -83,56 +83,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <Card className="animate-fade-up mb-6 lg:mb-8" style={{ animationDelay: "250ms" }}>
-          <CardHeader>
-            <CardTitle>Thao tác nhanh</CardTitle>
-            <CardDescription>Các chức năng thường dùng</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <Package className="h-8 w-8 text-blue-600" />
-                  <div>
-                    <h3 className="font-semibold">Quản lý sản phẩm</h3>
-                    <p className="text-sm text-muted-foreground">Thêm, sửa sản phẩm</p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-8 w-8 text-green-600" />
-                  <div>
-                    <h3 className="font-semibold">Sự kiện</h3>
-                    <p className="text-sm text-muted-foreground">Tạo sự kiện, mã giảm giá</p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <Users className="h-8 w-8 text-purple-600" />
-                  <div>
-                    <h3 className="font-semibold">Khách hàng</h3>
-                    <p className="text-sm text-muted-foreground">Xem thông tin khách hàng</p>
-                  </div>
-                </div>
-              </Card>
-              
-              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <History className="h-8 w-8 text-orange-600" />
-                  <div>
-                    <h3 className="font-semibold">Lịch sử</h3>
-                    <p className="text-sm text-muted-foreground">Xem lịch sử hoạt động</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          </CardContent>
-        </Card>
 
 
         {/* Additional Stats */}

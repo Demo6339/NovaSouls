@@ -5,61 +5,68 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
 import { 
-  Clock, 
+  CheckCircle, 
   Search, 
   Filter, 
+  Clock, 
   User, 
   Phone, 
   MapPin, 
   Calendar,
   Eye,
-  CheckCircle,
+  Play,
   X,
   MoreHorizontal,
   DollarSign,
   Package,
-  Timer,
-  ChefHat
+  XCircle,
+  AlertTriangle,
+  Truck,
+  CreditCard,
+  CheckCircle2
 } from "lucide-react";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
-// Mock data for in-progress orders - matching real order system data
-const inProgressOrders = [
+// Mock data for completed orders - orders that have finished cooking and are ready for delivery/pickup
+const completedOrders = [
   {
-    id: "ORD-004",
-    orderNumber: "NS-2024-004",
+    id: "ORD-006",
+    orderNumber: "NS-2024-006",
     customerInfo: {
-      name: "Phạm Thị D",
+      name: "Nguyễn Thị F",
       phone: "0123456789",
-      email: "phamthid@email.com",
+      email: "nguyenthif@email.com",
       address: {
-        street: "321 Đường GHI",
-        ward: "Phường Thủ Thiêm",
-        district: "Quận 2",
+        street: "123 Đường MNO",
+        ward: "Phường Bến Nghé",
+        district: "Quận 1",
         city: "TP.HCM",
-        fullAddress: "321 Đường GHI, Phường Thủ Thiêm, Quận 2, TP.HCM"
+        fullAddress: "123 Đường MNO, Phường Bến Nghé, Quận 1, TP.HCM"
       }
     },
     orderDetails: {
-      orderTime: "2024-01-15T16:30:00Z",
-      startTime: "2024-01-15T16:35:00Z",
+      orderTime: "2024-01-15T18:00:00Z",
+      completedTime: "2024-01-15T18:30:00Z",
       orderType: "delivery",
       paymentMethod: "cash",
-      paymentStatus: "paid",
+      paymentStatus: "pending",
       deliveryFee: 15000,
       serviceFee: 5000,
       discount: 0,
-      subtotal: 160000,
-      totalAmount: 180000,
-      estimatedTime: 20
+      subtotal: 200000,
+      totalAmount: 220000,
+      estimatedDeliveryTime: 15
     },
     items: [
       { 
         id: 1,
         name: "Soju Chamisul", 
-        quantity: 2, 
+        quantity: 3, 
         unitPrice: 25000,
-        totalPrice: 50000,
+        totalPrice: 75000,
         category: "soju",
         temperature: "lạnh",
         image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
@@ -69,9 +76,9 @@ const inProgressOrders = [
       { 
         id: 4,
         name: "Mojito", 
-        quantity: 1, 
+        quantity: 2, 
         unitPrice: 45000,
-        totalPrice: 45000,
+        totalPrice: 90000,
         category: "cocktail",
         temperature: "lạnh",
         image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
@@ -89,54 +96,42 @@ const inProgressOrders = [
         image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
         customizations: [],
         notes: "Cà phê đậm đặc"
-      },
-      { 
-        id: 2,
-        name: "Soju Yuja", 
-        quantity: 2, 
-        unitPrice: 30000,
-        totalPrice: 60000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: ["Thêm đá"],
-        notes: "Soju hương chanh yuja"
       }
     ],
-    orderNotes: "Cà phê ít đường, giao hàng nhanh",
-    status: "in-progress",
-    currentState: "waiting", // waiting, preparing, cooking, ready, completed
-    progress: 0,
-    createdAt: "2024-01-15T16:30:00Z",
-    updatedAt: "2024-01-15T16:35:00Z"
+    orderNotes: "Giao hàng nhanh, gọi điện trước khi giao",
+    status: "completed",
+    currentState: "ready", // ready, delivering, payment_received
+    progress: 100,
+    createdAt: "2024-01-15T18:00:00Z",
+    updatedAt: "2024-01-15T18:30:00Z"
   },
   {
-    id: "ORD-005", 
-    orderNumber: "NS-2024-005",
+    id: "ORD-007", 
+    orderNumber: "NS-2024-007",
     customerInfo: {
-      name: "Hoàng Văn E",
+      name: "Trần Văn G",
       phone: "0987654321",
-      email: "hoangvane@email.com",
+      email: "tranvang@email.com",
       address: {
-        street: "654 Đường JKL",
-        ward: "Phường Tân Phong",
-        district: "Quận 7",
+        street: "456 Đường PQR",
+        ward: "Phường 2",
+        district: "Quận 3",
         city: "TP.HCM",
-        fullAddress: "654 Đường JKL, Phường Tân Phong, Quận 7, TP.HCM"
+        fullAddress: "456 Đường PQR, Phường 2, Quận 3, TP.HCM"
       }
     },
     orderDetails: {
-      orderTime: "2024-01-15T17:00:00Z",
-      startTime: "2024-01-15T17:05:00Z",
+      orderTime: "2024-01-15T18:15:00Z",
+      completedTime: "2024-01-15T18:45:00Z",
       orderType: "pickup",
       paymentMethod: "momo",
       paymentStatus: "paid",
       deliveryFee: 0,
       serviceFee: 2000,
-      discount: 5000,
-      subtotal: 90000,
-      totalAmount: 87000,
-      estimatedTime: 15
+      discount: 10000,
+      subtotal: 80000,
+      totalAmount: 72000,
+      estimatedDeliveryTime: 0
     },
     items: [
       { 
@@ -152,43 +147,91 @@ const inProgressOrders = [
         notes: "Cocktail sang trọng và quyến rũ"
       },
       { 
+        id: 2,
+        name: "Soju Yuja", 
+        quantity: 1, 
+        unitPrice: 30000,
+        totalPrice: 30000,
+        category: "soju",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: ["Thêm đá"],
+        notes: "Soju hương chanh yuja"
+      }
+    ],
+    orderNotes: "Mang về, gọi điện khi đến",
+    status: "completed",
+    currentState: "delivering", // ready, delivering, payment_received
+    progress: 100,
+    createdAt: "2024-01-15T18:15:00Z",
+    updatedAt: "2024-01-15T18:45:00Z"
+  },
+  {
+    id: "ORD-008",
+    orderNumber: "NS-2024-008",
+    customerInfo: {
+      name: "Lê Thị H", 
+      phone: "0369852147",
+      email: "lethih@email.com",
+      address: {
+        street: "789 Đường STU",
+        ward: "Phường 5",
+        district: "Quận 5",
+        city: "TP.HCM",
+        fullAddress: "789 Đường STU, Phường 5, Quận 5, TP.HCM"
+      }
+    },
+    orderDetails: {
+      orderTime: "2024-01-15T18:30:00Z",
+      completedTime: "2024-01-15T19:00:00Z",
+      orderType: "delivery",
+      paymentMethod: "cash",
+      paymentStatus: "paid",
+      deliveryFee: 15000,
+      serviceFee: 5000,
+      discount: 0,
+      totalAmount: 150000,
+      estimatedDeliveryTime: 20
+    },
+    items: [
+      { 
+        id: 7,
+        name: "Cappuccino", 
+        quantity: 2, 
+        unitPrice: 25000,
+        totalPrice: 50000,
+        category: "coffee",
+        temperature: "nóng",
+        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Cà phê sữa Ý"
+      },
+      { 
         id: 3,
         name: "Soju Peach", 
-        quantity: 1, 
+        quantity: 2, 
         unitPrice: 35000,
-        totalPrice: 35000,
+        totalPrice: 70000,
         category: "soju",
         temperature: "lạnh",
         image: "https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
         customizations: ["Thêm đá"],
         notes: "Soju hương đào"
-      },
-      { 
-        id: 8,
-        name: "Orange Juice", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Nước cam tươi"
       }
     ],
-    orderNotes: "Trân châu nhiều, mang về",
-    status: "in-progress",
-    currentState: "preparing", // waiting, preparing, cooking, ready, completed
-    progress: 25,
-    createdAt: "2024-01-15T17:00:00Z",
-    updatedAt: "2024-01-15T17:05:00Z"
+    orderNotes: "Giao hàng nhanh",
+    status: "completed",
+    currentState: "payment_received", // ready, delivering, payment_received
+    progress: 100,
+    createdAt: "2024-01-15T18:30:00Z",
+    updatedAt: "2024-01-15T19:00:00Z"
   }
 ];
 
-const InProgressOrders = () => {
+const CompletedOrders = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [orders, setOrders] = useState(inProgressOrders);
+  const [orders, setOrders] = useState(completedOrders);
 
   const filteredOrders = orders.filter(order =>
     order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -204,43 +247,27 @@ const InProgressOrders = () => {
           ? { 
               ...order, 
               currentState: newState,
-              progress: newState === "waiting" ? 0 :
-                       newState === "preparing" ? 25 : 
-                       newState === "cooking" ? 50 : 
-                       newState === "ready" ? 100 : order.progress
+              updatedAt: new Date().toISOString()
             }
           : order
       )
     );
-    
-    // If order is completed (ready), move it to completed orders
-    if (newState === "ready") {
-      // This will be handled by the parent component or context
-      console.log(`Order ${orderId} completed and ready to move to completed orders`);
-    }
-    
     console.log(`Order ${orderId} updated to state: ${newState}`);
   };
 
   const getNextState = (currentState) => {
-    const stateOrder = ["waiting", "preparing", "cooking", "ready"];
+    const stateOrder = ["ready", "delivering", "payment_received"];
     const currentIndex = stateOrder.indexOf(currentState);
     return currentIndex < stateOrder.length - 1 ? stateOrder[currentIndex + 1] : null;
   };
 
   const getStateInfo = (state) => {
     const stateMap = {
-      waiting: { label: "Chờ bắt đầu", color: "bg-gray-100 text-gray-800", icon: "⏳" },
-      preparing: { label: "Bắt đầu", color: "bg-blue-100 text-blue-800", icon: "▶️" },
-      cooking: { label: "Đang làm", color: "bg-yellow-100 text-yellow-800", icon: "👨‍🍳" },
-      ready: { label: "Đã xong", color: "bg-green-100 text-green-800", icon: "✅" }
+      ready: { label: "Bắt đầu", color: "bg-blue-100 text-blue-800", icon: "🚀" },
+      delivering: { label: "Giao hàng", color: "bg-yellow-100 text-yellow-800", icon: "🚚" },
+      payment_received: { label: "Đã thu tiền", color: "bg-green-100 text-green-800", icon: "💰" }
     };
-    return stateMap[state] || stateMap.waiting;
-  };
-
-  const canCancelOrder = (currentState) => {
-    // Can only cancel if waiting to start (only in "waiting" state)
-    return currentState === "waiting";
+    return stateMap[state] || stateMap.ready;
   };
 
   const formatCurrency = (amount) => {
@@ -250,17 +277,11 @@ const InProgressOrders = () => {
     }).format(amount);
   };
 
-  const getProgressColor = (progress) => {
-    if (progress < 30) return "bg-red-500";
-    if (progress < 70) return "bg-yellow-500";
-    return "bg-green-500";
-  };
-
-  const getTimeRemaining = (startTime, estimatedTime) => {
-    const start = new Date(startTime);
+  const getTimeRemaining = (completedTime, estimatedDeliveryTime) => {
+    const completed = new Date(completedTime);
     const now = new Date();
-    const elapsed = Math.floor((now - start) / 1000 / 60); // minutes
-    const remaining = Math.max(0, estimatedTime - elapsed);
+    const elapsed = Math.floor((now.getTime() - completed.getTime()) / 1000 / 60);
+    const remaining = Math.max(0, estimatedDeliveryTime - elapsed);
     return remaining;
   };
 
@@ -272,10 +293,10 @@ const InProgressOrders = () => {
         {/* Header */}
         <div className="mb-6 lg:mb-8">
           <div className="flex items-center gap-3 mb-2">
-            <Clock className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng đang làm</h1>
+            <CheckCircle2 className="h-8 w-8 text-green-600" />
+            <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng hoàn thành</h1>
           </div>
-          <p className="text-muted-foreground">Theo dõi tiến độ và quản lý các đơn hàng đang được xử lý</p>
+          <p className="text-muted-foreground">Quản lý các đơn hàng đã hoàn thành và đang giao hàng</p>
         </div>
 
         {/* Search and Filter Bar */}
@@ -301,12 +322,12 @@ const InProgressOrders = () => {
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Đang làm</CardTitle>
-              <ChefHat className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
+              <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{orders.length}</div>
-              <p className="text-xs text-muted-foreground">đơn hàng</p>
+              <p className="text-xs text-muted-foreground">đơn hàng hoàn thành</p>
             </CardContent>
           </Card>
           
@@ -319,33 +340,33 @@ const InProgressOrders = () => {
               <div className="text-2xl font-bold">
                 {formatCurrency(orders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0))}
               </div>
-              <p className="text-xs text-muted-foreground">tổng giá trị</p>
+              <p className="text-xs text-muted-foreground">tổng giá trị đơn hàng</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Thời gian TB</CardTitle>
-              <Timer className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Đang giao</CardTitle>
+              <Truck className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {orders.length > 0 ? Math.round(orders.reduce((sum, order) => sum + order.orderDetails.estimatedTime, 0) / orders.length) : 0} phút
+                {orders.filter(order => order.currentState === 'delivering').length}
               </div>
-              <p className="text-xs text-muted-foreground">thời gian ước tính</p>
+              <p className="text-xs text-muted-foreground">đơn hàng đang giao</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tiến độ TB</CardTitle>
-              <Package className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Đã thu tiền</CardTitle>
+              <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {orders.length > 0 ? Math.round(orders.reduce((sum, order) => sum + order.progress, 0) / orders.length) : 0}%
+                {orders.filter(order => order.currentState === 'payment_received').length}
               </div>
-              <p className="text-xs text-muted-foreground">hoàn thành</p>
+              <p className="text-xs text-muted-foreground">đơn hàng đã thu tiền</p>
             </CardContent>
           </Card>
         </div>
@@ -356,22 +377,21 @@ const InProgressOrders = () => {
             <OrderCard
               key={order.id}
               order={order}
-              variant="in-progress"
+              variant="completed"
               onViewDetails={setSelectedOrder}
               onUpdateState={handleUpdateOrderState}
-              onCancelOrder={(orderId) => handleUpdateOrderState(orderId, "cancelled")}
             />
           ))}
         </div>
 
         {filteredOrders.length === 0 && (
           <div className="text-center py-12">
-            <Clock className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+            <CheckCircle2 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold text-muted-foreground mb-2">
-              {searchQuery ? "Không tìm thấy đơn hàng" : "Không có đơn hàng đang làm"}
+              {searchQuery ? "Không tìm thấy đơn hàng" : "Chưa có đơn hàng hoàn thành"}
             </h3>
             <p className="text-muted-foreground">
-              {searchQuery ? "Thử thay đổi từ khóa tìm kiếm" : "Các đơn hàng đang được xử lý sẽ xuất hiện ở đây"}
+              {searchQuery ? "Thử thay đổi từ khóa tìm kiếm" : "Các đơn hàng hoàn thành sẽ xuất hiện ở đây"}
             </p>
           </div>
         )}
@@ -382,7 +402,7 @@ const InProgressOrders = () => {
             <div className="bg-background rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-bold">Chi tiết đơn hàng #{selectedOrder.id}</h2>
+                  <h2 className="text-xl font-bold">Chi tiết đơn hàng #{selectedOrder.orderNumber}</h2>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -412,10 +432,10 @@ const InProgressOrders = () => {
                         <div className="space-y-2">
                           <div className="text-sm font-medium">Tiến trình:</div>
                           <div className="flex items-center space-x-2">
-                            {["waiting", "preparing", "cooking", "ready"].map((state, index) => {
+                            {["ready", "delivering", "payment_received"].map((state, index) => {
                               const stateInfo = getStateInfo(state);
                               const isActive = state === selectedOrder.currentState;
-                              const isCompleted = ["waiting", "preparing", "cooking", "ready"].indexOf(selectedOrder.currentState) > index;
+                              const isCompleted = ["ready", "delivering", "payment_received"].indexOf(selectedOrder.currentState) > index;
                               
                               return (
                                 <div key={state} className="flex items-center">
@@ -431,7 +451,7 @@ const InProgressOrders = () => {
                                   }`}>
                                     {stateInfo.label}
                                   </span>
-                                  {index < 3 && (
+                                  {index < 2 && (
                                     <div className={`w-8 h-0.5 mx-2 ${
                                       isCompleted ? 'bg-green-500' : 'bg-gray-200'
                                     }`} />
@@ -443,8 +463,10 @@ const InProgressOrders = () => {
                         </div>
                         
                         <div className="flex justify-between text-sm text-muted-foreground">
-                          <span>Bắt đầu: {new Date(selectedOrder.orderDetails.startTime).toLocaleString('vi-VN')}</span>
-                          <span>Còn lại: {getTimeRemaining(selectedOrder.orderDetails.startTime, selectedOrder.orderDetails.estimatedTime)} phút</span>
+                          <span>Hoàn thành: {new Date(selectedOrder.orderDetails.completedTime).toLocaleString('vi-VN')}</span>
+                          {selectedOrder.orderDetails.estimatedDeliveryTime > 0 && (
+                            <span>Còn lại: {getTimeRemaining(selectedOrder.orderDetails.completedTime, selectedOrder.orderDetails.estimatedDeliveryTime)} phút</span>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -476,7 +498,7 @@ const InProgressOrders = () => {
                   {/* Order Items */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Món đang làm</CardTitle>
+                      <CardTitle className="text-lg">Món đã hoàn thành</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
@@ -535,7 +557,7 @@ const InProgressOrders = () => {
                           )}
                           <div className="flex justify-between items-center py-2 font-bold text-lg border-t">
                             <span>Tổng cộng:</span>
-                            <span className="text-blue-600">{formatCurrency(selectedOrder.orderDetails.totalAmount)}</span>
+                            <span className="text-green-600">{formatCurrency(selectedOrder.orderDetails.totalAmount)}</span>
                           </div>
                         </div>
                       </div>
@@ -558,11 +580,11 @@ const InProgressOrders = () => {
                 <div className="flex gap-2 mt-6">
                   {(() => {
                     const nextState = getNextState(selectedOrder.currentState);
-                    const canCancel = canCancelOrder(selectedOrder.currentState);
+                    const isPaymentReceived = selectedOrder.currentState === 'payment_received';
                     
                     return (
                       <>
-                        {nextState && (
+                        {nextState && !isPaymentReceived && (
                           <Button
                             onClick={() => {
                               handleUpdateOrderState(selectedOrder.id, nextState);
@@ -570,21 +592,24 @@ const InProgressOrders = () => {
                             }}
                             className="flex-1 bg-blue-600 hover:bg-blue-700"
                           >
-                            <Clock className="h-4 w-4 mr-2" />
-                            {getStateInfo(nextState).label}
+                            {nextState === 'delivering' ? (
+                              <>
+                                <Truck className="h-4 w-4 mr-2" />
+                                Bắt đầu giao hàng
+                              </>
+                            ) : (
+                              <>
+                                <CreditCard className="h-4 w-4 mr-2" />
+                                Nhận tiền
+                              </>
+                            )}
                           </Button>
                         )}
-                        {canCancel && (
-                          <Button
-                            onClick={() => {
-                              handleUpdateOrderState(selectedOrder.id, "cancelled");
-                              setSelectedOrder(null);
-                            }}
-                            className="flex-1 bg-red-600 hover:bg-red-700"
-                          >
-                            <X className="h-4 w-4 mr-2" />
-                            Hủy đơn
-                          </Button>
+                        {isPaymentReceived && (
+                          <div className="flex-1 flex items-center justify-center py-2 px-4 bg-green-100 text-green-800 rounded-md font-semibold">
+                            <CheckCircle2 className="h-4 w-4 mr-2" />
+                            Đã thu tiền
+                          </div>
                         )}
                         <Button
                           variant="outline"
@@ -606,4 +631,4 @@ const InProgressOrders = () => {
   );
 };
 
-export default InProgressOrders;
+export default CompletedOrders;

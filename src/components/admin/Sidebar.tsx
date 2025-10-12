@@ -20,6 +20,7 @@ import {
   Settings,
   ShoppingCart,
   CheckCircle,
+  CheckCircle2,
   Clock,
   XCircle,
 } from "lucide-react";
@@ -34,6 +35,7 @@ const menuItems = [
     subItems: [
       { icon: CheckCircle, label: "Xác nhận", path: "/admin/orders/confirmed" },
       { icon: Clock, label: "Đang làm", path: "/admin/orders/in-progress" },
+      { icon: CheckCircle2, label: "Hoàn thành", path: "/admin/orders/completed" },
       { icon: XCircle, label: "Bị hủy", path: "/admin/orders/cancelled" },
     ]
   },

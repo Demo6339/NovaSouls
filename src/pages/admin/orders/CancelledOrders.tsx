@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import OrderCard from "@/components/admin/OrderCard";
 import { 
   XCircle, 
   Search, 
@@ -26,59 +27,239 @@ import { useState } from "react";
 const cancelledOrders = [
   {
     id: "ORD-006",
-    customerName: "Võ Thị F",
-    customerPhone: "0123456789",
-    customerAddress: "987 Đường MNO, Quận 10, TP.HCM",
-    orderTime: "2024-01-15 18:00",
-    cancelTime: "2024-01-15 18:15",
-    totalAmount: 120000,
+    orderNumber: "NS-2024-006",
+    customerInfo: {
+      name: "Võ Thị F",
+      phone: "0123456789",
+      email: "vothif@email.com",
+      address: {
+        street: "987 Đường MNO",
+        ward: "Phường 10",
+        district: "Quận 10",
+        city: "TP.HCM",
+        fullAddress: "987 Đường MNO, Phường 10, Quận 10, TP.HCM"
+      }
+    },
+    orderDetails: {
+      orderTime: "2024-01-15T18:00:00Z",
+      orderType: "delivery",
+      paymentMethod: "cash",
+      paymentStatus: "pending",
+      deliveryFee: 15000,
+      serviceFee: 5000,
+      discount: 0,
+      subtotal: 100000,
+      totalAmount: 120000
+    },
     items: [
-      { name: "Cà phê sữa", quantity: 2, price: 25000 },
-      { name: "Bánh mì pate", quantity: 1, price: 25000 },
-      { name: "Nước chanh", quantity: 1, price: 20000 }
+      { 
+        id: 1,
+        name: "Cà phê sữa", 
+        quantity: 2, 
+        unitPrice: 25000,
+        totalPrice: 50000,
+        category: "coffee",
+        temperature: "nóng",
+        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Cà phê sữa đậm đà"
+      },
+      { 
+        id: 2,
+        name: "Bánh mì pate", 
+        quantity: 1, 
+        unitPrice: 25000,
+        totalPrice: 25000,
+        category: "food",
+        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Bánh mì pate truyền thống"
+      },
+      { 
+        id: 3,
+        name: "Nước chanh", 
+        quantity: 1, 
+        unitPrice: 20000,
+        totalPrice: 20000,
+        category: "juice",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Nước chanh tươi mát"
+      }
     ],
-    notes: "Giao hàng nhanh",
+    orderNotes: "Giao hàng nhanh",
     status: "cancelled",
+    cancelTime: "2024-01-15 18:15",
     cancelReason: "Khách hàng yêu cầu hủy",
-    cancelledBy: "Khách hàng"
+    cancelledBy: "Khách hàng",
+    createdAt: "2024-01-15T18:00:00Z",
+    updatedAt: "2024-01-15T18:15:00Z"
   },
   {
     id: "ORD-007", 
-    customerName: "Đặng Văn G",
-    customerPhone: "0987654321",
-    customerAddress: "147 Đường PQR, Quận 11, TP.HCM",
-    orderTime: "2024-01-15 18:30",
-    cancelTime: "2024-01-15 18:45",
-    totalAmount: 85000,
+    orderNumber: "NS-2024-007",
+    customerInfo: {
+      name: "Đặng Văn G",
+      phone: "0987654321",
+      email: "dangvang@email.com",
+      address: {
+        street: "147 Đường PQR",
+        ward: "Phường 11",
+        district: "Quận 11",
+        city: "TP.HCM",
+        fullAddress: "147 Đường PQR, Phường 11, Quận 11, TP.HCM"
+      }
+    },
+    orderDetails: {
+      orderTime: "2024-01-15T18:30:00Z",
+      orderType: "pickup",
+      paymentMethod: "momo",
+      paymentStatus: "paid",
+      deliveryFee: 0,
+      serviceFee: 2000,
+      discount: 5000,
+      subtotal: 88000,
+      totalAmount: 85000
+    },
     items: [
-      { name: "Trà sữa trân châu", quantity: 1, price: 35000 },
-      { name: "Bánh flan", quantity: 1, price: 30000 },
-      { name: "Sinh tố xoài", quantity: 1, price: 20000 }
+      { 
+        id: 4,
+        name: "Trà sữa trân châu", 
+        quantity: 1, 
+        unitPrice: 35000,
+        totalPrice: 35000,
+        category: "drink",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Trà sữa trân châu ngọt ngào"
+      },
+      { 
+        id: 5,
+        name: "Bánh flan", 
+        quantity: 1, 
+        unitPrice: 30000,
+        totalPrice: 30000,
+        category: "dessert",
+        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Bánh flan mềm mịn"
+      },
+      { 
+        id: 6,
+        name: "Sinh tố xoài", 
+        quantity: 1, 
+        unitPrice: 20000,
+        totalPrice: 20000,
+        category: "juice",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Sinh tố xoài tươi ngon"
+      }
     ],
-    notes: "Trân châu nhiều",
+    orderNotes: "Trân châu nhiều",
     status: "cancelled",
+    cancelTime: "2024-01-15 18:45",
     cancelReason: "Hết nguyên liệu",
-    cancelledBy: "Quản lý"
+    cancelledBy: "Quản lý",
+    createdAt: "2024-01-15T18:30:00Z",
+    updatedAt: "2024-01-15T18:45:00Z"
   },
   {
     id: "ORD-008",
-    customerName: "Bùi Thị H",
-    customerPhone: "0369852147",
-    customerAddress: "258 Đường STU, Quận 12, TP.HCM",
-    orderTime: "2024-01-15 19:00",
-    cancelTime: "2024-01-15 19:20",
-    totalAmount: 150000,
+    orderNumber: "NS-2024-008",
+    customerInfo: {
+      name: "Bùi Thị H",
+      phone: "0369852147",
+      email: "buithih@email.com",
+      address: {
+        street: "258 Đường STU",
+        ward: "Phường 12",
+        district: "Quận 12",
+        city: "TP.HCM",
+        fullAddress: "258 Đường STU, Phường 12, Quận 12, TP.HCM"
+      }
+    },
+    orderDetails: {
+      orderTime: "2024-01-15T19:00:00Z",
+      orderType: "delivery",
+      paymentMethod: "card",
+      paymentStatus: "pending",
+      deliveryFee: 15000,
+      serviceFee: 5000,
+      discount: 0,
+      subtotal: 130000,
+      totalAmount: 150000
+    },
     items: [
-      { name: "Cà phê đen", quantity: 1, price: 25000 },
-      { name: "Bánh mì thịt", quantity: 2, price: 30000 },
-      { name: "Nước cam", quantity: 1, price: 20000 },
-      { name: "Bánh ngọt", quantity: 1, price: 27000 },
-      { name: "Sinh tố bơ", quantity: 1, price: 40000 }
+      { 
+        id: 7,
+        name: "Cà phê đen", 
+        quantity: 1, 
+        unitPrice: 25000,
+        totalPrice: 25000,
+        category: "coffee",
+        temperature: "nóng",
+        image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Cà phê đen đậm đặc"
+      },
+      { 
+        id: 8,
+        name: "Bánh mì thịt", 
+        quantity: 2, 
+        unitPrice: 30000,
+        totalPrice: 60000,
+        category: "food",
+        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Bánh mì thịt nướng"
+      },
+      { 
+        id: 9,
+        name: "Nước cam", 
+        quantity: 1, 
+        unitPrice: 20000,
+        totalPrice: 20000,
+        category: "juice",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Nước cam tươi"
+      },
+      { 
+        id: 10,
+        name: "Bánh ngọt", 
+        quantity: 1, 
+        unitPrice: 27000,
+        totalPrice: 27000,
+        category: "dessert",
+        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Bánh ngọt thơm ngon"
+      },
+      { 
+        id: 11,
+        name: "Sinh tố bơ", 
+        quantity: 1, 
+        unitPrice: 40000,
+        totalPrice: 40000,
+        category: "juice",
+        temperature: "lạnh",
+        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+        customizations: [],
+        notes: "Sinh tố bơ béo ngậy"
+      }
     ],
-    notes: "Không đường",
+    orderNotes: "Không đường",
     status: "cancelled",
+    cancelTime: "2024-01-15 19:20",
     cancelReason: "Không liên lạc được",
-    cancelledBy: "Hệ thống"
+    cancelledBy: "Hệ thống",
+    createdAt: "2024-01-15T19:00:00Z",
+    updatedAt: "2024-01-15T19:20:00Z"
   }
 ];
 
@@ -88,12 +269,12 @@ const CancelledOrders = () => {
   const [filterReason, setFilterReason] = useState("all");
 
   const filteredOrders = cancelledOrders.filter(order => {
-    const matchesSearch = order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch = order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customerPhone.includes(searchQuery);
+      order.customerInfo.phone.includes(searchQuery);
     
     const matchesReason = filterReason === "all" || 
-      order.cancelReason.toLowerCase().includes(filterReason.toLowerCase());
+      order.cancelReason?.toLowerCase().includes(filterReason.toLowerCase());
     
     return matchesSearch && matchesReason;
   });
@@ -194,7 +375,7 @@ const CancelledOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-red-600">
-                {formatCurrency(cancelledOrders.reduce((sum, order) => sum + order.totalAmount, 0))}
+                {formatCurrency(cancelledOrders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0))}
               </div>
               <p className="text-xs text-muted-foreground">tổng giá trị bị hủy</p>
             </CardContent>
@@ -224,120 +405,16 @@ const CancelledOrders = () => {
         </div>
 
         {/* Orders List */}
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredOrders.map((order) => (
-            <Card key={order.id} className="hover:shadow-md transition-shadow border-l-4 border-red-500">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">
-                      <XCircle className="h-3 w-3 mr-1" />
-                      Đã hủy
-                    </Badge>
-                    <CardTitle className="text-lg">#{order.id}</CardTitle>
-                    <Badge variant="outline" className={getCancelledByColor(order.cancelledBy)}>
-                      {order.cancelledBy}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSelectedOrder(order)}
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      Chi tiết
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleRestoreOrder(order.id)}
-                      className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                    >
-                      <RefreshCw className="h-4 w-4 mr-1" />
-                      Khôi phục
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteOrder(order.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4 mr-1" />
-                      Xóa
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {/* Customer Info */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">{order.customerName}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{order.customerPhone}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                      <span className="text-sm text-muted-foreground">{order.customerAddress}</span>
-                    </div>
-                  </div>
-
-                  {/* Order Info */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{order.orderTime}</span>
-                    </div>
-                    <div className="text-lg font-bold text-red-600">
-                      {formatCurrency(order.totalAmount)}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {order.items.length} món
-                    </div>
-                  </div>
-
-                  {/* Cancel Info */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">Hủy: {order.cancelTime}</span>
-                    </div>
-                    <div className="text-sm font-medium">
-                      Lý do: <span className={getCancelReasonColor(order.cancelReason)}>{order.cancelReason}</span>
-                    </div>
-                  </div>
-
-                  {/* Items Preview */}
-                  <div className="space-y-1">
-                    <span className="text-sm font-medium">Món đã hủy:</span>
-                    <div className="space-y-1">
-                      {order.items.slice(0, 2).map((item, index) => (
-                        <div key={index} className="text-sm text-muted-foreground">
-                          {item.quantity}x {item.name}
-                        </div>
-                      ))}
-                      {order.items.length > 2 && (
-                        <div className="text-sm text-muted-foreground">
-                          +{order.items.length - 2} món khác
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {order.notes && (
-                  <div className="mt-4 p-3 bg-muted rounded-lg">
-                    <span className="text-sm font-medium">Ghi chú: </span>
-                    <span className="text-sm text-muted-foreground">{order.notes}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <OrderCard
+              key={order.id}
+              order={order}
+              variant="cancelled"
+              onViewDetails={setSelectedOrder}
+              onRestoreOrder={handleRestoreOrder}
+              onDeleteOrder={handleDeleteOrder}
+            />
           ))}
         </div>
 
@@ -401,16 +478,18 @@ const CancelledOrders = () => {
                     <CardContent className="space-y-2">
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4 text-muted-foreground" />
-                        <span>{selectedOrder.customerName}</span>
+                        <span>{selectedOrder.customerInfo.name}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span>{selectedOrder.customerPhone}</span>
+                        <span>{selectedOrder.customerInfo.phone}</span>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                        <span>{selectedOrder.customerAddress}</span>
-                      </div>
+                      {selectedOrder.customerInfo.email && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">Email:</span>
+                          <span className="text-sm">{selectedOrder.customerInfo.email}</span>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -427,25 +506,25 @@ const CancelledOrders = () => {
                               <span className="font-medium">{item.name}</span>
                               <span className="text-muted-foreground ml-2">x{item.quantity}</span>
                             </div>
-                            <span className="font-medium">{formatCurrency(item.price * item.quantity)}</span>
+                            <span className="font-medium">{formatCurrency(item.totalPrice)}</span>
                           </div>
                         ))}
                         <div className="flex justify-between items-center py-2 font-bold text-lg">
                           <span>Tổng cộng:</span>
-                          <span className="text-red-600">{formatCurrency(selectedOrder.totalAmount)}</span>
+                          <span className="text-red-600">{formatCurrency(selectedOrder.orderDetails.totalAmount)}</span>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
 
                   {/* Notes */}
-                  {selectedOrder.notes && (
+                  {selectedOrder.orderNotes && (
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-lg">Ghi chú</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground">{selectedOrder.notes}</p>
+                        <p className="text-muted-foreground">{selectedOrder.orderNotes}</p>
                       </CardContent>
                     </Card>
                   )}
