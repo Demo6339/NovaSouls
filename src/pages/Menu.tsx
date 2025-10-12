@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { useMenu } from "@/contexts/MenuContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,200 +34,19 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// H₂CO Bar menu data
-const menuData = {
-  categories: [
-    {
-      id: "soju",
-      name: "Soju",
-      icon: Wine,
-      items: [
-        {
-          id: 1,
-          name: "Soju Chamisul",
-          description: "Soju truyền thống Hàn Quốc, mát lạnh, hương vị tinh tế và thanh khiết",
-          price: 25000,
-          image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soju",
-          temperature: "lạnh",
-          purchaseCount: 89
-        },
-        {
-          id: 2,
-          name: "Soju Yuja",
-          description: "Soju với hương chanh yuja thơm ngon, vị chua ngọt hài hòa",
-          price: 30000,
-          image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soju",
-          temperature: "lạnh",
-          purchaseCount: 156
-        },
-        {
-          id: 3,
-          name: "Soju Peach",
-          description: "Soju hương đào ngọt ngào, hương thơm quyến rũ",
-          price: 35000,
-          image: "https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soju",
-          temperature: "lạnh",
-          purchaseCount: 67
-        }
-      ]
-    },
-    {
-      id: "cocktail",
-      name: "Cocktail",
-      icon: Zap,
-      items: [
-        {
-          id: 4,
-          name: "Mojito",
-          description: "Rum, bạc hà, chanh tươi, soda - cocktail tươi mát và sảng khoái",
-          price: 45000,
-          image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "cocktail",
-          temperature: "lạnh",
-          purchaseCount: 234
-        },
-        {
-          id: 5,
-          name: "Cosmopolitan",
-          description: "Vodka, Cointreau, cranberry juice, chanh - cocktail sang trọng và quyến rũ",
-          price: 50000,
-          image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "cocktail",
-          temperature: "lạnh",
-          purchaseCount: 189
-        },
-        {
-          id: 6,
-          name: "Old Fashioned",
-          description: "Whiskey, đường, bitters, cam - cocktail cổ điển và tinh tế",
-          price: 48000,
-          image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "cocktail",
-          temperature: "lạnh",
-          purchaseCount: 98
-        }
-      ]
-    },
-    {
-      id: "coffee",
-      name: "Coffee",
-      icon: Coffee,
-      items: [
-        {
-          id: 7,
-          name: "Espresso",
-          description: "Cà phê đậm đặc, nguyên chất, hương vị mạnh mẽ và tinh tế",
-          price: 20000,
-          image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "coffee",
-          temperature: "nóng",
-          purchaseCount: 312
-        },
-        {
-          id: 8,
-          name: "Cappuccino",
-          description: "Cà phê với sữa và bọt sữa, hương vị hài hòa và thơm ngon",
-          price: 25000,
-          image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "coffee",
-          temperature: "nóng",
-          purchaseCount: 278
-        },
-        {
-          id: 9,
-          name: "Iced Coffee",
-          description: "Cà phê đá mát lạnh, tươi mát và sảng khoái",
-          price: 22000,
-          image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "coffee",
-          temperature: "lạnh",
-          purchaseCount: 145
-        }
-      ]
-    },
-    {
-      id: "juice",
-      name: "Nước hoa quả",
-      icon: Droplets,
-      items: [
-        {
-          id: 10,
-          name: "Nước cam tươi",
-          description: "Cam tươi vắt, mát lạnh, giàu vitamin C và tươi ngon",
-          price: 18000,
-          image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "juice",
-          temperature: "lạnh",
-          purchaseCount: 198
-        },
-        {
-          id: 11,
-          name: "Sinh tố bơ",
-          description: "Bơ tươi xay với sữa, béo ngậy và thơm ngon",
-          price: 22000,
-          image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "juice",
-          temperature: "lạnh",
-          purchaseCount: 87
-        },
-        {
-          id: 12,
-          name: "Nước dưa hấu",
-          description: "Dưa hấu tươi, mát lạnh, ngọt thanh và giải nhiệt",
-          price: 16000,
-          image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "juice",
-          temperature: "lạnh",
-          purchaseCount: 156
-        }
-      ]
-    },
-    {
-      id: "soft-drinks",
-      name: "Nước ngọt",
-      icon: Thermometer,
-      items: [
-        {
-          id: 13,
-          name: "Coca Cola",
-          description: "Nước ngọt có gas, mát lạnh, vị ngọt đậm đà và sảng khoái",
-          price: 16000,
-          image: "https://images.unsplash.com/photo-1581636625402-29b2a7041f62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soft-drinks",
-          temperature: "lạnh",
-          purchaseCount: 245
-        },
-        {
-          id: 14,
-          name: "Pepsi",
-          description: "Nước ngọt có gas, mát lạnh, vị ngọt đặc trưng và tươi mát",
-          price: 16000,
-          image: "https://images.unsplash.com/photo-1581636625402-29b2a7041f62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soft-drinks",
-          temperature: "lạnh",
-          purchaseCount: 123
-        },
-        {
-          id: 15,
-          name: "Sprite",
-          description: "Nước ngọt chanh, mát lạnh, vị chanh tươi mát và sảng khoái",
-          price: 16000,
-          image: "https://images.unsplash.com/photo-1581636625402-29b2a7041f62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-          category: "soft-drinks",
-          temperature: "lạnh",
-          purchaseCount: 167
-        }
-      ]
-    }
-  ]
+// Category icons mapping
+const categoryIcons = {
+  soju: Wine,
+  cocktail: Zap,
+  coffee: Coffee,
+  juice: Droplets,
+  "soft-drinks": Thermometer
 };
 
 const Menu = () => {
   const navigate = useNavigate();
   const { addToCart, getTotalItems } = useCart();
+  const { categories, allItems } = useMenu();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [showSidebar, setShowSidebar] = useState(false);
@@ -236,9 +56,6 @@ const Menu = () => {
   const [filters, setFilters] = useState({
     priceRange: [16000, 50000]
   });
-
-  // Get all items from all categories
-  const allItems = menuData.categories.flatMap(cat => cat.items);
 
   const handleViewDetails = (item) => {
     setSelectedItem(item);
@@ -308,8 +125,8 @@ const Menu = () => {
             >
               Tất cả
             </button>
-            {menuData.categories.map((category) => {
-              const Icon = category.icon;
+            {categories.map((category) => {
+              const Icon = categoryIcons[category.id as keyof typeof categoryIcons] || Coffee;
               return (
                 <button
                   key={category.id}
@@ -372,8 +189,8 @@ const Menu = () => {
                       >
                         Tất cả
                       </button>
-                      {menuData.categories.map((category) => {
-                        const Icon = category.icon;
+                      {categories.map((category) => {
+                        const Icon = categoryIcons[category.id as keyof typeof categoryIcons] || Coffee;
                         return (
                           <button
                             key={category.id}
@@ -460,7 +277,7 @@ const Menu = () => {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
                   {activeCategory === "all" ? "Tất cả đồ uống" : 
-                   menuData.categories.find(cat => cat.id === activeCategory)?.name}
+                   categories.find(cat => cat.id === activeCategory)?.name}
                 </h2>
                 <p className="text-gray-600">
                   Tìm thấy {filteredItems.length} đồ uống
@@ -472,7 +289,7 @@ const Menu = () => {
             <div className="lg:hidden">
               <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-1">
                 {activeCategory === "all" ? "Tất cả đồ uống" : 
-                 menuData.categories.find(cat => cat.id === activeCategory)?.name}
+                 categories.find(cat => cat.id === activeCategory)?.name}
               </h2>
               <p className="text-xs sm:text-sm text-gray-600">
                 {filteredItems.length} đồ uống
@@ -568,8 +385,8 @@ const Menu = () => {
                     <div>
                       <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
                         {(() => {
-                          const category = menuData.categories.find(cat => cat.id === selectedItem.category);
-                          const Icon = category?.icon || Coffee;
+                          const category = categories.find(cat => cat.id === selectedItem.category);
+                          const Icon = categoryIcons[selectedItem.category as keyof typeof categoryIcons] || Coffee;
                           return (
                             <>
                               <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -599,7 +416,7 @@ const Menu = () => {
                       <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-2 sm:p-3 border border-green-200">
                         <div className="text-xs text-green-600 font-medium mb-1">Danh mục</div>
                         <div className="text-sm font-bold text-green-800">
-                          {menuData.categories.find(cat => cat.id === selectedItem.category)?.name}
+                          {categories.find(cat => cat.id === selectedItem.category)?.name}
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-2 sm:p-3 border border-orange-200">

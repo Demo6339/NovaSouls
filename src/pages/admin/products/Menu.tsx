@@ -12,12 +12,66 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
-
-const products = [];
+import { Plus, Search, Edit, Trash2, X } from "lucide-react";
+import { useMenu } from "@/contexts/MenuContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const AdminMenu = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [newItem, setNewItem] = useState({
+    name: "",
+    description: "",
+    price: 0,
+    image: "",
+    category: "",
+    temperature: "lạnh" as "nóng" | "lạnh",
+    stock: 0,
+    status: "active" as "active" | "inactive"
+  });
+  
+  const { allItems, deleteItem, addItem, updateItem } = useMenu();
+
+  // Filter products based on search query
+  const filteredProducts = allItems.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleAddItem = () => {
+    if (newItem.name && newItem.description && newItem.price > 0 && newItem.category) {
+      addItem(newItem);
+      setNewItem({
+        name: "",
+        description: "",
+        price: 0,
+        image: "",
+        category: "",
+        temperature: "lạnh",
+        stock: 0,
+        status: "active"
+      });
+      setShowAddModal(false);
+    }
+  };
+
+  const handleEditItem = (item: MenuItem) => {
+    setEditingItem(item);
+    setShowEditModal(true);
+  };
+
+  const handleUpdateItem = () => {
+    if (editingItem) {
+      updateItem(editingItem.id, editingItem);
+      setShowEditModal(false);
+      setEditingItem(null);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -29,10 +83,114 @@ const AdminMenu = () => {
             <h1 className="text-2xl lg:text-4xl font-bold text-foreground mb-2">Món chính</h1>
             <p className="text-muted-foreground">Quản lý món chính trong thực đơn</p>
           </div>
-          <Button className="bg-gradient-hero w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            Thêm món
-          </Button>
+          <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+            <DialogTrigger asChild>
+              <Button className="bg-gradient-hero w-full sm:w-auto">
+                <Plus className="mr-2 h-4 w-4" />
+                Thêm món
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Thêm món mới</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="name">Tên món *</Label>
+                    <Input
+                      id="name"
+                      value={newItem.name}
+                      onChange={(e) => setNewItem({...newItem, name: e.target.value})}
+                      placeholder="Nhập tên món"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="price">Giá (đ) *</Label>
+                    <Input
+                      id="price"
+                      type="number"
+                      value={newItem.price}
+                      onChange={(e) => setNewItem({...newItem, price: parseInt(e.target.value) || 0})}
+                      placeholder="Nhập giá"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="description">Mô tả *</Label>
+                  <Textarea
+                    id="description"
+                    value={newItem.description}
+                    onChange={(e) => setNewItem({...newItem, description: e.target.value})}
+                    placeholder="Nhập mô tả món"
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="category">Danh mục *</Label>
+                    <Select value={newItem.category} onValueChange={(value) => setNewItem({...newItem, category: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn danh mục" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="soju">Soju</SelectItem>
+                        <SelectItem value="cocktail">Cocktail</SelectItem>
+                        <SelectItem value="coffee">Coffee</SelectItem>
+                        <SelectItem value="juice">Nước hoa quả</SelectItem>
+                        <SelectItem value="soft-drinks">Nước ngọt</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="temperature">Nhiệt độ</Label>
+                    <Select value={newItem.temperature} onValueChange={(value: "nóng" | "lạnh") => setNewItem({...newItem, temperature: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn nhiệt độ" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nóng">Nóng</SelectItem>
+                        <SelectItem value="lạnh">Lạnh</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="image">URL hình ảnh</Label>
+                    <Input
+                      id="image"
+                      value={newItem.image}
+                      onChange={(e) => setNewItem({...newItem, image: e.target.value})}
+                      placeholder="Nhập URL hình ảnh"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="stock">Tồn kho</Label>
+                    <Input
+                      id="stock"
+                      type="number"
+                      value={newItem.stock}
+                      onChange={(e) => setNewItem({...newItem, stock: parseInt(e.target.value) || 0})}
+                      placeholder="Nhập số lượng tồn kho"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex justify-end gap-2 pt-4">
+                  <Button variant="outline" onClick={() => setShowAddModal(false)}>
+                    Hủy
+                  </Button>
+                  <Button onClick={handleAddItem}>
+                    Thêm món
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Card>
@@ -67,7 +225,7 @@ const AdminMenu = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {products.map((product) => (
+                  {filteredProducts.map((product) => (
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
@@ -79,20 +237,37 @@ const AdminMenu = () => {
                           <span className="font-medium">{product.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell>{product.category}</TableCell>
+                      <TableCell>
+                        {product.category === 'soju' ? 'Soju' :
+                         product.category === 'cocktail' ? 'Cocktail' :
+                         product.category === 'coffee' ? 'Coffee' :
+                         product.category === 'juice' ? 'Nước hoa quả' :
+                         product.category === 'soft-drinks' ? 'Nước ngọt' : product.category}
+                      </TableCell>
                       <TableCell className="font-medium">
                         {product.price.toLocaleString('vi-VN')}đ
                       </TableCell>
-                      <TableCell>{product.stock}</TableCell>
+                      <TableCell>{product.stock || 0}</TableCell>
                       <TableCell>
-                        <Badge className="bg-green-500">Hoạt động</Badge>
+                        <Badge className={product.status === 'active' ? "bg-green-500" : "bg-red-500"}>
+                          {product.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Button variant="ghost" size="icon">
+                          <Button 
+                            variant="ghost" 
+                            size="icon"
+                            onClick={() => handleEditItem(product)}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="icon" className="text-destructive">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="text-destructive"
+                            onClick={() => deleteItem(product.id)}
+                          >
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -105,7 +280,7 @@ const AdminMenu = () => {
 
             {/* Mobile Card Layout */}
             <div className="lg:hidden space-y-4">
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <div key={product.id} className="border rounded-lg p-4 space-y-3">
                   <div className="flex items-start gap-3">
                     <img
@@ -115,9 +290,17 @@ const AdminMenu = () => {
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm truncate">{product.name}</h3>
-                      <p className="text-xs text-muted-foreground">{product.category}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {product.category === 'soju' ? 'Soju' :
+                         product.category === 'cocktail' ? 'Cocktail' :
+                         product.category === 'coffee' ? 'Coffee' :
+                         product.category === 'juice' ? 'Nước hoa quả' :
+                         product.category === 'soft-drinks' ? 'Nước ngọt' : product.category}
+                      </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge className="bg-green-500 text-xs">Hoạt động</Badge>
+                        <Badge className={product.status === 'active' ? "bg-green-500 text-xs" : "bg-red-500 text-xs"}>
+                          {product.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
+                        </Badge>
                       </div>
                     </div>
                   </div>
@@ -128,15 +311,24 @@ const AdminMenu = () => {
                     </div>
                     <div>
                       <span className="text-muted-foreground">Tồn kho:</span>
-                      <p className="font-medium">{product.stock}</p>
+                      <p className="font-medium">{product.stock || 0}</p>
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 pt-2 border-t">
-                    <Button variant="ghost" size="sm">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleEditItem(product)}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Sửa
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-destructive">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-destructive"
+                      onClick={() => deleteItem(product.id)}
+                    >
                       <Trash2 className="h-4 w-4 mr-1" />
                       Xóa
                     </Button>
@@ -146,6 +338,125 @@ const AdminMenu = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Edit Modal */}
+        {editingItem && (
+          <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Chỉnh sửa món</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="edit-name">Tên món *</Label>
+                    <Input
+                      id="edit-name"
+                      value={editingItem.name}
+                      onChange={(e) => setEditingItem({...editingItem, name: e.target.value})}
+                      placeholder="Nhập tên món"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-price">Giá (đ) *</Label>
+                    <Input
+                      id="edit-price"
+                      type="number"
+                      value={editingItem.price}
+                      onChange={(e) => setEditingItem({...editingItem, price: parseInt(e.target.value) || 0})}
+                      placeholder="Nhập giá"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="edit-description">Mô tả *</Label>
+                  <Textarea
+                    id="edit-description"
+                    value={editingItem.description}
+                    onChange={(e) => setEditingItem({...editingItem, description: e.target.value})}
+                    placeholder="Nhập mô tả món"
+                    rows={3}
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="edit-category">Danh mục *</Label>
+                    <Select value={editingItem.category} onValueChange={(value) => setEditingItem({...editingItem, category: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn danh mục" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="soju">Soju</SelectItem>
+                        <SelectItem value="cocktail">Cocktail</SelectItem>
+                        <SelectItem value="coffee">Coffee</SelectItem>
+                        <SelectItem value="juice">Nước hoa quả</SelectItem>
+                        <SelectItem value="soft-drinks">Nước ngọt</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-temperature">Nhiệt độ</Label>
+                    <Select value={editingItem.temperature} onValueChange={(value: "nóng" | "lạnh") => setEditingItem({...editingItem, temperature: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn nhiệt độ" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="nóng">Nóng</SelectItem>
+                        <SelectItem value="lạnh">Lạnh</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="edit-image">URL hình ảnh</Label>
+                    <Input
+                      id="edit-image"
+                      value={editingItem.image}
+                      onChange={(e) => setEditingItem({...editingItem, image: e.target.value})}
+                      placeholder="Nhập URL hình ảnh"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-stock">Tồn kho</Label>
+                    <Input
+                      id="edit-stock"
+                      type="number"
+                      value={editingItem.stock || 0}
+                      onChange={(e) => setEditingItem({...editingItem, stock: parseInt(e.target.value) || 0})}
+                      placeholder="Nhập số lượng tồn kho"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="edit-status">Trạng thái</Label>
+                  <Select value={editingItem.status || 'active'} onValueChange={(value: "active" | "inactive") => setEditingItem({...editingItem, status: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn trạng thái" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Hoạt động</SelectItem>
+                      <SelectItem value="inactive">Tạm dừng</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex justify-end gap-2 pt-4">
+                  <Button variant="outline" onClick={() => setShowEditModal(false)}>
+                    Hủy
+                  </Button>
+                  <Button onClick={handleUpdateItem}>
+                    Cập nhật
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </main>
     </div>
   );
