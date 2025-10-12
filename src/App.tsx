@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { MenuProvider } from "@/contexts/MenuContext";
+import { OrderProvider } from "@/contexts/OrderContext";
 import Menu from "./pages/Menu";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -26,14 +27,15 @@ const App = () => (
     <TooltipProvider>
       <CartProvider>
         <MenuProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter
-            future={{
-              v7_startTransition: true,
-              v7_relativeSplatPath: true,
-            }}
-          >
+          <OrderProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
           <Routes>
             <Route path="/" element={<Menu />} />
             <Route path="/menu" element={<Menu />} />
@@ -52,6 +54,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           </BrowserRouter>
+          </OrderProvider>
         </MenuProvider>
       </CartProvider>
     </TooltipProvider>

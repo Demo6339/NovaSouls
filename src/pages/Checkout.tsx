@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { useOrders } from "@/contexts/OrderContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,7 @@ import {
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, getTotalPrice, getTotalItems, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -140,6 +142,30 @@ const Checkout = () => {
     for (let i = 0; i <= 100; i += 20) {
       await new Promise(resolve => setTimeout(resolve, 200));
     }
+    
+    // Create order in the system
+    const orderData = {
+      customerName: formData.name,
+      customerPhone: formData.phone,
+      items: cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+        notes: item.notes || undefined
+      })),
+      totalAmount: getTotalPrice(),
+      discountAmount: discountAmount,
+      finalAmount: getTotalPrice() - discountAmount,
+      paymentMethod: formData.paymentMethod as 'cash' | 'card',
+      notes: formData.note || undefined,
+      discountCode: formData.discountCode || undefined,
+      estimatedTime: 20 // Default estimated time
+    };
+    
+    const orderId = addOrder(orderData);
+    console.log('Order created with ID:', orderId);
     
     // Clear cart and form data after successful order
     clearCart();

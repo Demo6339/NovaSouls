@@ -22,7 +22,7 @@ import {
 import { useState, useEffect } from "react";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Tổng quan", path: "/admin" },
+  { icon: LayoutDashboard, label: "Tổng quan", path: "/admin", section: "overview" },
   { 
     icon: Package, 
     label: "Sản phẩm", 
@@ -46,7 +46,9 @@ const menuItems = [
   { icon: History, label: "Lịch sử", path: "/admin/history" },
 ];
 
-const AdminSidebar = () => {
+interface AdminSidebarProps {}
+
+const AdminSidebar = ({}: AdminSidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -82,36 +84,39 @@ const AdminSidebar = () => {
     );
   };
 
-  const handleItemClick = (item: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType }[] }) => {
+  const handleItemClick = (item: { path: string; section?: string; subItems?: { path: string; label: string; icon: React.ComponentType; section?: string; subsection?: string }[] }) => {
     if (item.subItems) {
       toggleExpanded(item.path);
-      // If clicking on products, navigate to menu by default
+      // Navigate to first sub-item for sections with sub-items
       if (item.path === '/admin/products') {
         navigate('/admin/products/menu');
-      }
-      // If clicking on events, navigate to activities by default
-      if (item.path === '/admin/events') {
+      } else if (item.path === '/admin/events') {
         navigate('/admin/events/activities');
       }
     } else {
+      // Handle regular navigation items
       navigate(item.path);
     }
   };
 
-  const isItemActive = (item: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType; subItems?: { path: string; label: string; icon: React.ComponentType }[] }[] }) => {
+  const handleSubItemClick = (subItem: { path: string; section?: string; subsection?: string }) => {
+    // Always navigate to the sub-item path
+    navigate(subItem.path);
+  };
+
+  const isItemActive = (item: { path: string; section?: string; subItems?: { path: string; label: string; icon: React.ComponentType; section?: string; subsection?: string }[] }) => {
+    // For items with subItems
     if (item.subItems) {
-      return item.subItems.some((subItem: { path: string; subItems?: { path: string; label: string; icon: React.ComponentType }[] }) => {
-        if (subItem.subItems) {
-          return subItem.subItems.some((subSubItem: { path: string; label: string; icon: React.ComponentType }) => location.pathname === subSubItem.path) ||
-                 location.pathname === subItem.path;
-        }
+      return item.subItems.some((subItem: { path: string; section?: string; subsection?: string }) => {
         return location.pathname === subItem.path;
       }) || location.pathname === item.path;
     }
+    
+    // For regular items
     return location.pathname === item.path;
   };
 
-  const isSubItemActive = (subItem: { path: string }) => {
+  const isSubItemActive = (subItem: { path: string; section?: string; subsection?: string }) => {
     return location.pathname === subItem.path;
   };
 
@@ -246,12 +251,14 @@ const AdminSidebar = () => {
                          }
                          
                          return (
-                           <Link
+                           <button
                              key={subItem.path}
-                             to={subItem.path}
-                             onClick={closeMobileMenu}
+                             onClick={() => {
+                               handleSubItemClick(subItem);
+                               closeMobileMenu();
+                             }}
                              className={cn(
-                               "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm",
+                               "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-sm w-full text-left",
                                isSubActive
                                  ? "bg-gradient-hero text-primary-foreground shadow-md"
                                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -259,7 +266,7 @@ const AdminSidebar = () => {
                            >
                              <SubIcon className="h-4 w-4" />
                              <span className="font-medium">{subItem.label}</span>
-                           </Link>
+                           </button>
                          );
                        })}
                      </div>

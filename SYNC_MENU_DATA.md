@@ -71,9 +71,8 @@ Hệ thống đã được cập nhật để đồng bộ data menu giữa tran
   image: string;
   category: string;
   temperature: 'nóng' | 'lạnh';
-  purchaseCount: number;
-  stock?: number;
-  status?: 'active' | 'inactive';
+  stock: number;
+  status: 'active' | 'inactive';
 }
 ```
 
@@ -87,6 +86,29 @@ Hệ thống đã được cập nhật để đồng bộ data menu giữa tran
 }
 ```
 
+## Cập nhật mới nhất
+
+### ✅ **Đã xóa doanh số giả:**
+- Loại bỏ hoàn toàn `purchaseCount` khỏi data structure
+- Xóa thông tin "Lượt mua" khỏi popup món
+- Tập trung vào quản lý menu thật
+
+### ✅ **Thông tin popup hoàn toàn có thể quản lý:**
+- **Tên món** - Có thể chỉnh sửa từ admin
+- **Giá** - Có thể chỉnh sửa từ admin  
+- **Mô tả** - Có thể chỉnh sửa từ admin
+- **Danh mục** - Có thể chỉnh sửa từ admin
+- **Trạng thái** - Có thể chỉnh sửa từ admin (Có sẵn/Tạm dừng)
+- **Tồn kho** - Có thể chỉnh sửa từ admin (hiển thị trong popup)
+- **Hình ảnh** - Có thể chỉnh sửa từ admin
+- **Nhiệt độ** - Có thể chỉnh sửa từ admin
+
+### ✅ **Validation đầy đủ:**
+- Tất cả trường bắt buộc đều có validation
+- Stock phải >= 0
+- Price phải > 0
+- Tên món, mô tả, danh mục không được để trống
+
 ## Lợi ích
 
 1. **Đồng bộ realtime** - Thay đổi từ admin ngay lập tức hiển thị trên frontend
@@ -94,10 +116,11 @@ Hệ thống đã được cập nhật để đồng bộ data menu giữa tran
 3. **Dễ bảo trì** - Không cần cập nhật data ở nhiều nơi
 4. **Tính năng đầy đủ** - CRUD operations hoàn chỉnh
 5. **UI/UX tốt** - Modal forms đẹp, responsive
+6. **Data thật** - Không có doanh số giả, tập trung vào quản lý menu thực tế
 
 ## Lưu ý
 
 - Data hiện tại được lưu trong memory, sẽ mất khi refresh trang
 - Để lưu trữ lâu dài, cần tích hợp với database (Supabase/PostgreSQL)
-- Có thể thêm validation cho form input
+- Doanh số thật sẽ được phát triển sau từ các đơn hàng đã hoàn thành
 - Có thể thêm confirmation dialog cho việc xóa món

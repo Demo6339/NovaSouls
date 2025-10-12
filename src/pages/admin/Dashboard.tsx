@@ -1,11 +1,39 @@
 import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package, Calendar, History } from "lucide-react";
 import RevenueChart from "@/components/RevenueChart";
 
-const stats = [];
+const stats = [
+  {
+    title: "Tổng doanh thu",
+    value: "0đ",
+    change: "0%",
+    trend: "up" as const,
+    icon: DollarSign
+  },
+  {
+    title: "Đơn hàng hôm nay",
+    value: "0",
+    change: "0%",
+    trend: "up" as const,
+    icon: ShoppingCart
+  },
+  {
+    title: "Khách hàng mới",
+    value: "0",
+    change: "0%",
+    trend: "up" as const,
+    icon: Users
+  },
+  {
+    title: "Sản phẩm",
+    value: "0",
+    change: "0%",
+    trend: "up" as const,
+    icon: Package
+  }
+];
 
-const recentOrders = [];
 
 const AdminDashboard = () => {
   return (
@@ -13,6 +41,7 @@ const AdminDashboard = () => {
       <AdminSidebar />
       
       <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
+        {/* Header */}
         <div className="mb-6 lg:mb-8">
           <h1 className="text-2xl lg:text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
           <p className="text-muted-foreground">Theo dõi hoạt động kinh doanh</p>
@@ -54,34 +83,57 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Recent Orders - Full Width */}
-        <Card className="animate-fade-up mb-6 lg:mb-8" style={{ animationDelay: "300ms" }}>
+        {/* Quick Actions */}
+        <Card className="animate-fade-up mb-6 lg:mb-8" style={{ animationDelay: "250ms" }}>
           <CardHeader>
-            <CardTitle>Đơn hàng gần đây</CardTitle>
-            <CardDescription>Cập nhật realtime</CardDescription>
+            <CardTitle>Thao tác nhanh</CardTitle>
+            <CardDescription>Các chức năng thường dùng</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3 lg:space-y-4">
-              {recentOrders.map((order) => (
-                <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg gap-2">
-                  <div className="flex-1">
-                    <p className="font-medium text-sm lg:text-base">#{order.id}</p>
-                    <p className="text-xs lg:text-sm text-muted-foreground">{order.customer}</p>
-                    <p className="text-xs text-muted-foreground">{order.time}</p>
-                  </div>
-                  <div className="text-left sm:text-right">
-                    <p className="font-bold text-primary text-sm lg:text-base">{order.total.toLocaleString('vi-VN')}đ</p>
-                    <span className={`text-xs px-2 py-1 rounded ${
-                      order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                      {order.status === 'completed' ? 'Hoàn thành' : 'Đang làm'}
-                    </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <Package className="h-8 w-8 text-blue-600" />
+                  <div>
+                    <h3 className="font-semibold">Quản lý sản phẩm</h3>
+                    <p className="text-sm text-muted-foreground">Thêm, sửa sản phẩm</p>
                   </div>
                 </div>
-              ))}
+              </Card>
+              
+              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-8 w-8 text-green-600" />
+                  <div>
+                    <h3 className="font-semibold">Sự kiện</h3>
+                    <p className="text-sm text-muted-foreground">Tạo sự kiện, mã giảm giá</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <Users className="h-8 w-8 text-purple-600" />
+                  <div>
+                    <h3 className="font-semibold">Khách hàng</h3>
+                    <p className="text-sm text-muted-foreground">Xem thông tin khách hàng</p>
+                  </div>
+                </div>
+              </Card>
+              
+              <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="flex items-center gap-3">
+                  <History className="h-8 w-8 text-orange-600" />
+                  <div>
+                    <h3 className="font-semibold">Lịch sử</h3>
+                    <p className="text-sm text-muted-foreground">Xem lịch sử hoạt động</p>
+                  </div>
+                </div>
+              </Card>
             </div>
           </CardContent>
         </Card>
+
 
         {/* Additional Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">

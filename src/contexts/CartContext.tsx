@@ -6,12 +6,14 @@ export interface CartItem {
   price: number;
   quantity: number;
   image: string;
+  notes?: string;
 }
 
 interface CartContextType {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'>) => void;
   updateQuantity: (id: number, quantity: number) => void;
+  updateItemNotes: (id: number, notes: string) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
   getTotalPrice: () => number;
@@ -61,6 +63,14 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     );
   };
 
+  const updateItemNotes = (id: number, notes: string) => {
+    setCart(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, notes } : item
+      )
+    );
+  };
+
   const removeFromCart = (id: number) => {
     setCart(prev => prev.filter(item => item.id !== id));
   };
@@ -81,6 +91,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     cart,
     addToCart,
     updateQuantity,
+    updateItemNotes,
     removeFromCart,
     clearCart,
     getTotalPrice,

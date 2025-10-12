@@ -44,7 +44,7 @@ const AdminMenu = () => {
   );
 
   const handleAddItem = () => {
-    if (newItem.name && newItem.description && newItem.price > 0 && newItem.category) {
+    if (newItem.name && newItem.description && newItem.price > 0 && newItem.category && newItem.stock >= 0) {
       addItem(newItem);
       setNewItem({
         name: "",
@@ -169,10 +169,11 @@ const AdminMenu = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="stock">Tồn kho</Label>
+                    <Label htmlFor="stock">Tồn kho *</Label>
                     <Input
                       id="stock"
                       type="number"
+                      min="0"
                       value={newItem.stock}
                       onChange={(e) => setNewItem({...newItem, stock: parseInt(e.target.value) || 0})}
                       placeholder="Nhập số lượng tồn kho"
@@ -421,10 +422,11 @@ const AdminMenu = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="edit-stock">Tồn kho</Label>
+                    <Label htmlFor="edit-stock">Tồn kho *</Label>
                     <Input
                       id="edit-stock"
                       type="number"
+                      min="0"
                       value={editingItem.stock || 0}
                       onChange={(e) => setEditingItem({...editingItem, stock: parseInt(e.target.value) || 0})}
                       placeholder="Nhập số lượng tồn kho"
