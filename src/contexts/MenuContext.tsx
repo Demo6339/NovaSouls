@@ -11,6 +11,8 @@ export interface MenuItem {
   temperature: 'nóng' | 'lạnh';
   stock: number;
   status: 'active' | 'inactive';
+  purchaseCount: number; // Doanh số thật từ đơn hàng
+  stockStatus: 'còn hàng' | 'gần hết' | 'đã hết'; // Trạng thái tồn kho
 }
 
 // Category interface
@@ -37,7 +39,9 @@ const initialMenuData: MenuCategory[] = [
           category: "soju",
           temperature: "lạnh",
           stock: 50,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
       {
         id: 2,
@@ -48,7 +52,9 @@ const initialMenuData: MenuCategory[] = [
         category: "soju",
         temperature: "lạnh",
         stock: 30,
-        status: 'active'
+        status: 'active',
+        purchaseCount: 0,
+        stockStatus: 'còn hàng'
       },
       {
         id: 3,
@@ -59,7 +65,9 @@ const initialMenuData: MenuCategory[] = [
         category: "soju",
         temperature: "lạnh",
         stock: 25,
-        status: 'active'
+        status: 'active',
+        purchaseCount: 0,
+        stockStatus: 'còn hàng'
       }
     ]
   },
@@ -77,7 +85,9 @@ const initialMenuData: MenuCategory[] = [
           category: "cocktail",
           temperature: "lạnh",
           stock: 40,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 5,
@@ -88,7 +98,9 @@ const initialMenuData: MenuCategory[] = [
           category: "cocktail",
           temperature: "lạnh",
           stock: 35,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 6,
@@ -99,7 +111,9 @@ const initialMenuData: MenuCategory[] = [
           category: "cocktail",
           temperature: "lạnh",
           stock: 20,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         }
       ]
   },
@@ -117,7 +131,9 @@ const initialMenuData: MenuCategory[] = [
           category: "coffee",
           temperature: "nóng",
           stock: 100,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 8,
@@ -128,7 +144,9 @@ const initialMenuData: MenuCategory[] = [
           category: "coffee",
           temperature: "nóng",
           stock: 80,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 9,
@@ -139,7 +157,9 @@ const initialMenuData: MenuCategory[] = [
           category: "coffee",
           temperature: "lạnh",
           stock: 60,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         }
       ]
   },
@@ -157,7 +177,9 @@ const initialMenuData: MenuCategory[] = [
           category: "juice",
           temperature: "lạnh",
           stock: 70,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 11,
@@ -168,7 +190,9 @@ const initialMenuData: MenuCategory[] = [
           category: "juice",
           temperature: "lạnh",
           stock: 45,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 12,
@@ -179,7 +203,9 @@ const initialMenuData: MenuCategory[] = [
           category: "juice",
           temperature: "lạnh",
           stock: 55,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         }
       ]
   },
@@ -197,7 +223,9 @@ const initialMenuData: MenuCategory[] = [
           category: "soft-drinks",
           temperature: "lạnh",
           stock: 120,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 14,
@@ -208,7 +236,9 @@ const initialMenuData: MenuCategory[] = [
           category: "soft-drinks",
           temperature: "lạnh",
           stock: 90,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         },
         {
           id: 15,
@@ -219,7 +249,9 @@ const initialMenuData: MenuCategory[] = [
           category: "soft-drinks",
           temperature: "lạnh",
           stock: 75,
-          status: 'active'
+          status: 'active',
+          purchaseCount: 0,
+          stockStatus: 'còn hàng'
         }
       ]
   }
@@ -251,7 +283,9 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newId = Math.max(...allItems.map(i => i.id), 0) + 1;
     const newItem: MenuItem = {
       ...item,
-      id: newId
+      id: newId,
+      purchaseCount: item.purchaseCount || 0,
+      stockStatus: item.stockStatus || 'còn hàng'
     };
 
     setCategories(prev => prev.map(cat => 

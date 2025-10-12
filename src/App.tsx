@@ -17,6 +17,7 @@ import AdminAddons from "./pages/admin/products/Addons";
 import AdminEvents from "./pages/admin/AdminEvents";
 import AdminActivities from "./pages/admin/events/Activities";
 import AdminCoupons from "./pages/admin/events/Coupons";
+import { ConfirmedOrders, InProgressOrders, CancelledOrders } from "./pages/admin/orders";
 import History from "./pages/admin/History";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,10 @@ const App = () => (
             <Route path="/admin/products/inventory" element={<AdminInventory />} />
             <Route path="/admin/products/recipes" element={<AdminRecipes />} />
             <Route path="/admin/products/addons" element={<AdminAddons />} />
+            <Route path="/admin/orders" element={<ConfirmedOrders />} />
+            <Route path="/admin/orders/confirmed" element={<ConfirmedOrders />} />
+            <Route path="/admin/orders/in-progress" element={<InProgressOrders />} />
+            <Route path="/admin/orders/cancelled" element={<CancelledOrders />} />
             <Route path="/admin/events" element={<AdminEvents />} />
             <Route path="/admin/events/activities" element={<AdminActivities />} />
             <Route path="/admin/events/coupons" element={<AdminCoupons />} />

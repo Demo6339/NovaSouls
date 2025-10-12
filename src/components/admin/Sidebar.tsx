@@ -18,11 +18,25 @@ import {
   Activity,
   Tag,
   Settings,
+  ShoppingCart,
+  CheckCircle,
+  Clock,
+  XCircle,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Tổng quan", path: "/admin", section: "overview" },
+  { 
+    icon: ShoppingCart, 
+    label: "Đơn hàng", 
+    path: "/admin/orders",
+    subItems: [
+      { icon: CheckCircle, label: "Xác nhận", path: "/admin/orders/confirmed" },
+      { icon: Clock, label: "Đang làm", path: "/admin/orders/in-progress" },
+      { icon: XCircle, label: "Bị hủy", path: "/admin/orders/cancelled" },
+    ]
+  },
   { 
     icon: Package, 
     label: "Sản phẩm", 
@@ -61,6 +75,11 @@ const AdminSidebar = ({}: AdminSidebarProps) => {
         prev.includes('/admin/products') ? prev : [...prev, '/admin/products']
       );
     }
+    if (location.pathname.startsWith('/admin/orders')) {
+      setExpandedItems(prev => 
+        prev.includes('/admin/orders') ? prev : [...prev, '/admin/orders']
+      );
+    }
     if (location.pathname.startsWith('/admin/events')) {
       setExpandedItems(prev => 
         prev.includes('/admin/events') ? prev : [...prev, '/admin/events']
@@ -90,6 +109,8 @@ const AdminSidebar = ({}: AdminSidebarProps) => {
       // Navigate to first sub-item for sections with sub-items
       if (item.path === '/admin/products') {
         navigate('/admin/products/menu');
+      } else if (item.path === '/admin/orders') {
+        navigate('/admin/orders/confirmed');
       } else if (item.path === '/admin/events') {
         navigate('/admin/events/activities');
       }

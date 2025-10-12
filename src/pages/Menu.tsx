@@ -409,20 +409,21 @@ const Menu = () => {
 
                     {/* Quick Info - Beautiful Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-                      <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-2 sm:p-3 border border-green-200">
-                        <div className="text-xs text-green-600 font-medium mb-1">Danh mục</div>
-                        <div className="text-sm font-bold text-green-800">
-                          {categories.find(cat => cat.id === selectedItem.category)?.name}
+                      <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-2 sm:p-3 border border-purple-200">
+                        <div className="text-xs text-purple-600 font-medium mb-1">Phân loại</div>
+                        <div className="text-sm font-bold text-purple-800">
+                          {selectedItem.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}
                         </div>
                       </div>
                       <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-2 sm:p-3 border border-blue-200">
-                        <div className="text-xs text-blue-600 font-medium mb-1">Tồn kho</div>
-                        <div className="text-sm font-bold text-blue-800">{selectedItem.stock || 0}</div>
+                        <div className="text-xs text-blue-600 font-medium mb-1">Lượt mua</div>
+                        <div className="text-sm font-bold text-blue-800">{selectedItem.purchaseCount || 0}</div>
                       </div>
                       <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-2 sm:p-3 border border-orange-200">
                         <div className="text-xs text-orange-600 font-medium mb-1">Trạng thái</div>
                         <div className="text-sm font-bold text-orange-800">
-                          {selectedItem.status === 'active' ? 'Có sẵn' : 'Tạm dừng'}
+                          {selectedItem.stockStatus === 'còn hàng' ? 'Còn hàng' : 
+                           selectedItem.stockStatus === 'gần hết' ? 'Gần hết' : 'Đã hết'}
                         </div>
                       </div>
                     </div>

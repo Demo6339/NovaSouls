@@ -32,7 +32,9 @@ const AdminMenu = () => {
     category: "",
     temperature: "lạnh" as "nóng" | "lạnh",
     stock: 0,
-    status: "active" as "active" | "inactive"
+    status: "active" as "active" | "inactive",
+    purchaseCount: 0,
+    stockStatus: "còn hàng" as "còn hàng" | "gần hết" | "đã hết"
   });
   
   const { allItems, deleteItem, addItem, updateItem } = useMenu();
@@ -54,7 +56,9 @@ const AdminMenu = () => {
         category: "",
         temperature: "lạnh",
         stock: 0,
-        status: "active"
+        status: "active",
+        purchaseCount: 0,
+        stockStatus: "còn hàng"
       });
       setShowAddModal(false);
     }
@@ -179,6 +183,46 @@ const AdminMenu = () => {
                       placeholder="Nhập số lượng tồn kho"
                     />
                   </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="status">Trạng thái</Label>
+                    <Select value={newItem.status} onValueChange={(value: "active" | "inactive") => setNewItem({...newItem, status: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn trạng thái" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Hoạt động</SelectItem>
+                        <SelectItem value="inactive">Tạm dừng</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="stock-status">Trạng thái tồn kho</Label>
+                    <Select value={newItem.stockStatus} onValueChange={(value: "còn hàng" | "gần hết" | "đã hết") => setNewItem({...newItem, stockStatus: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn trạng thái tồn kho" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="còn hàng">Còn hàng</SelectItem>
+                        <SelectItem value="gần hết">Gần hết</SelectItem>
+                        <SelectItem value="đã hết">Đã hết</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div>
+                  <Label htmlFor="purchase-count">Lượt mua</Label>
+                  <Input
+                    id="purchase-count"
+                    type="number"
+                    min="0"
+                    value={newItem.purchaseCount}
+                    onChange={(e) => setNewItem({...newItem, purchaseCount: parseInt(e.target.value) || 0})}
+                    placeholder="Số lượng đã bán"
+                  />
                 </div>
                 
                 <div className="flex justify-end gap-2 pt-4">
@@ -434,17 +478,44 @@ const AdminMenu = () => {
                   </div>
                 </div>
                 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="edit-status">Trạng thái</Label>
+                    <Select value={editingItem.status || 'active'} onValueChange={(value: "active" | "inactive") => setEditingItem({...editingItem, status: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn trạng thái" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Hoạt động</SelectItem>
+                        <SelectItem value="inactive">Tạm dừng</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="edit-stock-status">Trạng thái tồn kho</Label>
+                    <Select value={editingItem.stockStatus || 'còn hàng'} onValueChange={(value: "còn hàng" | "gần hết" | "đã hết") => setEditingItem({...editingItem, stockStatus: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn trạng thái tồn kho" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="còn hàng">Còn hàng</SelectItem>
+                        <SelectItem value="gần hết">Gần hết</SelectItem>
+                        <SelectItem value="đã hết">Đã hết</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
                 <div>
-                  <Label htmlFor="edit-status">Trạng thái</Label>
-                  <Select value={editingItem.status || 'active'} onValueChange={(value: "active" | "inactive") => setEditingItem({...editingItem, status: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn trạng thái" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Hoạt động</SelectItem>
-                      <SelectItem value="inactive">Tạm dừng</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="edit-purchase-count">Lượt mua</Label>
+                  <Input
+                    id="edit-purchase-count"
+                    type="number"
+                    min="0"
+                    value={editingItem.purchaseCount || 0}
+                    onChange={(e) => setEditingItem({...editingItem, purchaseCount: parseInt(e.target.value) || 0})}
+                    placeholder="Số lượng đã bán"
+                  />
                 </div>
                 
                 <div className="flex justify-end gap-2 pt-4">

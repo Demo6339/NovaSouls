@@ -73,6 +73,8 @@ Hệ thống đã được cập nhật để đồng bộ data menu giữa tran
   temperature: 'nóng' | 'lạnh';
   stock: number;
   status: 'active' | 'inactive';
+  purchaseCount: number; // Doanh số thật từ đơn hàng
+  stockStatus: 'còn hàng' | 'gần hết' | 'đã hết'; // Trạng thái tồn kho
 }
 ```
 
@@ -88,20 +90,25 @@ Hệ thống đã được cập nhật để đồng bộ data menu giữa tran
 
 ## Cập nhật mới nhất
 
-### ✅ **Đã xóa doanh số giả:**
-- Loại bỏ hoàn toàn `purchaseCount` khỏi data structure
-- Xóa thông tin "Lượt mua" khỏi popup món
-- Tập trung vào quản lý menu thật
+### ✅ **Cập nhật 3 mục thông tin popup:**
+- **Phân loại**: Hiển thị Nóng/Lạnh thay vì Danh mục
+- **Lượt mua**: Doanh số thật từ đơn hàng (hiện tại = 0, sẵn sàng cho data thật)
+- **Trạng thái**: Còn hàng/Gần hết/Đã hết thay vì Có sẵn/Tạm dừng
 
 ### ✅ **Thông tin popup hoàn toàn có thể quản lý:**
 - **Tên món** - Có thể chỉnh sửa từ admin
 - **Giá** - Có thể chỉnh sửa từ admin  
 - **Mô tả** - Có thể chỉnh sửa từ admin
 - **Danh mục** - Có thể chỉnh sửa từ admin
-- **Trạng thái** - Có thể chỉnh sửa từ admin (Có sẵn/Tạm dừng)
-- **Tồn kho** - Có thể chỉnh sửa từ admin (hiển thị trong popup)
+- **Trạng thái** - Có thể chỉnh sửa từ admin (Hoạt động/Tạm dừng)
+- **Tồn kho** - Có thể chỉnh sửa từ admin
 - **Hình ảnh** - Có thể chỉnh sửa từ admin
 - **Nhiệt độ** - Có thể chỉnh sửa từ admin
+
+### ✅ **3 mục thông tin chính trong popup:**
+- **Phân loại** - Hiển thị Nóng/Lạnh (từ trường temperature)
+- **Lượt mua** - Doanh số thật từ đơn hàng (hiện tại = 0, sẽ cập nhật sau)
+- **Trạng thái** - Còn hàng/Gần hết/Đã hết (từ trường stockStatus)
 
 ### ✅ **Validation đầy đủ:**
 - Tất cả trường bắt buộc đều có validation
