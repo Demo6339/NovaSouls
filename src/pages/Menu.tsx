@@ -28,7 +28,8 @@ import {
   Star,
   CheckCircle,
   Truck,
-  Shield
+  Shield,
+  Eye
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -270,29 +271,67 @@ const Menu = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center justify-center">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => setShowSidebar(!showSidebar)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
+        <div className="flex items-center justify-center py-2">
+          <div className="flex items-center">
+            <img 
+              src="/logo.png" 
+              alt="H₂CO Bar Logo" 
+              className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 object-contain"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Search & Filter Bar */}
+      <div className="lg:hidden bg-white border-b border-gray-200 sticky top-[88px] z-40">
+        <div className="p-3 space-y-3">
+          {/* Search Box */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Tìm kiếm đồ uống..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10 border border-gray-300 focus:border-gray-900 rounded-lg text-sm"
+            />
+          </div>
+          
+          {/* Category Filter - Horizontal Scroll */}
+          <div className="flex gap-1.5 overflow-x-auto pb-1">
+            <button
+              onClick={() => setActiveCategory("all")}
+              className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                activeCategory === "all" 
+                  ? "bg-gray-900 text-white" 
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
             >
-              <MenuIcon className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center">
-              <img 
-                src="/logo.png" 
-                alt="H₂CO Bar Logo" 
-                className="h-28 w-28 object-contain"
-              />
-            </div>
+              Tất cả
+            </button>
+            {menuData.categories.map((category) => {
+              const Icon = category.icon;
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                    activeCategory === category.id 
+                      ? "bg-gray-900 text-white" 
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {category.name}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
       <div className="flex">
-        {/* Left Sidebar - Search & Filters */}
-        <div className={`w-80 flex-shrink-0 ${showSidebar ? 'block' : 'hidden lg:block'}`}>
+        {/* Left Sidebar - Search & Filters - Desktop Only */}
+        <div className="hidden lg:block w-80 flex-shrink-0">
           <div className="h-screen overflow-y-auto bg-white p-6">
             <div className="space-y-8">
               {/* Search Box */}
@@ -414,64 +453,67 @@ const Menu = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-6">
-          <div className="space-y-6">
-            {/* Results Header */}
-            <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {activeCategory === "all" ? "Tất cả đồ uống" : 
-                     menuData.categories.find(cat => cat.id === activeCategory)?.name}
-                  </h2>
-                  <p className="text-gray-600">
-                    Tìm thấy {filteredItems.length} đồ uống
-                  </p>
-                </div>
-              <Button
-                variant="outline"
-                onClick={() => setShowSidebar(!showSidebar)}
-                className="lg:hidden"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                Bộ lọc
-              </Button>
+        <div className="flex-1 p-2 sm:p-4 lg:p-6">
+          <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+            {/* Results Header - Desktop Only */}
+            <div className="hidden lg:flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {activeCategory === "all" ? "Tất cả đồ uống" : 
+                   menuData.categories.find(cat => cat.id === activeCategory)?.name}
+                </h2>
+                <p className="text-gray-600">
+                  Tìm thấy {filteredItems.length} đồ uống
+                </p>
+              </div>
+            </div>
+
+            {/* Mobile Results Header */}
+            <div className="lg:hidden">
+              <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-1">
+                {activeCategory === "all" ? "Tất cả đồ uống" : 
+                 menuData.categories.find(cat => cat.id === activeCategory)?.name}
+              </h2>
+              <p className="text-xs sm:text-sm text-gray-600">
+                {filteredItems.length} đồ uống
+              </p>
             </div>
 
             {/* Menu Items Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-6">
               {filteredItems.map((item) => (
                 <Card key={item.id} className="group overflow-hidden hover:shadow-lg transition-all duration-200 border border-gray-200">
                   <div className="relative">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-24 sm:h-32 md:h-40 lg:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/80 text-white px-2 py-1 rounded-full">
-                      <Thermometer className="h-3 w-3" />
-                      <span className="text-sm">{item.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}</span>
+                    <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex items-center gap-1 bg-black/80 text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
+                      <Thermometer className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                      <span className="text-xs sm:text-xs">{item.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}</span>
                     </div>
                   </div>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-lg group-hover:text-gray-900 transition-colors">
+                  <CardHeader className="pb-1 px-2 pt-2 sm:pb-2 sm:px-3 sm:pt-3">
+                    <CardTitle className="text-sm sm:text-base lg:text-lg group-hover:text-gray-900 transition-colors line-clamp-1 leading-tight">
                       {item.name}
                     </CardTitle>
-                    <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-tight sm:leading-relaxed">{item.description}</p>
                   </CardHeader>
-                  <CardContent className="pt-0">
+                  <CardContent className="pt-0 px-2 pb-2 sm:px-3 sm:pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-xl font-bold text-gray-900">
+                        <span className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900">
                           {item.price.toLocaleString('vi-VN')}đ
                         </span>
-                        <span className="text-xs text-gray-500">Mỗi ly</span>
+                        <span className="text-xs text-gray-500 hidden sm:block">Mỗi ly</span>
                       </div>
-                      <Button 
+                      <button 
                         onClick={() => handleViewDetails(item)}
-                        className="bg-gray-900 hover:bg-gray-800 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+                        className="text-white hover:text-gray-200 transition-colors p-2.5 sm:p-3.5 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center"
                       >
-                        Xem thêm
-                      </Button>
+                        <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+                      </button>
                     </div>
                   </CardContent>
                 </Card>
@@ -488,20 +530,13 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Mobile Sidebar Overlay */}
-        {showSidebar && (
-          <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={() => setShowSidebar(false)}
-          />
-        )}
 
         {/* Item Details Modal - Beautiful & Complete */}
         {selectedItem && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-300">
-            <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden relative flex flex-col lg:flex-row">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 animate-in fade-in-0 duration-300">
+            <div className="bg-white rounded-xl sm:rounded-2xl max-w-5xl w-full max-h-[95vh] sm:max-h-[90vh] shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden relative flex flex-col lg:flex-row">
               {/* Left Side - Image */}
-              <div className="w-full lg:w-2/5 relative h-64 lg:h-auto flex-shrink-0">
+              <div className="w-full lg:w-2/5 relative h-48 sm:h-56 lg:h-auto flex-shrink-0">
                   <img
                     src={selectedItem.image}
                     alt={selectedItem.name}
@@ -509,9 +544,9 @@ const Menu = () => {
                   />
                   
                   {/* Temperature Badge */}
-                  <div className="absolute top-4 left-4">
-                    <div className="bg-white/95 backdrop-blur-sm text-gray-800 px-3 py-1.5 rounded-full text-sm font-medium shadow-lg flex items-center gap-1.5">
-                      <Thermometer className="h-4 w-4" />
+                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+                    <div className="bg-white/95 backdrop-blur-sm text-gray-800 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium shadow-lg flex items-center gap-1 sm:gap-1.5">
+                      <Thermometer className="h-3 w-3 sm:h-4 sm:w-4" />
                       {selectedItem.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}
                     </div>
                   </div>
@@ -519,55 +554,55 @@ const Menu = () => {
 
               {/* Right Side - Content */}
               <div className="w-full lg:w-3/5 overflow-y-auto relative flex-1">
-                <div className="p-6 lg:p-8">
+                <div className="p-4 sm:p-6 lg:p-8">
                   {/* Close Button */}
                   <button
                     onClick={() => setSelectedItem(null)}
-                    className="absolute top-4 right-4 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-200 z-10 border border-gray-200"
+                    className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full p-1.5 sm:p-2 shadow-md hover:shadow-lg transition-all duration-200 z-10 border border-gray-200"
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-4 w-4 sm:h-5 sm:w-5" />
                   </button>
 
-                  <div className="space-y-3">
+                  <div className="space-y-3 sm:space-y-4">
                     {/* Header */}
                     <div>
-                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
                         {(() => {
                           const category = menuData.categories.find(cat => cat.id === selectedItem.category);
                           const Icon = category?.icon || Coffee;
                           return (
                             <>
-                              <Icon className="h-4 w-4" />
+                              <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
                               <span>{category?.name}</span>
                             </>
                           );
                         })()}
                       </div>
-                      <h1 className="text-2xl font-bold text-gray-900 mb-2">{selectedItem.name}</h1>
-                      <div className="text-xl font-bold text-gray-900 mb-3">
+                      <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-2">{selectedItem.name}</h1>
+                      <div className="text-lg sm:text-xl font-bold text-gray-900 mb-3">
                         {selectedItem.price.toLocaleString('vi-VN')}đ
                       </div>
                     </div>
 
                     {/* Description */}
                     <div>
-                      <h3 className="text-base font-semibold text-gray-900 mb-2">Mô tả</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">{selectedItem.description}</p>
+                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">Mô tả</h3>
+                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{selectedItem.description}</p>
                     </div>
 
                     {/* Quick Info - Beautiful Cards */}
-                    <div className="grid grid-cols-3 gap-3">
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 border border-blue-200">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-2 sm:p-3 border border-blue-200">
                         <div className="text-xs text-blue-600 font-medium mb-1">Lượt mua</div>
                         <div className="text-sm font-bold text-blue-800">{selectedItem.purchaseCount}</div>
                       </div>
-                      <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-3 border border-green-200">
+                      <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-2 sm:p-3 border border-green-200">
                         <div className="text-xs text-green-600 font-medium mb-1">Danh mục</div>
                         <div className="text-sm font-bold text-green-800">
                           {menuData.categories.find(cat => cat.id === selectedItem.category)?.name}
                         </div>
                       </div>
-                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
+                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-2 sm:p-3 border border-orange-200">
                         <div className="text-xs text-orange-600 font-medium mb-1">Trạng thái</div>
                         <div className="text-sm font-bold text-orange-800">Có sẵn</div>
                       </div>
@@ -576,37 +611,37 @@ const Menu = () => {
 
                   {/* Notes Section */}
                   <div className="border-t border-gray-200 pt-3 pb-3 mt-3">
-                    <Label className="text-sm font-semibold text-gray-900 mb-2 block">Ghi chú thêm</Label>
+                    <Label className="text-xs sm:text-sm font-semibold text-gray-900 mb-2 block">Ghi chú thêm</Label>
                     <Textarea
                       placeholder="Ghi chú đặc biệt cho món này... (tùy chọn)"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      className="min-h-[60px] resize-none border border-gray-300 focus:border-gray-500 rounded-lg p-3 text-sm"
+                      className="min-h-[50px] sm:min-h-[60px] resize-none border border-gray-300 focus:border-gray-500 rounded-lg p-2 sm:p-3 text-xs sm:text-sm"
                     />
                   </div>
 
                   {/* Order Section - Balanced Design */}
-                  <div className="border-t border-gray-200 pt-4 pb-4">
-                    {/* Quantity, Total & Add to Cart - Same Row */}
-                    <div className="flex items-center gap-3">
+                  <div className="border-t border-gray-200 pt-3 sm:pt-4 pb-3 sm:pb-4">
+                    {/* Quantity, Total & Add to Cart - Responsive Layout */}
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
                       {/* Quantity Selector */}
-                      <div className="flex-1">
+                      <div className="flex-1 w-full sm:w-auto">
                         <Label className="text-xs font-medium text-gray-600 mb-2 block">Số lượng</Label>
-                        <div className="flex items-center gap-2 h-11">
+                        <div className="flex items-center gap-2 h-10 sm:h-11">
                           <Button
                             variant="outline"
                             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                            className="w-11 h-11 p-0 rounded-lg border-2 hover:bg-gray-50 text-base font-bold"
+                            className="w-10 h-10 sm:w-11 sm:h-11 p-0 rounded-lg border-2 hover:bg-gray-50 text-base font-bold"
                           >
                             -
                           </Button>
                           <div className="flex-1 text-center">
-                            <span className="text-xl font-bold text-gray-900">{quantity}</span>
+                            <span className="text-lg sm:text-xl font-bold text-gray-900">{quantity}</span>
                           </div>
                           <Button
                             variant="outline"
                             onClick={() => setQuantity(quantity + 1)}
-                            className="w-11 h-11 p-0 rounded-lg border-2 hover:bg-gray-50 text-base font-bold"
+                            className="w-10 h-10 sm:w-11 sm:h-11 p-0 rounded-lg border-2 hover:bg-gray-50 text-base font-bold"
                           >
                             +
                           </Button>
@@ -614,21 +649,22 @@ const Menu = () => {
                       </div>
 
                       {/* Total Price */}
-                      <div className="flex-1">
+                      <div className="flex-1 w-full sm:w-auto">
                         <Label className="text-xs font-medium text-gray-600 mb-2 block">Tổng cộng</Label>
-                        <div className="bg-gray-50 rounded-lg px-3 h-11 border border-gray-200 flex items-center justify-center">
-                          <span className="text-xl font-bold text-gray-900">{(selectedItem.price * quantity).toLocaleString('vi-VN')}đ</span>
+                        <div className="bg-gray-50 rounded-lg px-3 h-10 sm:h-11 border border-gray-200 flex items-center justify-center">
+                          <span className="text-lg sm:text-xl font-bold text-gray-900">{(selectedItem.price * quantity).toLocaleString('vi-VN')}đ</span>
                         </div>
                       </div>
 
                       {/* Add to Cart Button */}
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 w-full sm:w-auto">
                         <Label className="text-xs font-medium text-gray-600 mb-2 block invisible">.</Label>
                         <Button
                           onClick={handleAddToCart}
-                          className="w-16 h-11 p-0 bg-gray-900 hover:bg-gray-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center"
+                          className="w-full sm:w-16 h-10 sm:h-11 p-0 bg-gray-900 hover:bg-gray-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center"
                         >
-                          <ShoppingCart className="h-5 w-5" />
+                          <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <span className="ml-2 sm:hidden">Thêm vào giỏ</span>
                         </Button>
                       </div>
                     </div>

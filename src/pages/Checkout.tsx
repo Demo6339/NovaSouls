@@ -479,24 +479,6 @@ const Checkout = () => {
                             </div>
                           )}
                           
-                          {/* Available discount codes */}
-                          <div className="text-xs text-gray-500">
-                            <p className="mb-2">💡 Mã giảm giá có sẵn (tùy chọn):</p>
-                            <div className="grid grid-cols-2 gap-2">
-                              <div className="bg-gray-50 p-2 rounded text-xs">
-                                <span className="font-mono font-semibold">WELCOME10</span> - Giảm 10%
-                              </div>
-                              <div className="bg-gray-50 p-2 rounded text-xs">
-                                <span className="font-mono font-semibold">SAVE20</span> - Giảm 20%
-                              </div>
-                              <div className="bg-gray-50 p-2 rounded text-xs">
-                                <span className="font-mono font-semibold">FREESHIP</span> - Miễn phí ship
-                              </div>
-                              <div className="bg-gray-50 p-2 rounded text-xs">
-                                <span className="font-mono font-semibold">VIP50</span> - Giảm 50%
-                              </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
 
