@@ -22,12 +22,13 @@ import {
   Shield,
   Truck,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from "lucide-react";
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, getTotalPrice, getTotalItems, clearCart } = useCart();
+  const { cart, getTotalPrice, getTotalItems, clearCart, removeFromCart } = useCart();
   const { addOrder } = useOrders();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -439,7 +440,20 @@ const Checkout = () => {
                                     {(item.price * item.quantity).toLocaleString('vi-VN')}đ
                                   </span>
                                 </div>
+                                {item.notes && (
+                                  <div className="mt-2 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                                    <p className="text-xs text-blue-700 font-medium">Ghi chú:</p>
+                                    <p className="text-sm text-blue-800">{item.notes}</p>
+                                  </div>
+                                )}
                               </div>
+                              <button
+                                onClick={() => removeFromCart(item.id)}
+                                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Xóa món này"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
                             </div>
                           ))}
                         </div>
@@ -613,6 +627,12 @@ const Checkout = () => {
                               <div className="flex-1">
                                 <h4 className="font-semibold text-gray-900">{item.name}</h4>
                                 <p className="text-sm text-gray-600">Số lượng: {item.quantity}</p>
+                                {item.notes && (
+                                  <div className="mt-1 p-2 bg-blue-50 rounded border border-blue-200">
+                                    <p className="text-xs text-blue-700 font-medium">Ghi chú:</p>
+                                    <p className="text-xs text-blue-800">{item.notes}</p>
+                                  </div>
+                                )}
                               </div>
                               <span className="font-semibold text-gray-900">
                                 {(item.price * item.quantity).toLocaleString('vi-VN')}đ
@@ -732,6 +752,12 @@ const Checkout = () => {
                         <p className="text-xs text-gray-600">
                           {item.price.toLocaleString('vi-VN')}đ x {item.quantity}
                         </p>
+                        {item.notes && (
+                          <div className="mt-1 p-1.5 bg-blue-50 rounded border border-blue-200">
+                            <p className="text-xs text-blue-700 font-medium">Ghi chú:</p>
+                            <p className="text-xs text-blue-800 line-clamp-2">{item.notes}</p>
+                          </div>
+                        )}
                       </div>
                       <p className="font-bold text-sm text-gray-900">
                         {(item.price * item.quantity).toLocaleString('vi-VN')}đ
@@ -774,10 +800,6 @@ const Checkout = () => {
                     <div className="flex items-center gap-2 text-xs text-gray-600">
                       <Truck className="h-4 w-4 text-gray-500" />
                       <span>Giao hàng nhanh 30-45 phút</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
-                      <CheckCircle className="h-4 w-4 text-gray-500" />
-                      <span>Đổi trả trong 24h</span>
                     </div>
                   </div>
                 </div>

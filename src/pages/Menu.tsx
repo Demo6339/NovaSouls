@@ -112,7 +112,7 @@ const Menu = () => {
   const handleAddToCart = () => {
     if (selectedItem) {
       for (let i = 0; i < quantity; i++) {
-        addToCart(selectedItem);
+        addToCart({ ...selectedItem, notes: notes || undefined });
       }
       setSelectedItem(null);
       setQuantity(1);
