@@ -145,14 +145,12 @@ const Menu = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center justify-center py-2">
-          <div className="flex items-center">
-            <img 
-              src="/logo.png" 
-              alt="H₂CO Bar Logo" 
-              className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 object-contain"
-            />
-          </div>
+        <div className="flex items-center justify-center">
+          <img 
+            src="/logo.png" 
+            alt="H₂CO Bar Logo" 
+            className="h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 object-contain"
+          />
         </div>
       </div>
 

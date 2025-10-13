@@ -165,7 +165,7 @@ const AdminSidebar = ({}: AdminSidebarProps) => {
 
       {/* Sidebar */}
       <div className={cn(
-        "w-64 bg-card border-r border-border min-h-screen p-6 transition-transform duration-300",
+        "w-64 bg-card border-r border-border min-h-screen transition-transform duration-300",
         "lg:translate-x-0 lg:static lg:z-auto",
         isMobileMenuOpen 
           ? "fixed top-0 left-0 z-50 translate-x-0" 
@@ -181,12 +181,15 @@ const AdminSidebar = ({}: AdminSidebarProps) => {
           <X className="h-5 w-5" />
         </Button>
 
-        <Link to="/" className="flex items-center gap-2 mb-8" onClick={closeMobileMenu}>
-          <Coffee className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold text-primary">Nova Souls</span>
+        <Link to="/" className="flex items-center justify-center py-2.5" onClick={closeMobileMenu}>
+          <img 
+            src="/logo.png" 
+            alt="H₂CO Bar Logo" 
+            className="h-20 w-20 object-contain"
+          />
         </Link>
 
-        <nav className="space-y-2">
+        <nav className="space-y-2 px-4 pb-4">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = isItemActive(item);
