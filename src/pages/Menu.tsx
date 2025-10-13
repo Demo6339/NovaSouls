@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useMenu } from "@/contexts/MenuContext";
@@ -56,6 +56,50 @@ const Menu = () => {
   const [filters, setFilters] = useState({
     priceRange: [16000, 50000]
   });
+
+  // Add custom styles for range slider
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #374151;
+        cursor: pointer;
+        border: 3px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+      }
+      
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      
+      input[type="range"]::-moz-range-thumb {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: #374151;
+        cursor: pointer;
+        border: 3px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+      }
+      
+      input[type="range"]::-moz-range-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const handleViewDetails = (item) => {
     setSelectedItem(item);
@@ -149,42 +193,49 @@ const Menu = () => {
       <div className="flex">
         {/* Left Sidebar - Search & Filters - Desktop Only */}
         <div className="hidden lg:block w-80 flex-shrink-0">
-          <div className="h-screen overflow-y-auto bg-white p-6">
-            <div className="space-y-8">
+          <div className="h-screen overflow-y-auto bg-white">
+            <div className="p-6 space-y-8">
               {/* Search Box */}
               <div>
-                <div className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-4">
-                  <Search className="h-5 w-5 text-gray-600" />
+                <div className="flex items-center gap-3 text-lg font-bold text-gray-900 mb-4">
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <Search className="h-5 w-5 text-gray-700" />
+                  </div>
                   Tìm kiếm
                 </div>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="Tìm kiếm đồ uống..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 h-12 border border-gray-300 focus:border-gray-900 rounded-lg"
-                    />
+                  <Input
+                    placeholder="Tìm kiếm đồ uống..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-12 border-2 border-gray-200 focus:border-gray-900 rounded-xl bg-gray-50 focus:bg-white transition-all duration-200"
+                  />
                 </div>
               </div>
 
               {/* Filters */}
               <div>
-                <div className="flex items-center gap-2 text-lg font-semibold text-gray-900 mb-6">
-                  <SlidersHorizontal className="h-5 w-5 text-gray-600" />
+                <div className="flex items-center gap-3 text-lg font-bold text-gray-900 mb-6">
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <SlidersHorizontal className="h-5 w-5 text-gray-700" />
+                  </div>
                   Bộ lọc
                 </div>
                 <div className="space-y-6">
                   {/* Category Filter */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium text-gray-600 uppercase tracking-wide">Danh mục</Label>
-                    <div className="space-y-1">
+                  <div className="space-y-4">
+                    <Label className="text-sm font-semibold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                      Danh mục
+                    </Label>
+                    <div className="space-y-2">
                       <button
                         onClick={() => setActiveCategory("all")}
-                        className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                           activeCategory === "all" 
-                            ? "bg-gray-900 text-white" 
-                            : "text-gray-700 hover:bg-gray-100"
+                            ? "bg-gray-900 text-white shadow-md" 
+                            : "text-gray-700 hover:bg-gray-100 hover:shadow-sm"
                         }`}
                       >
                         Tất cả
@@ -195,13 +246,15 @@ const Menu = () => {
                           <button
                             key={category.id}
                             onClick={() => setActiveCategory(category.id)}
-                            className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
+                            className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center gap-3 ${
                               activeCategory === category.id 
-                                ? "bg-gray-900 text-white" 
-                                : "text-gray-700 hover:bg-gray-100"
+                                ? "bg-gray-900 text-white shadow-md" 
+                                : "text-gray-700 hover:bg-gray-100 hover:shadow-sm"
                             }`}
                           >
-                            <Icon className="h-4 w-4" />
+                            <div className={`p-1.5 rounded-lg ${activeCategory === category.id ? 'bg-white/20' : 'bg-gray-100'}`}>
+                              <Icon className="h-4 w-4" />
+                            </div>
                             {category.name}
                           </button>
                         );
@@ -211,44 +264,107 @@ const Menu = () => {
 
                   <div className="border-t border-gray-200"></div>
 
-                  {/* Price Range */}
-                  <div className="space-y-3">
-                    <Label className="text-sm font-medium text-gray-600 uppercase tracking-wide">Khoảng giá</Label>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <Label className="text-xs text-gray-500 mb-1 block">Từ (đ)</Label>
-                          <Input
-                            type="number"
-                            min="16000"
-                            max="50000"
-                            step="1000"
-                            value={filters.priceRange[0]}
-                            onChange={(e) => setFilters(prev => ({
-                              ...prev,
-                              priceRange: [parseInt(e.target.value) || 16000, prev.priceRange[1]]
-                            }))}
-                            className="h-9 text-sm"
-                            placeholder="16.000"
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-xs text-gray-500 mb-1 block">Đến (đ)</Label>
-                          <Input
-                            type="number"
-                            min="16000"
-                            max="50000"
-                            step="1000"
-                            value={filters.priceRange[1]}
-                            onChange={(e) => setFilters(prev => ({
-                              ...prev,
-                              priceRange: [prev.priceRange[0], parseInt(e.target.value) || 50000]
-                            }))}
-                            className="h-9 text-sm"
-                            placeholder="50.000"
-                          />
+                  {/* Price Range - Modern Slider */}
+                  <div className="space-y-4">
+                    <Label className="text-sm font-semibold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                      Khoảng giá
+                    </Label>
+                    
+                    {/* Price Display */}
+                    <div className="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">Từ</div>
+                        <div className="text-lg font-bold text-gray-900">
+                          {filters.priceRange[0].toLocaleString('vi-VN')}đ
                         </div>
                       </div>
+                      <div className="w-8 h-0.5 bg-gray-300"></div>
+                      <div className="text-center">
+                        <div className="text-xs text-gray-500 mb-1">Đến</div>
+                        <div className="text-lg font-bold text-gray-900">
+                          {filters.priceRange[1].toLocaleString('vi-VN')}đ
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Range Slider */}
+                    <div className="relative h-8 flex items-center">
+                      {/* Track */}
+                      <div className="absolute w-full h-2 bg-gray-200 rounded-full"></div>
+                      
+                      {/* Active Range */}
+                      <div 
+                        className="absolute h-2 bg-gray-900 rounded-full"
+                        style={{
+                          left: `${((filters.priceRange[0] - 16000) / (50000 - 16000)) * 100}%`,
+                          width: `${((filters.priceRange[1] - filters.priceRange[0]) / (50000 - 16000)) * 100}%`
+                        }}
+                      ></div>
+                      
+                      {/* Min Thumb */}
+                      <input
+                        type="range"
+                        min="16000"
+                        max="50000"
+                        step="1000"
+                        value={filters.priceRange[0]}
+                        onChange={(e) => setFilters(prev => ({
+                          ...prev,
+                          priceRange: [parseInt(e.target.value), prev.priceRange[1]]
+                        }))}
+                        className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer z-10"
+                        style={{
+                          background: 'transparent'
+                        }}
+                      />
+                      
+                      {/* Max Thumb */}
+                      <input
+                        type="range"
+                        min="16000"
+                        max="50000"
+                        step="1000"
+                        value={filters.priceRange[1]}
+                        onChange={(e) => setFilters(prev => ({
+                          ...prev,
+                          priceRange: [prev.priceRange[0], parseInt(e.target.value)]
+                        }))}
+                        className="absolute w-full h-2 bg-transparent appearance-none cursor-pointer z-20"
+                        style={{
+                          background: 'transparent'
+                        }}
+                      />
+                    </div>
+
+                    {/* Price Labels */}
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>16.000đ</span>
+                      <span>50.000đ</span>
+                    </div>
+
+                    {/* Quick Price Buttons */}
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { label: 'Dưới 20k', range: [16000, 20000] },
+                        { label: '20k-30k', range: [20000, 30000] },
+                        { label: 'Trên 30k', range: [30000, 50000] }
+                      ].map((preset, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setFilters(prev => ({
+                            ...prev,
+                            priceRange: preset.range
+                          }))}
+                          className={`px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 ${
+                            filters.priceRange[0] === preset.range[0] && filters.priceRange[1] === preset.range[1]
+                              ? 'bg-gray-900 text-white'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
@@ -259,9 +375,12 @@ const Menu = () => {
                     onClick={() => setFilters({
                       priceRange: [16000, 50000]
                     })}
-                    className="w-full text-center px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                    className="w-full text-center px-4 py-3 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 font-medium"
                   >
-                    Xóa tất cả bộ lọc
+                    <div className="flex items-center justify-center gap-2">
+                      <X className="h-4 w-4" />
+                      Xóa tất cả bộ lọc
+                    </div>
                   </button>
                 </div>
               </div>
