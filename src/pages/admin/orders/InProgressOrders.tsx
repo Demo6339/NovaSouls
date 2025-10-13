@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import RealtimeIndicator from "@/components/RealtimeIndicator";
 import { useOrders } from "@/contexts/OrderContext";
+import { useRealtimeOrders } from "@/hooks/useRealtimeOrders";
 import { 
   Clock, 
   Search, 
@@ -26,6 +28,7 @@ import { useState } from "react";
 
 const InProgressOrders = () => {
   const { getOrdersByStatus, updateOrderState, updateOrderStatus } = useOrders();
+  useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   
@@ -104,9 +107,12 @@ const InProgressOrders = () => {
       <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
         {/* Header */}
         <div className="mb-6 lg:mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Clock className="h-8 w-8 text-blue-600" />
-            <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng đang làm</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Clock className="h-8 w-8 text-blue-600" />
+              <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng đang làm</h1>
+            </div>
+            <RealtimeIndicator />
           </div>
           <p className="text-muted-foreground">Theo dõi tiến độ và quản lý các đơn hàng đang được xử lý</p>
         </div>

@@ -157,10 +157,19 @@ const OrderCard: React.FC<OrderCardProps> = ({
             </div>
           </div>
 
-          {/* Order Time */}
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
-            <Calendar className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{formatDate(order.orderDetails.orderTime)}</span>
+          {/* Order Time & Type */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
+              <Calendar className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{formatDate(order.orderDetails.orderTime)}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
+              <Truck className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">
+                {order.orderDetails.orderType === 'delivery' ? 'Giao hàng' : 
+                 order.orderDetails.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+              </span>
+            </div>
           </div>
         </CardHeader>
 
@@ -267,6 +276,35 @@ const OrderCard: React.FC<OrderCardProps> = ({
             <div className="flex items-center justify-between">
               <span className="text-xs text-slate-600 font-medium">Mã đơn hàng</span>
               <span className="text-xs font-bold text-slate-900">{order.orderNumber}</span>
+            </div>
+          </div>
+
+          {/* Customer Info */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <div className={`${styles.iconBg} p-1.5 rounded-md flex-shrink-0`}>
+                <User className={`h-3.5 w-3.5 ${styles.iconColor}`} />
+              </div>
+              <p className="font-semibold text-sm text-slate-900 truncate">{order.customerInfo.name}</p>
+            </div>
+            <div className="flex items-center gap-2 ml-7">
+              <Phone className="h-3 w-3 text-slate-400 flex-shrink-0" />
+              <p className="text-xs text-slate-600">{order.customerInfo.phone}</p>
+            </div>
+          </div>
+
+          {/* Order Type & Time */}
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
+              <Truck className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">
+                {order.orderDetails.orderType === 'delivery' ? 'Giao hàng' : 
+                 order.orderDetails.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
+              <Calendar className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{formatDate(order.orderDetails.orderTime)}</span>
             </div>
           </div>
 
@@ -519,11 +557,18 @@ const OrderCard: React.FC<OrderCardProps> = ({
             </div>
           </div>
 
-          {/* Order Time and Order Number */}
+          {/* Order Time, Type and Order Number */}
           <div className="space-y-1.5">
             <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
               <Calendar className="h-3 w-3 flex-shrink-0" />
               <span className="truncate">{formatDate(order.orderDetails.orderTime)}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-md">
+              <Truck className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">
+                {order.orderDetails.orderType === 'delivery' ? 'Giao hàng' : 
+                 order.orderDetails.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+              </span>
             </div>
             <div className="bg-slate-50 rounded-md px-2.5 py-1.5">
               <div className="flex items-center justify-between">

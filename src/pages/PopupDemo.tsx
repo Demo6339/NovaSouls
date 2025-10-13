@@ -7,14 +7,10 @@ const PopupDemo = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const sampleProduct = {
+    id: 1,
     name: "Cà phê đen truyền thống",
     price: 25000,
     image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop&crop=center"
-  };
-
-  const handleAddToCart = (quantity: number, note: string) => {
-    console.log("Added to cart:", { quantity, note });
-    alert(`Đã thêm ${quantity} sản phẩm vào giỏ hàng${note ? ` với ghi chú: ${note}` : ""}`);
   };
 
   return (
@@ -101,10 +97,10 @@ const PopupDemo = () => {
       <OrderPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
+        productId={sampleProduct.id}
         productName={sampleProduct.name}
         productPrice={sampleProduct.price}
         productImage={sampleProduct.image}
-        onAddToCart={handleAddToCart}
       />
     </div>
   );

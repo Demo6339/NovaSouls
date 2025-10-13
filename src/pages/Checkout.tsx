@@ -38,6 +38,15 @@ const Checkout = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    email: "",
+    address: {
+      street: "",
+      ward: "",
+      district: "",
+      city: "TP.HCM",
+      fullAddress: ""
+    },
+    orderType: "delivery",
     note: "",
     paymentMethod: "cash",
     discountCode: ""
@@ -82,6 +91,16 @@ const Checkout = () => {
           errors.phone = 'Số điện thoại không hợp lệ';
         }
         break;
+      case 'email':
+        if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+          errors.email = 'Email không hợp lệ';
+        }
+        break;
+      case 'street':
+        if (formData.orderType === 'delivery' && !value.trim()) {
+          errors.street = 'Địa chỉ không được để trống';
+        }
+        break;
     }
     
     setFormErrors(prev => ({ ...prev, ...errors }));
@@ -91,8 +110,10 @@ const Checkout = () => {
   const validateAllFields = () => {
     const isNameValid = validateField('name', formData.name);
     const isPhoneValid = validateField('phone', formData.phone);
+    const isEmailValid = validateField('email', formData.email);
+    const isAddressValid = formData.orderType === 'delivery' ? validateField('street', formData.address.street) : true;
     
-    return isNameValid && isPhoneValid;
+    return isNameValid && isPhoneValid && isEmailValid && isAddressValid;
   };
 
   // Apply discount code
@@ -146,8 +167,30 @@ const Checkout = () => {
     
     // Create order in the system
     const orderData = {
-      customerName: formData.name,
-      customerPhone: formData.phone,
+      customerInfo: {
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email || undefined,
+        address: formData.orderType === 'delivery' ? {
+          street: formData.address.street,
+          ward: formData.address.ward,
+          district: formData.address.district,
+          city: formData.address.city,
+          fullAddress: `${formData.address.street}, ${formData.address.ward}, ${formData.address.district}, ${formData.address.city}`
+        } : undefined
+      },
+      orderDetails: {
+        orderTime: new Date().toISOString(),
+        orderType: formData.orderType as 'delivery' | 'pickup' | 'dine-in',
+        paymentMethod: formData.paymentMethod as 'cash' | 'card' | 'momo' | 'zalo',
+        paymentStatus: 'pending' as 'pending' | 'paid' | 'failed',
+        deliveryFee: formData.orderType === 'delivery' ? 15000 : 0,
+        serviceFee: 5000,
+        discount: discountAmount,
+        subtotal: getTotalPrice(),
+        totalAmount: getTotalPrice() - discountAmount,
+        estimatedTime: 20
+      },
       items: cart.map(item => ({
         id: item.id,
         name: item.name,
@@ -156,13 +199,7 @@ const Checkout = () => {
         image: item.image,
         notes: item.notes || undefined
       })),
-      totalAmount: getTotalPrice(),
-      discountAmount: discountAmount,
-      finalAmount: getTotalPrice() - discountAmount,
-      paymentMethod: formData.paymentMethod as 'cash' | 'card',
-      notes: formData.note || undefined,
-      discountCode: formData.discountCode || undefined,
-      estimatedTime: 20 // Default estimated time
+      orderNotes: formData.note || undefined
     };
     
     const orderId = addOrder(orderData);
@@ -180,11 +217,23 @@ const Checkout = () => {
     setShowConfirmation(false);
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleInputChange = (field: string, value: string | any) => {
+    if (field === 'address') {
+      setFormData(prev => ({
+        ...prev,
+        address: value
+      }));
+    } else if (field === 'orderType') {
+      setFormData(prev => ({
+        ...prev,
+        orderType: value
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value
+      }));
+    }
     
     // Clear error when user starts typing
     if (formErrors[field]) {
@@ -292,6 +341,25 @@ const Checkout = () => {
                     <span className="font-semibold text-gray-700">Số điện thoại:</span>
                     <span className="text-gray-900">{formData.phone}</span>
                   </div>
+                  {formData.email && (
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Email:</span>
+                      <span className="text-gray-900">{formData.email}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="font-semibold text-gray-700">Loại đơn hàng:</span>
+                    <span className="text-gray-900">
+                      {formData.orderType === 'delivery' ? 'Giao hàng' : 
+                       formData.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+                    </span>
+                  </div>
+                  {formData.orderType === 'delivery' && formData.address.street && (
+                    <div className="flex justify-between">
+                      <span className="font-semibold text-gray-700">Địa chỉ:</span>
+                      <span className="text-right max-w-48 truncate text-gray-900">{formData.address.fullAddress}</span>
+                    </div>
+                  )}
                   {discountApplied && (
                     <div className="flex justify-between text-green-600">
                       <span className="font-semibold">Mã giảm giá:</span>
@@ -576,6 +644,132 @@ const Checkout = () => {
                         </div>
                       </div>
 
+                      <div className="space-y-2">
+                        <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                          Email <span className="text-gray-400">(tùy chọn)</span>
+                        </Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          placeholder="Nhập email (tùy chọn)"
+                          className={`border-gray-300 focus:border-gray-900 ${formErrors.email ? 'border-red-500 focus:border-red-500' : ''}`}
+                        />
+                        {formErrors.email && (
+                          <div className="flex items-center gap-1 text-red-500 text-sm">
+                            <AlertCircle className="h-4 w-4" />
+                            <span>{formErrors.email}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Order Type */}
+                      <div className="space-y-4">
+                        <Label className="text-sm font-semibold text-gray-700">Loại đơn hàng</Label>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200 border-gray-200 bg-gray-50">
+                            <input
+                              type="radio"
+                              name="orderType"
+                              value="delivery"
+                              checked={formData.orderType === "delivery"}
+                              onChange={(e) => handleInputChange('orderType', e.target.value)}
+                              className="text-gray-900 mr-3"
+                            />
+                            <div className="flex items-center gap-3">
+                              <Truck className="h-6 w-6 text-gray-600" />
+                              <div>
+                                <div className="font-semibold text-gray-900">Giao hàng</div>
+                                <div className="text-sm text-gray-600">Giao tận nơi</div>
+                              </div>
+                            </div>
+                          </label>
+                          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200 border-gray-200 bg-gray-50">
+                            <input
+                              type="radio"
+                              name="orderType"
+                              value="pickup"
+                              checked={formData.orderType === "pickup"}
+                              onChange={(e) => handleInputChange('orderType', e.target.value)}
+                              className="text-gray-900 mr-3"
+                            />
+                            <div className="flex items-center gap-3">
+                              <ShoppingCart className="h-6 w-6 text-gray-600" />
+                              <div>
+                                <div className="font-semibold text-gray-900">Mang về</div>
+                                <div className="text-sm text-gray-600">Tự lấy tại quán</div>
+                              </div>
+                            </div>
+                          </label>
+                          <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-all duration-200 border-gray-200 bg-gray-50">
+                            <input
+                              type="radio"
+                              name="orderType"
+                              value="dine-in"
+                              checked={formData.orderType === "dine-in"}
+                              onChange={(e) => handleInputChange('orderType', e.target.value)}
+                              className="text-gray-900 mr-3"
+                            />
+                            <div className="flex items-center gap-3">
+                              <MapPin className="h-6 w-6 text-gray-600" />
+                              <div>
+                                <div className="font-semibold text-gray-900">Tại quán</div>
+                                <div className="text-sm text-gray-600">Ăn tại chỗ</div>
+                              </div>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Address for delivery */}
+                      {formData.orderType === 'delivery' && (
+                        <div className="space-y-4">
+                          <Label className="text-sm font-semibold text-gray-700">Địa chỉ giao hàng *</Label>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Input
+                                value={formData.address.street}
+                                onChange={(e) => handleInputChange('address', { ...formData.address, street: e.target.value })}
+                                placeholder="Số nhà, tên đường"
+                                className={`border-gray-300 focus:border-gray-900 ${formErrors.street ? 'border-red-500 focus:border-red-500' : ''}`}
+                                required
+                              />
+                              {formErrors.street && (
+                                <div className="flex items-center gap-1 text-red-500 text-sm">
+                                  <AlertCircle className="h-4 w-4" />
+                                  <span>{formErrors.street}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-2">
+                              <Input
+                                value={formData.address.ward}
+                                onChange={(e) => handleInputChange('address', { ...formData.address, ward: e.target.value })}
+                                placeholder="Phường/Xã"
+                                className="border-gray-300 focus:border-gray-900"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Input
+                                value={formData.address.district}
+                                onChange={(e) => handleInputChange('address', { ...formData.address, district: e.target.value })}
+                                placeholder="Quận/Huyện"
+                                className="border-gray-300 focus:border-gray-900"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Input
+                                value={formData.address.city}
+                                onChange={(e) => handleInputChange('address', { ...formData.address, city: e.target.value })}
+                                placeholder="Thành phố"
+                                className="border-gray-300 focus:border-gray-900"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Payment Method */}
                       <div className="space-y-4">
                         <Label className="text-sm font-semibold text-gray-700">Phương thức thanh toán</Label>
@@ -644,6 +838,25 @@ const Checkout = () => {
                             <span className="text-gray-600">Số điện thoại:</span>
                             <span className="font-semibold text-gray-900">{formData.phone}</span>
                           </div>
+                          {formData.email && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Email:</span>
+                              <span className="font-semibold text-gray-900">{formData.email}</span>
+                            </div>
+                          )}
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Loại đơn hàng:</span>
+                            <span className="font-semibold text-gray-900">
+                              {formData.orderType === 'delivery' ? 'Giao hàng' : 
+                               formData.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+                            </span>
+                          </div>
+                          {formData.orderType === 'delivery' && formData.address.street && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Địa chỉ:</span>
+                              <span className="font-semibold text-gray-900 text-right max-w-48 truncate">{formData.address.fullAddress}</span>
+                            </div>
+                          )}
                           <div className="flex justify-between">
                             <span className="text-gray-600">Phương thức thanh toán:</span>
                             <span className="font-semibold text-gray-900">Thanh toán khi nhận hàng</span>

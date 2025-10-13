@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useCart } from "@/contexts/CartContext";
 import { 
   ShoppingCart, 
   Minus, 
@@ -18,20 +19,21 @@ import {
 interface OrderPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  productId: number;
   productName: string;
   productPrice: number;
   productImage: string;
-  onAddToCart: (quantity: number, note: string) => void;
 }
 
 const OrderPopup = ({
   isOpen,
   onClose,
+  productId,
   productName,
   productPrice,
-  productImage,
-  onAddToCart
+  productImage
 }: OrderPopupProps) => {
+  const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [note, setNote] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
@@ -45,7 +47,13 @@ const OrderPopup = ({
   };
 
   const handleAddToCart = () => {
-    onAddToCart(quantity, note);
+    addToCart({
+      id: productId,
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      notes: note || undefined
+    });
     onClose();
   };
 

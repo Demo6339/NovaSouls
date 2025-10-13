@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import RealtimeIndicator from "@/components/RealtimeIndicator";
 import { useOrders } from "@/contexts/OrderContext";
+import { useRealtimeOrders } from "@/hooks/useRealtimeOrders";
 import { 
   XCircle, 
   Search, 
@@ -25,6 +27,7 @@ import { useState } from "react";
 
 const CancelledOrders = () => {
   const { getOrdersByStatus, restoreOrder } = useOrders();
+  useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filterReason, setFilterReason] = useState("all");
@@ -75,9 +78,12 @@ const CancelledOrders = () => {
       <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
         {/* Header */}
         <div className="mb-6 lg:mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <XCircle className="h-8 w-8 text-red-600" />
-            <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng bị hủy</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <XCircle className="h-8 w-8 text-red-600" />
+              <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng bị hủy</h1>
+            </div>
+            <RealtimeIndicator />
           </div>
           <p className="text-muted-foreground">Xem lại và quản lý các đơn hàng đã bị hủy</p>
         </div>

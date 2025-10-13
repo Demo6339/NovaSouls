@@ -149,7 +149,7 @@ const Menu = () => {
           <img 
             src="/logo.png" 
             alt="H₂CO Bar Logo" 
-            className="h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 object-contain"
+            className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 object-contain"
           />
         </div>
       </div>

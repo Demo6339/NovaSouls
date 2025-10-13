@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import RealtimeIndicator from "@/components/RealtimeIndicator";
 import { useOrders } from "@/contexts/OrderContext";
+import { useRealtimeOrders } from "@/hooks/useRealtimeOrders";
 import { 
   CheckCircle, 
   Search, 
@@ -30,6 +32,7 @@ import { Label } from "@/components/ui/label";
 
 const ConfirmedOrders = () => {
   const { getOrdersByStatus, updateOrderStatus } = useOrders();
+  useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -85,9 +88,12 @@ const ConfirmedOrders = () => {
       <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
         {/* Header */}
         <div className="mb-6 lg:mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle className="h-8 w-8 text-green-600" />
-            <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng xác nhận</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+              <h1 className="text-2xl lg:text-4xl font-bold text-foreground">Đơn hàng xác nhận</h1>
+            </div>
+            <RealtimeIndicator />
           </div>
           <p className="text-muted-foreground">Quản lý các đơn hàng đã được xác nhận và chờ xử lý</p>
         </div>
@@ -259,6 +265,19 @@ const ConfirmedOrders = () => {
                         
                         {/* Order Summary */}
                         <div className="space-y-1 pt-2">
+                          <div className="flex justify-between items-center">
+                            <span>Loại đơn hàng:</span>
+                            <Badge variant="outline">
+                              {selectedOrder.orderDetails.orderType === 'delivery' ? 'Giao hàng' : 
+                               selectedOrder.orderDetails.orderType === 'pickup' ? 'Mang về' : 'Tại quán'}
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span>Phương thức thanh toán:</span>
+                            <span>{selectedOrder.orderDetails.paymentMethod === 'cash' ? 'Tiền mặt' : 
+                                   selectedOrder.orderDetails.paymentMethod === 'card' ? 'Thẻ' :
+                                   selectedOrder.orderDetails.paymentMethod === 'momo' ? 'MoMo' : 'ZaloPay'}</span>
+                          </div>
                           <div className="flex justify-between items-center">
                             <span>Tạm tính:</span>
                             <span>{formatCurrency(selectedOrder.orderDetails.subtotal)}</span>

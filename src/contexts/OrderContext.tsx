@@ -276,7 +276,7 @@ const mockOrders: Order[] = [
 
 // Provider component
 export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   // Calculate statistics
   const calculateStats = (): OrderStats => {
