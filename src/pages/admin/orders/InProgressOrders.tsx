@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import { useOrders } from "@/contexts/OrderContext";
 import { 
   Clock, 
   Search, 
@@ -23,172 +24,12 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-// Mock data for in-progress orders - matching real order system data
-const inProgressOrders = [
-  {
-    id: "ORD-004",
-    orderNumber: "NS-2024-004",
-    customerInfo: {
-      name: "Phạm Thị D",
-      phone: "0123456789",
-      email: "phamthid@email.com",
-      address: {
-        street: "321 Đường GHI",
-        ward: "Phường Thủ Thiêm",
-        district: "Quận 2",
-        city: "TP.HCM",
-        fullAddress: "321 Đường GHI, Phường Thủ Thiêm, Quận 2, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T16:30:00Z",
-      startTime: "2024-01-15T16:35:00Z",
-      orderType: "delivery",
-      paymentMethod: "cash",
-      paymentStatus: "paid",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 160000,
-      totalAmount: 180000,
-      estimatedTime: 20
-    },
-    items: [
-      { 
-        id: 1,
-        name: "Soju Chamisul", 
-        quantity: 2, 
-        unitPrice: 25000,
-        totalPrice: 50000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Soju truyền thống Hàn Quốc"
-      },
-      { 
-        id: 4,
-        name: "Mojito", 
-        quantity: 1, 
-        unitPrice: 45000,
-        totalPrice: 45000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail tươi mát"
-      },
-      { 
-        id: 6,
-        name: "Espresso", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê đậm đặc"
-      },
-      { 
-        id: 2,
-        name: "Soju Yuja", 
-        quantity: 2, 
-        unitPrice: 30000,
-        totalPrice: 60000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: ["Thêm đá"],
-        notes: "Soju hương chanh yuja"
-      }
-    ],
-    orderNotes: "Cà phê ít đường, giao hàng nhanh",
-    status: "in-progress",
-    currentState: "waiting", // waiting, preparing, cooking, ready, completed
-    progress: 0,
-    createdAt: "2024-01-15T16:30:00Z",
-    updatedAt: "2024-01-15T16:35:00Z"
-  },
-  {
-    id: "ORD-005", 
-    orderNumber: "NS-2024-005",
-    customerInfo: {
-      name: "Hoàng Văn E",
-      phone: "0987654321",
-      email: "hoangvane@email.com",
-      address: {
-        street: "654 Đường JKL",
-        ward: "Phường Tân Phong",
-        district: "Quận 7",
-        city: "TP.HCM",
-        fullAddress: "654 Đường JKL, Phường Tân Phong, Quận 7, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T17:00:00Z",
-      startTime: "2024-01-15T17:05:00Z",
-      orderType: "pickup",
-      paymentMethod: "momo",
-      paymentStatus: "paid",
-      deliveryFee: 0,
-      serviceFee: 2000,
-      discount: 5000,
-      subtotal: 90000,
-      totalAmount: 87000,
-      estimatedTime: 15
-    },
-    items: [
-      { 
-        id: 5,
-        name: "Cosmopolitan", 
-        quantity: 1, 
-        unitPrice: 50000,
-        totalPrice: 50000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail sang trọng và quyến rũ"
-      },
-      { 
-        id: 3,
-        name: "Soju Peach", 
-        quantity: 1, 
-        unitPrice: 35000,
-        totalPrice: 35000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: ["Thêm đá"],
-        notes: "Soju hương đào"
-      },
-      { 
-        id: 8,
-        name: "Orange Juice", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Nước cam tươi"
-      }
-    ],
-    orderNotes: "Trân châu nhiều, mang về",
-    status: "in-progress",
-    currentState: "preparing", // waiting, preparing, cooking, ready, completed
-    progress: 25,
-    createdAt: "2024-01-15T17:00:00Z",
-    updatedAt: "2024-01-15T17:05:00Z"
-  }
-];
-
 const InProgressOrders = () => {
+  const { getOrdersByStatus, updateOrderState, updateOrderStatus } = useOrders();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [orders, setOrders] = useState(inProgressOrders);
+  
+  const orders = getOrdersByStatus('in-progress');
 
   const filteredOrders = orders.filter(order =>
     order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -198,27 +39,14 @@ const InProgressOrders = () => {
   );
 
   const handleUpdateOrderState = (orderId, newState) => {
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === orderId 
-          ? { 
-              ...order, 
-              currentState: newState,
-              progress: newState === "waiting" ? 0 :
-                       newState === "preparing" ? 25 : 
-                       newState === "cooking" ? 50 : 
-                       newState === "ready" ? 100 : order.progress
-            }
-          : order
-      )
-    );
+    const progressMap = {
+      "waiting": 0,
+      "preparing": 25,
+      "cooking": 50,
+      "ready": 100
+    };
     
-    // If order is completed (ready), move it to completed orders
-    if (newState === "ready") {
-      // This will be handled by the parent component or context
-      console.log(`Order ${orderId} completed and ready to move to completed orders`);
-    }
-    
+    updateOrderState(orderId, newState, progressMap[newState]);
     console.log(`Order ${orderId} updated to state: ${newState}`);
   };
 
@@ -241,6 +69,11 @@ const InProgressOrders = () => {
   const canCancelOrder = (currentState) => {
     // Can only cancel if waiting to start (only in "waiting" state)
     return currentState === "waiting";
+  };
+
+  const handleCancelOrder = (orderId) => {
+    updateOrderStatus(orderId, 'cancelled', 'Hủy đơn trong quá trình xử lý', 'Quản lý');
+    console.log(`Order ${orderId} cancelled`);
   };
 
   const formatCurrency = (amount) => {

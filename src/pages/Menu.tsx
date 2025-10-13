@@ -483,7 +483,7 @@ const Menu = () => {
                           onClick={handleAddToCart}
                           className="w-full sm:w-16 h-10 sm:h-11 p-0 bg-gray-900 hover:bg-gray-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center"
                         >
-                          <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                          <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
                           <span className="ml-2 sm:hidden">Thêm vào giỏ</span>
                         </Button>
                       </div>

@@ -185,7 +185,7 @@ const OrderPopup = ({
                 onClick={handleAddToCart}
                 className="h-12 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <ShoppingCart className="h-5 w-5 mr-2" />
+                <Plus className="h-5 w-5 mr-2" />
                 Thêm vào giỏ
               </Button>
             </div>
@@ -242,6 +242,7 @@ const OrderPopup = ({
               onClick={handleAddToCart}
               className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
             >
+              <Plus className="h-4 w-4 mr-2" />
               Xác nhận đặt hàng
             </Button>
           </div>

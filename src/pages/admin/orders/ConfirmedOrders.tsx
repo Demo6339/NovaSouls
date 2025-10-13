@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import { useOrders } from "@/contexts/OrderContext";
 import { 
   CheckCircle, 
   Search, 
@@ -27,222 +28,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-// Mock data for confirmed orders - matching real order system data
-const confirmedOrders = [
-  {
-    id: "ORD-001",
-    orderNumber: "NS-2024-001",
-    customerInfo: {
-      name: "Nguyễn Văn A",
-      phone: "0123456789",
-      email: "nguyenvana@email.com",
-      address: {
-        street: "123 Đường ABC",
-        ward: "Phường Bến Nghé",
-        district: "Quận 1",
-        city: "TP.HCM",
-        fullAddress: "123 Đường ABC, Phường Bến Nghé, Quận 1, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T14:30:00Z",
-      orderType: "delivery", // delivery, pickup, dine-in
-      paymentMethod: "cash", // cash, card, momo, zalo
-      paymentStatus: "pending", // pending, paid, failed
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 130000,
-      totalAmount: 150000
-    },
-    items: [
-      { 
-        id: 1,
-        name: "Soju Chamisul", 
-        quantity: 2, 
-        unitPrice: 25000,
-        totalPrice: 50000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Soju truyền thống Hàn Quốc"
-      },
-      { 
-        id: 4,
-        name: "Mojito", 
-        quantity: 1, 
-        unitPrice: 45000,
-        totalPrice: 45000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail tươi mát"
-      },
-      { 
-        id: 6,
-        name: "Espresso", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê đậm đặc"
-      }
-    ],
-    orderNotes: "Giao hàng trước 15:30, gọi điện trước khi giao",
-    status: "confirmed",
-    createdAt: "2024-01-15T14:30:00Z",
-    updatedAt: "2024-01-15T14:30:00Z"
-  },
-  {
-    id: "ORD-002", 
-    orderNumber: "NS-2024-002",
-    customerInfo: {
-      name: "Trần Thị B",
-      phone: "0987654321",
-      email: "tranthib@email.com",
-      address: {
-        street: "456 Đường XYZ",
-        ward: "Phường 2",
-        district: "Quận 3",
-        city: "TP.HCM",
-        fullAddress: "456 Đường XYZ, Phường 2, Quận 3, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T15:15:00Z",
-      orderType: "pickup",
-      paymentMethod: "momo",
-      paymentStatus: "paid",
-      deliveryFee: 0,
-      serviceFee: 2000,
-      discount: 10000,
-      subtotal: 64000,
-      totalAmount: 56000
-    },
-    items: [
-      { 
-        id: 5,
-        name: "Cosmopolitan", 
-        quantity: 1, 
-        unitPrice: 50000,
-        totalPrice: 50000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail sang trọng và quyến rũ"
-      },
-      { 
-        id: 2,
-        name: "Soju Yuja", 
-        quantity: 2, 
-        unitPrice: 30000,
-        totalPrice: 60000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Soju hương chanh yuja"
-      }
-    ],
-    orderNotes: "Trân châu ít đường",
-    status: "confirmed",
-    createdAt: "2024-01-15T15:15:00Z",
-    updatedAt: "2024-01-15T15:15:00Z"
-  },
-  {
-    id: "ORD-003",
-    orderNumber: "NS-2024-003",
-    customerInfo: {
-      name: "Lê Văn C", 
-      phone: "0369852147",
-      email: "levanc@email.com",
-      address: {
-        street: "789 Đường DEF",
-        ward: "Phường 5",
-        district: "Quận 5",
-        city: "TP.HCM",
-        fullAddress: "789 Đường DEF, Phường 5, Quận 5, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T16:00:00Z",
-      orderType: "delivery",
-      paymentMethod: "card",
-      paymentStatus: "paid",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 100000,
-      totalAmount: 120000
-    },
-    items: [
-      { 
-        id: 7,
-        name: "Cappuccino", 
-        quantity: 1, 
-        unitPrice: 25000,
-        totalPrice: 25000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê sữa Ý"
-      },
-      { 
-        id: 3,
-        name: "Soju Peach", 
-        quantity: 1, 
-        unitPrice: 35000,
-        totalPrice: 35000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Soju hương đào"
-      },
-      { 
-        id: 8,
-        name: "Orange Juice", 
-        quantity: 1, 
-        unitPrice: 40000,
-        totalPrice: 40000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Nước cam tươi"
-      },
-      { 
-        id: "ITEM-009",
-        name: "Bánh flan", 
-        quantity: 1, 
-        unitPrice: 30000,
-        totalPrice: 30000,
-        category: "dessert",
-        customizations: [],
-        notes: ""
-      }
-    ],
-    orderNotes: "Giao hàng nhanh, gọi điện trước khi giao",
-    status: "confirmed",
-    createdAt: "2024-01-15T16:00:00Z",
-    updatedAt: "2024-01-15T16:00:00Z"
-  }
-];
-
 const ConfirmedOrders = () => {
+  const { getOrdersByStatus, updateOrderStatus } = useOrders();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [orderToCancel, setOrderToCancel] = useState(null);
-  const [orders, setOrders] = useState(confirmedOrders);
+  
+  const orders = getOrdersByStatus('confirmed');
 
   const filteredOrders = orders.filter(order =>
     order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -252,8 +46,7 @@ const ConfirmedOrders = () => {
   );
 
   const handleAcceptOrder = (orderId) => {
-    // Remove order from confirmed orders (it will move to in-progress)
-    setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
+    updateOrderStatus(orderId, 'in-progress');
     console.log(`Order ${orderId} accepted and moved to in-progress`);
   };
 
@@ -264,8 +57,7 @@ const ConfirmedOrders = () => {
 
   const handleConfirmCancel = () => {
     if (cancelReason.trim()) {
-      // Remove order from confirmed orders (it will move to cancelled)
-      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderToCancel));
+      updateOrderStatus(orderToCancel, 'cancelled', cancelReason, 'Quản lý');
       console.log(`Order ${orderToCancel} cancelled with reason: ${cancelReason}`);
       setShowCancelModal(false);
       setCancelReason("");

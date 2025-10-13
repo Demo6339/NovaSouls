@@ -19,53 +19,15 @@ import {
   CheckCircle2
 } from "lucide-react";
 
+import { Order } from '@/contexts/OrderContext';
+
 interface OrderItem {
   id: string | number;
   name: string;
   quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-  category: string;
-  temperature?: string;
-  image?: string;
-  customizations?: string[];
+  price: number;
+  image: string;
   notes?: string;
-}
-
-interface CustomerInfo {
-  name: string;
-  phone: string;
-  email?: string;
-}
-
-interface OrderDetails {
-  orderTime: string;
-  startTime?: string;
-  orderType: string;
-  paymentMethod: string;
-  paymentStatus: string;
-  deliveryFee: number;
-  discount: number;
-  subtotal: number;
-  totalAmount: number;
-  estimatedTime?: number;
-}
-
-interface Order {
-  id: string;
-  orderNumber: string;
-  customerInfo: CustomerInfo;
-  orderDetails: OrderDetails;
-  items: OrderItem[];
-  orderNotes?: string;
-  status: string;
-  currentState?: string;
-  progress?: number;
-  cancelTime?: string;
-  cancelReason?: string;
-  cancelledBy?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface OrderCardProps {
@@ -75,7 +37,6 @@ interface OrderCardProps {
   onCancelOrder?: (orderId: string) => void;
   onUpdateState?: (orderId: string, newState: string) => void;
   onRestoreOrder?: (orderId: string) => void;
-  onDeleteOrder?: (orderId: string) => void;
   variant: 'confirmed' | 'in-progress' | 'cancelled' | 'completed';
 }
 
@@ -86,7 +47,6 @@ const OrderCard: React.FC<OrderCardProps> = ({
   onCancelOrder,
   onUpdateState,
   onRestoreOrder,
-  onDeleteOrder,
   variant
 }) => {
   const formatCurrency = (amount: number) => {
@@ -231,7 +191,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
                       <p className="text-slate-500">x{item.quantity}</p>
                     </div>
                   </div>
-                  <span className="font-semibold text-slate-700 ml-2 flex-shrink-0">{formatCurrency(item.totalPrice)}</span>
+                  <span className="font-semibold text-slate-700 ml-2 flex-shrink-0">{formatCurrency(item.price * item.quantity)}</span>
                 </div>
               ))}
               {order.items.length > 2 && (
@@ -458,7 +418,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
                       <p className="text-slate-500">x{item.quantity}</p>
                     </div>
                   </div>
-                  <span className="font-semibold text-slate-700 ml-2 flex-shrink-0">{formatCurrency(item.totalPrice)}</span>
+                  <span className="font-semibold text-slate-700 ml-2 flex-shrink-0">{formatCurrency(item.price * item.quantity)}</span>
                 </div>
               ))}
               {order.items.length > 2 && (
@@ -652,16 +612,6 @@ const OrderCard: React.FC<OrderCardProps> = ({
               >
                 <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
                 Khôi phục
-              </Button>
-            )}
-            {onDeleteOrder && (
-              <Button
-                onClick={() => onDeleteOrder(order.id)}
-                variant="outline"
-                size="sm"
-                className="h-9 w-9 p-0 border-rose-300 text-rose-600 hover:bg-rose-50 flex-shrink-0"
-              >
-                <Trash2 className="h-4 w-4" />
               </Button>
             )}
           </div>

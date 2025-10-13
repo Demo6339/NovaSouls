@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import { useOrders } from "@/contexts/OrderContext";
 import { 
   CheckCircle, 
   Search, 
@@ -30,208 +31,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-// Mock data for completed orders - orders that have finished cooking and are ready for delivery/pickup
-const completedOrders = [
-  {
-    id: "ORD-006",
-    orderNumber: "NS-2024-006",
-    customerInfo: {
-      name: "Nguyễn Thị F",
-      phone: "0123456789",
-      email: "nguyenthif@email.com",
-      address: {
-        street: "123 Đường MNO",
-        ward: "Phường Bến Nghé",
-        district: "Quận 1",
-        city: "TP.HCM",
-        fullAddress: "123 Đường MNO, Phường Bến Nghé, Quận 1, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T18:00:00Z",
-      completedTime: "2024-01-15T18:30:00Z",
-      orderType: "delivery",
-      paymentMethod: "cash",
-      paymentStatus: "pending",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 200000,
-      totalAmount: 220000,
-      estimatedDeliveryTime: 15
-    },
-    items: [
-      { 
-        id: 1,
-        name: "Soju Chamisul", 
-        quantity: 3, 
-        unitPrice: 25000,
-        totalPrice: 75000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Soju truyền thống Hàn Quốc"
-      },
-      { 
-        id: 4,
-        name: "Mojito", 
-        quantity: 2, 
-        unitPrice: 45000,
-        totalPrice: 90000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail tươi mát"
-      },
-      { 
-        id: 6,
-        name: "Espresso", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê đậm đặc"
-      }
-    ],
-    orderNotes: "Giao hàng nhanh, gọi điện trước khi giao",
-    status: "completed",
-    currentState: "ready", // ready, delivering, payment_received
-    progress: 100,
-    createdAt: "2024-01-15T18:00:00Z",
-    updatedAt: "2024-01-15T18:30:00Z"
-  },
-  {
-    id: "ORD-007", 
-    orderNumber: "NS-2024-007",
-    customerInfo: {
-      name: "Trần Văn G",
-      phone: "0987654321",
-      email: "tranvang@email.com",
-      address: {
-        street: "456 Đường PQR",
-        ward: "Phường 2",
-        district: "Quận 3",
-        city: "TP.HCM",
-        fullAddress: "456 Đường PQR, Phường 2, Quận 3, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T18:15:00Z",
-      completedTime: "2024-01-15T18:45:00Z",
-      orderType: "pickup",
-      paymentMethod: "momo",
-      paymentStatus: "paid",
-      deliveryFee: 0,
-      serviceFee: 2000,
-      discount: 10000,
-      subtotal: 80000,
-      totalAmount: 72000,
-      estimatedDeliveryTime: 0
-    },
-    items: [
-      { 
-        id: 5,
-        name: "Cosmopolitan", 
-        quantity: 1, 
-        unitPrice: 50000,
-        totalPrice: 50000,
-        category: "cocktail",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cocktail sang trọng và quyến rũ"
-      },
-      { 
-        id: 2,
-        name: "Soju Yuja", 
-        quantity: 1, 
-        unitPrice: 30000,
-        totalPrice: 30000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: ["Thêm đá"],
-        notes: "Soju hương chanh yuja"
-      }
-    ],
-    orderNotes: "Mang về, gọi điện khi đến",
-    status: "completed",
-    currentState: "delivering", // ready, delivering, payment_received
-    progress: 100,
-    createdAt: "2024-01-15T18:15:00Z",
-    updatedAt: "2024-01-15T18:45:00Z"
-  },
-  {
-    id: "ORD-008",
-    orderNumber: "NS-2024-008",
-    customerInfo: {
-      name: "Lê Thị H", 
-      phone: "0369852147",
-      email: "lethih@email.com",
-      address: {
-        street: "789 Đường STU",
-        ward: "Phường 5",
-        district: "Quận 5",
-        city: "TP.HCM",
-        fullAddress: "789 Đường STU, Phường 5, Quận 5, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T18:30:00Z",
-      completedTime: "2024-01-15T19:00:00Z",
-      orderType: "delivery",
-      paymentMethod: "cash",
-      paymentStatus: "paid",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      totalAmount: 150000,
-      estimatedDeliveryTime: 20
-    },
-    items: [
-      { 
-        id: 7,
-        name: "Cappuccino", 
-        quantity: 2, 
-        unitPrice: 25000,
-        totalPrice: 50000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê sữa Ý"
-      },
-      { 
-        id: 3,
-        name: "Soju Peach", 
-        quantity: 2, 
-        unitPrice: 35000,
-        totalPrice: 70000,
-        category: "soju",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: ["Thêm đá"],
-        notes: "Soju hương đào"
-      }
-    ],
-    orderNotes: "Giao hàng nhanh",
-    status: "completed",
-    currentState: "payment_received", // ready, delivering, payment_received
-    progress: 100,
-    createdAt: "2024-01-15T18:30:00Z",
-    updatedAt: "2024-01-15T19:00:00Z"
-  }
-];
-
 const CompletedOrders = () => {
+  const { getOrdersByStatus, updateOrderState } = useOrders();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [orders, setOrders] = useState(completedOrders);
+  
+  const orders = getOrdersByStatus('completed');
 
   const filteredOrders = orders.filter(order =>
     order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -241,17 +46,7 @@ const CompletedOrders = () => {
   );
 
   const handleUpdateOrderState = (orderId, newState) => {
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === orderId 
-          ? { 
-              ...order, 
-              currentState: newState,
-              updatedAt: new Date().toISOString()
-            }
-          : order
-      )
-    );
+    updateOrderState(orderId, newState);
     console.log(`Order ${orderId} updated to state: ${newState}`);
   };
 

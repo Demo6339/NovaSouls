@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import OrderCard from "@/components/admin/OrderCard";
+import { useOrders } from "@/contexts/OrderContext";
 import { 
   XCircle, 
   Search, 
@@ -14,7 +15,6 @@ import {
   Calendar,
   Eye,
   RefreshCw,
-  Trash2,
   MoreHorizontal,
   DollarSign,
   Package,
@@ -23,252 +23,15 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-// Mock data for cancelled orders
-const cancelledOrders = [
-  {
-    id: "ORD-006",
-    orderNumber: "NS-2024-006",
-    customerInfo: {
-      name: "Võ Thị F",
-      phone: "0123456789",
-      email: "vothif@email.com",
-      address: {
-        street: "987 Đường MNO",
-        ward: "Phường 10",
-        district: "Quận 10",
-        city: "TP.HCM",
-        fullAddress: "987 Đường MNO, Phường 10, Quận 10, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T18:00:00Z",
-      orderType: "delivery",
-      paymentMethod: "cash",
-      paymentStatus: "pending",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 100000,
-      totalAmount: 120000
-    },
-    items: [
-      { 
-        id: 1,
-        name: "Cà phê sữa", 
-        quantity: 2, 
-        unitPrice: 25000,
-        totalPrice: 50000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê sữa đậm đà"
-      },
-      { 
-        id: 2,
-        name: "Bánh mì pate", 
-        quantity: 1, 
-        unitPrice: 25000,
-        totalPrice: 25000,
-        category: "food",
-        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Bánh mì pate truyền thống"
-      },
-      { 
-        id: 3,
-        name: "Nước chanh", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Nước chanh tươi mát"
-      }
-    ],
-    orderNotes: "Giao hàng nhanh",
-    status: "cancelled",
-    cancelTime: "2024-01-15 18:15",
-    cancelReason: "Khách hàng yêu cầu hủy",
-    cancelledBy: "Khách hàng",
-    createdAt: "2024-01-15T18:00:00Z",
-    updatedAt: "2024-01-15T18:15:00Z"
-  },
-  {
-    id: "ORD-007", 
-    orderNumber: "NS-2024-007",
-    customerInfo: {
-      name: "Đặng Văn G",
-      phone: "0987654321",
-      email: "dangvang@email.com",
-      address: {
-        street: "147 Đường PQR",
-        ward: "Phường 11",
-        district: "Quận 11",
-        city: "TP.HCM",
-        fullAddress: "147 Đường PQR, Phường 11, Quận 11, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T18:30:00Z",
-      orderType: "pickup",
-      paymentMethod: "momo",
-      paymentStatus: "paid",
-      deliveryFee: 0,
-      serviceFee: 2000,
-      discount: 5000,
-      subtotal: 88000,
-      totalAmount: 85000
-    },
-    items: [
-      { 
-        id: 4,
-        name: "Trà sữa trân châu", 
-        quantity: 1, 
-        unitPrice: 35000,
-        totalPrice: 35000,
-        category: "drink",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Trà sữa trân châu ngọt ngào"
-      },
-      { 
-        id: 5,
-        name: "Bánh flan", 
-        quantity: 1, 
-        unitPrice: 30000,
-        totalPrice: 30000,
-        category: "dessert",
-        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Bánh flan mềm mịn"
-      },
-      { 
-        id: 6,
-        name: "Sinh tố xoài", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Sinh tố xoài tươi ngon"
-      }
-    ],
-    orderNotes: "Trân châu nhiều",
-    status: "cancelled",
-    cancelTime: "2024-01-15 18:45",
-    cancelReason: "Hết nguyên liệu",
-    cancelledBy: "Quản lý",
-    createdAt: "2024-01-15T18:30:00Z",
-    updatedAt: "2024-01-15T18:45:00Z"
-  },
-  {
-    id: "ORD-008",
-    orderNumber: "NS-2024-008",
-    customerInfo: {
-      name: "Bùi Thị H",
-      phone: "0369852147",
-      email: "buithih@email.com",
-      address: {
-        street: "258 Đường STU",
-        ward: "Phường 12",
-        district: "Quận 12",
-        city: "TP.HCM",
-        fullAddress: "258 Đường STU, Phường 12, Quận 12, TP.HCM"
-      }
-    },
-    orderDetails: {
-      orderTime: "2024-01-15T19:00:00Z",
-      orderType: "delivery",
-      paymentMethod: "card",
-      paymentStatus: "pending",
-      deliveryFee: 15000,
-      serviceFee: 5000,
-      discount: 0,
-      subtotal: 130000,
-      totalAmount: 150000
-    },
-    items: [
-      { 
-        id: 7,
-        name: "Cà phê đen", 
-        quantity: 1, 
-        unitPrice: 25000,
-        totalPrice: 25000,
-        category: "coffee",
-        temperature: "nóng",
-        image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Cà phê đen đậm đặc"
-      },
-      { 
-        id: 8,
-        name: "Bánh mì thịt", 
-        quantity: 2, 
-        unitPrice: 30000,
-        totalPrice: 60000,
-        category: "food",
-        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Bánh mì thịt nướng"
-      },
-      { 
-        id: 9,
-        name: "Nước cam", 
-        quantity: 1, 
-        unitPrice: 20000,
-        totalPrice: 20000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Nước cam tươi"
-      },
-      { 
-        id: 10,
-        name: "Bánh ngọt", 
-        quantity: 1, 
-        unitPrice: 27000,
-        totalPrice: 27000,
-        category: "dessert",
-        image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Bánh ngọt thơm ngon"
-      },
-      { 
-        id: 11,
-        name: "Sinh tố bơ", 
-        quantity: 1, 
-        unitPrice: 40000,
-        totalPrice: 40000,
-        category: "juice",
-        temperature: "lạnh",
-        image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-        customizations: [],
-        notes: "Sinh tố bơ béo ngậy"
-      }
-    ],
-    orderNotes: "Không đường",
-    status: "cancelled",
-    cancelTime: "2024-01-15 19:20",
-    cancelReason: "Không liên lạc được",
-    cancelledBy: "Hệ thống",
-    createdAt: "2024-01-15T19:00:00Z",
-    updatedAt: "2024-01-15T19:20:00Z"
-  }
-];
-
 const CancelledOrders = () => {
+  const { getOrdersByStatus, restoreOrder } = useOrders();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filterReason, setFilterReason] = useState("all");
+  
+  const orders = getOrdersByStatus('cancelled');
 
-  const filteredOrders = cancelledOrders.filter(order => {
+  const filteredOrders = orders.filter(order => {
     const matchesSearch = order.customerInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.customerInfo.phone.includes(searchQuery);
@@ -280,13 +43,8 @@ const CancelledOrders = () => {
   });
 
   const handleRestoreOrder = (orderId) => {
-    // Logic to restore order
+    restoreOrder(orderId);
     console.log(`Restoring order ${orderId}`);
-  };
-
-  const handleDeleteOrder = (orderId) => {
-    // Logic to permanently delete order
-    console.log(`Deleting order ${orderId}`);
   };
 
   const formatCurrency = (amount) => {
@@ -363,7 +121,7 @@ const CancelledOrders = () => {
               <XCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{cancelledOrders.length}</div>
+              <div className="text-2xl font-bold text-red-600">{orders.length}</div>
               <p className="text-xs text-muted-foreground">đơn hàng</p>
             </CardContent>
           </Card>
@@ -375,7 +133,7 @@ const CancelledOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-red-600">
-                {formatCurrency(cancelledOrders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0))}
+                {formatCurrency(orders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0))}
               </div>
               <p className="text-xs text-muted-foreground">tổng giá trị bị hủy</p>
             </CardContent>
@@ -413,7 +171,6 @@ const CancelledOrders = () => {
               variant="cancelled"
               onViewDetails={setSelectedOrder}
               onRestoreOrder={handleRestoreOrder}
-              onDeleteOrder={handleDeleteOrder}
             />
           ))}
         </div>
