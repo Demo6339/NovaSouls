@@ -408,7 +408,8 @@ const Menu = () => {
             {/* Menu Items Grid - Tall Rectangular Design */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-4">
               {currentItems.map((item) => (
-                <Card key={item.id} className="group overflow-hidden hover:shadow-lg transition-all duration-200 border border-gray-200 rounded-xl">
+                <Card key={item.id} className="group overflow-hidden hover:shadow-lg transition-all duration-200 border border-gray-200 rounded-xl flex flex-col h-full">
+                  {/* Image Section */}
                   <div className="relative">
                     <img
                       src={item.image}
@@ -421,14 +422,23 @@ const Menu = () => {
                     </div>
                   </div>
                   
-                  <CardHeader className="pb-3 px-4 pt-4">
-                    <CardTitle className="text-base font-semibold group-hover:text-gray-900 transition-colors line-clamp-1 leading-tight">
+                  {/* Content Section - Flexible */}
+                  <div className="flex flex-col flex-1 px-4 pt-4">
+                    {/* Title */}
+                    <CardTitle className="text-base font-semibold group-hover:text-gray-900 transition-colors line-clamp-1 leading-tight mb-2">
                       {item.name}
                     </CardTitle>
-                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{item.description}</p>
-                  </CardHeader>
+                    
+                    {/* Description - Flexible space */}
+                    <div className="flex-1 mb-4">
+                      <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
                   
-                  <CardContent className="pt-0 px-4 pb-4">
+                  {/* Fixed Bottom Section */}
+                  <div className="px-4 pb-4 mt-auto">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-base font-bold text-gray-900">
@@ -438,12 +448,12 @@ const Menu = () => {
                       </div>
                       <button 
                         onClick={() => handleViewDetails(item)}
-                        className="text-white hover:text-gray-200 transition-colors p-2.5 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center"
+                        className="text-white hover:text-gray-200 transition-colors p-2.5 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center flex-shrink-0"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
                     </div>
-                  </CardContent>
+                  </div>
                 </Card>
               ))}
             </div>
