@@ -257,13 +257,6 @@ const Checkout = () => {
                 >
                   Quay về menu
                 </Button>
-                <Button 
-                  onClick={() => navigate('/admin')} 
-                  variant="outline" 
-                  className="w-full border-gray-300 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors"
-                >
-                  Xem admin
-                </Button>
               </div>
             </div>
           </CardContent>
