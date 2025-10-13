@@ -391,29 +391,6 @@ const Menu = () => {
         {/* Main Content */}
         <div className="flex-1 p-2 sm:p-4 lg:p-6">
           <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-            {/* Results Header - Desktop Only */}
-            <div className="hidden lg:flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {activeCategory === "all" ? "Tất cả đồ uống" : 
-                   categories.find(cat => cat.id === activeCategory)?.name}
-                </h2>
-                <p className="text-gray-600">
-                  Tìm thấy {filteredItems.length} đồ uống
-                </p>
-              </div>
-            </div>
-
-            {/* Mobile Results Header */}
-            <div className="lg:hidden">
-              <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-1">
-                {activeCategory === "all" ? "Tất cả đồ uống" : 
-                 categories.find(cat => cat.id === activeCategory)?.name}
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-600">
-                {filteredItems.length} đồ uống
-              </p>
-            </div>
 
             {/* Menu Items Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-6">
