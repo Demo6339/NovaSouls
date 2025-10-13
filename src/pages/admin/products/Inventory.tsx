@@ -11,10 +11,46 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Package } from "lucide-react";
+import { useMenu } from "@/contexts/MenuContext";
+import { useMemo } from "react";
 
-const inventory = [];
+// Inventory item interface
+interface InventoryItem {
+  id: number;
+  name: string;
+  unit: string;
+  stock: number;
+  minStock: number;
+  status: 'good' | 'low';
+}
 
 const AdminInventory = () => {
+  const { allItems } = useMenu();
+
+  // Generate inventory from menu items
+  const inventory = useMemo((): InventoryItem[] => {
+    return allItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      unit: 'cái',
+      stock: item.stock || 0,
+      minStock: Math.max(1, Math.floor((item.stock || 0) * 0.2)), // 20% of current stock as minimum
+      status: (item.stock || 0) <= Math.max(1, Math.floor((item.stock || 0) * 0.2)) ? 'low' : 'good'
+    }));
+  }, [allItems]);
+
+  // Calculate statistics
+  const totalItems = inventory.length;
+  const lowStockItems = inventory.filter(item => item.status === 'low').length;
+  const totalValue = inventory.reduce((sum, item) => sum + (item.stock * 1000), 0); // Assuming 1000đ per unit
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <AdminSidebar />
@@ -33,7 +69,7 @@ const AdminInventory = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{totalItems}</div>
             </CardContent>
           </Card>
           <Card>
@@ -43,7 +79,7 @@ const AdminInventory = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-destructive">0</div>
+              <div className="text-2xl font-bold text-destructive">{lowStockItems}</div>
             </CardContent>
           </Card>
           <Card>
@@ -53,7 +89,7 @@ const AdminInventory = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0đ</div>
+              <div className="text-2xl font-bold">{formatCurrency(totalValue)}</div>
             </CardContent>
           </Card>
         </div>

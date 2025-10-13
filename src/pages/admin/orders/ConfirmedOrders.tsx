@@ -31,7 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 const ConfirmedOrders = () => {
-  const { getOrdersByStatus, updateOrderStatus } = useOrders();
+  const { getOrdersByStatus, updateOrderStatus, orders: allOrders } = useOrders();
   useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -79,6 +79,27 @@ const ConfirmedOrders = () => {
       style: 'currency',
       currency: 'VND'
     }).format(amount);
+  };
+
+  // Calculate average processing time for confirmed orders
+  const calculateAverageProcessingTime = () => {
+    if (orders.length === 0) return "0";
+    
+    // Get all completed orders to calculate average processing time
+    const completedOrders = allOrders.filter(order => 
+      order.status === 'completed' && order.orderDetails.startTime
+    );
+    
+    if (completedOrders.length === 0) return "0";
+    
+    const totalMinutes = completedOrders.reduce((sum, order) => {
+      const orderTime = new Date(order.orderDetails.orderTime);
+      const startTime = new Date(order.orderDetails.startTime);
+      const diffMinutes = Math.floor((startTime.getTime() - orderTime.getTime()) / (1000 * 60));
+      return sum + diffMinutes;
+    }, 0);
+    
+    return Math.round(totalMinutes / completedOrders.length).toString();
   };
 
   return (
@@ -149,7 +170,7 @@ const ConfirmedOrders = () => {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">15 phút</div>
+              <div className="text-2xl font-bold">{calculateAverageProcessingTime()} phút</div>
               <p className="text-xs text-muted-foreground">thời gian xử lý trung bình</p>
             </CardContent>
           </Card>

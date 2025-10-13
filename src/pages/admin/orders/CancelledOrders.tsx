@@ -26,7 +26,7 @@ import {
 import { useState } from "react";
 
 const CancelledOrders = () => {
-  const { getOrdersByStatus, restoreOrder } = useOrders();
+  const { getOrdersByStatus, restoreOrder, orders: allOrders } = useOrders();
   useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -69,6 +69,29 @@ const CancelledOrders = () => {
     if (cancelledBy === "Quản lý") return "bg-orange-100 text-orange-800";
     if (cancelledBy === "Hệ thống") return "bg-yellow-100 text-yellow-800";
     return "bg-gray-100 text-gray-800";
+  };
+
+  // Calculate real statistics
+  const calculateCancellationRate = () => {
+    const totalOrders = allOrders.length;
+    const cancelledOrders = orders.length;
+    return totalOrders > 0 ? ((cancelledOrders / totalOrders) * 100).toFixed(1) : "0.0";
+  };
+
+  const calculateAverageCancellationTime = () => {
+    if (orders.length === 0) return "0";
+    
+    const totalMinutes = orders.reduce((sum, order) => {
+      if (order.cancelTime && order.orderDetails.orderTime) {
+        const orderTime = new Date(order.orderDetails.orderTime);
+        const cancelTime = new Date(order.cancelTime);
+        const diffMinutes = Math.floor((cancelTime.getTime() - orderTime.getTime()) / (1000 * 60));
+        return sum + diffMinutes;
+      }
+      return sum;
+    }, 0);
+    
+    return Math.round(totalMinutes / orders.length).toString();
   };
 
   return (
@@ -151,7 +174,7 @@ const CancelledOrders = () => {
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12.5%</div>
+              <div className="text-2xl font-bold">{calculateCancellationRate()}%</div>
               <p className="text-xs text-muted-foreground">so với tổng đơn hàng</p>
             </CardContent>
           </Card>
@@ -162,7 +185,7 @@ const CancelledOrders = () => {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">15 phút</div>
+              <div className="text-2xl font-bold">{calculateAverageCancellationTime()} phút</div>
               <p className="text-xs text-muted-foreground">trước khi hủy</p>
             </CardContent>
           </Card>

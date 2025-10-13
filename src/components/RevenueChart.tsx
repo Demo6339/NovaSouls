@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
@@ -19,34 +19,7 @@ import {
   ReferenceLine
 } from 'recharts';
 import { RefreshCw, TrendingUp, Activity, Clock } from 'lucide-react';
-
-// Dữ liệu trống cho các khoảng thời gian khác nhau
-const revenueData = {
-  '1': [
-    { time: '00:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '04:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '08:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '12:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '16:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '20:00', revenue: 0, orders: 0, profit: 0 },
-    { time: '24:00', revenue: 0, orders: 0, profit: 0 },
-  ],
-  '7': [
-    { time: 'T2', revenue: 0, orders: 0, profit: 0 },
-    { time: 'T3', revenue: 0, orders: 0, profit: 0 },
-    { time: 'T4', revenue: 0, orders: 0, profit: 0 },
-    { time: 'T5', revenue: 0, orders: 0, profit: 0 },
-    { time: 'T6', revenue: 0, orders: 0, profit: 0 },
-    { time: 'T7', revenue: 0, orders: 0, profit: 0 },
-    { time: 'CN', revenue: 0, orders: 0, profit: 0 },
-  ],
-  '30': [
-    { time: 'Tuần 1', revenue: 0, orders: 0, profit: 0 },
-    { time: 'Tuần 2', revenue: 0, orders: 0, profit: 0 },
-    { time: 'Tuần 3', revenue: 0, orders: 0, profit: 0 },
-    { time: 'Tuần 4', revenue: 0, orders: 0, profit: 0 },
-  ],
-};
+import { useOrders } from '@/contexts/OrderContext';
 
 // Thời gian cập nhật realtime
 const updateIntervals = {
@@ -58,6 +31,7 @@ const updateIntervals = {
 };
 
 const RevenueChart: React.FC = () => {
+  const { orders } = useOrders();
   const [selectedPeriod, setSelectedPeriod] = useState<string>('7');
   const [selectedUpdateInterval, setSelectedUpdateInterval] = useState<string>('5m');
   const [chartType, setChartType] = useState<'line' | 'area' | 'bar'>('area');
@@ -84,9 +58,94 @@ const RevenueChart: React.FC = () => {
     }
   };
 
-  const getChartData = () => {
-    return revenueData[selectedPeriod as keyof typeof revenueData] || revenueData['7'];
-  };
+  // Generate chart data based on actual orders
+  const getChartData = useMemo(() => {
+    const now = new Date();
+    const completedOrders = orders.filter(order => 
+      order.status === 'completed' && order.currentState === 'payment_received'
+    );
+
+    if (selectedPeriod === '1') {
+      // Last 24 hours
+      const hours = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'];
+      return hours.map(hour => {
+        const hourNum = parseInt(hour.split(':')[0]);
+        const startTime = new Date(now);
+        startTime.setHours(hourNum, 0, 0, 0);
+        const endTime = new Date(startTime);
+        endTime.setHours(hourNum + 4, 0, 0, 0);
+
+        const periodOrders = completedOrders.filter(order => {
+          const orderTime = new Date(order.orderDetails.completedTime || order.createdAt);
+          return orderTime >= startTime && orderTime < endTime;
+        });
+
+        const revenue = periodOrders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0);
+        const ordersCount = periodOrders.length;
+        const profit = revenue * 0.3; // Assuming 30% profit margin
+
+        return {
+          time: hour,
+          revenue,
+          orders: ordersCount,
+          profit
+        };
+      });
+    } else if (selectedPeriod === '7') {
+      // Last 7 days
+      const days = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+      return days.map((day, index) => {
+        const dayStart = new Date(now);
+        dayStart.setDate(now.getDate() - (6 - index));
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setHours(23, 59, 59, 999);
+
+        const dayOrders = completedOrders.filter(order => {
+          const orderTime = new Date(order.orderDetails.completedTime || order.createdAt);
+          return orderTime >= dayStart && orderTime <= dayEnd;
+        });
+
+        const revenue = dayOrders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0);
+        const ordersCount = dayOrders.length;
+        const profit = revenue * 0.3;
+
+        return {
+          time: day,
+          revenue,
+          orders: ordersCount,
+          profit
+        };
+      });
+    } else {
+      // Last 30 days (4 weeks)
+      const weeks = ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'];
+      return weeks.map((week, index) => {
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - (28 - index * 7));
+        weekStart.setHours(0, 0, 0, 0);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+
+        const weekOrders = completedOrders.filter(order => {
+          const orderTime = new Date(order.orderDetails.completedTime || order.createdAt);
+          return orderTime >= weekStart && orderTime <= weekEnd;
+        });
+
+        const revenue = weekOrders.reduce((sum, order) => sum + order.orderDetails.totalAmount, 0);
+        const ordersCount = weekOrders.length;
+        const profit = revenue * 0.3;
+
+        return {
+          time: week,
+          revenue,
+          orders: ordersCount,
+          profit
+        };
+      });
+    }
+  }, [orders, selectedPeriod]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -141,7 +200,7 @@ const RevenueChart: React.FC = () => {
   };
 
   const renderChart = () => {
-    const data = getChartData();
+    const data = getChartData;
     
     if (chartType === 'area') {
       return (
@@ -331,28 +390,28 @@ const RevenueChart: React.FC = () => {
           <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl border border-primary/20">
             <p className="text-sm text-muted-foreground mb-1">Tổng doanh thu</p>
             <p className="text-xl lg:text-2xl font-bold text-primary">
-              {formatCurrency(getChartData().reduce((sum, item) => sum + item.revenue, 0))}
+              {formatCurrency(getChartData.reduce((sum, item) => sum + item.revenue, 0))}
             </p>
           </div>
           
           <div className="text-center p-4 bg-gradient-to-br from-green-500/10 to-green-500/5 rounded-xl border border-green-500/20">
             <p className="text-sm text-muted-foreground mb-1">Tổng lợi nhuận</p>
             <p className="text-xl lg:text-2xl font-bold text-green-600">
-              {formatCurrency(getChartData().reduce((sum, item) => sum + item.profit, 0))}
+              {formatCurrency(getChartData.reduce((sum, item) => sum + item.profit, 0))}
             </p>
           </div>
           
           <div className="text-center p-4 bg-gradient-to-br from-orange-500/10 to-orange-500/5 rounded-xl border border-orange-500/20">
             <p className="text-sm text-muted-foreground mb-1">Trung bình/ngày</p>
             <p className="text-xl lg:text-2xl font-bold text-orange-600">
-              {formatCurrency(getChartData().reduce((sum, item) => sum + item.revenue, 0) / getChartData().length)}
+              {formatCurrency(getChartData.reduce((sum, item) => sum + item.revenue, 0) / Math.max(getChartData.length, 1))}
             </p>
           </div>
           
           <div className="text-center p-4 bg-gradient-to-br from-purple-500/10 to-purple-500/5 rounded-xl border border-purple-500/20">
             <p className="text-sm text-muted-foreground mb-1">Tổng đơn hàng</p>
             <p className="text-xl lg:text-2xl font-bold text-purple-600">
-              {getChartData().reduce((sum, item) => sum + item.orders, 0)} đơn
+              {getChartData.reduce((sum, item) => sum + item.orders, 0)} đơn
             </p>
           </div>
         </div>

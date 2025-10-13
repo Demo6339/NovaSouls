@@ -27,7 +27,7 @@ import {
 import { useState } from "react";
 
 const InProgressOrders = () => {
-  const { getOrdersByStatus, updateOrderState, updateOrderStatus } = useOrders();
+  const { getOrdersByStatus, updateOrderState, updateOrderStatus, orders: allOrders } = useOrders();
   useRealtimeOrders(); // Enable realtime updates
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -100,6 +100,18 @@ const InProgressOrders = () => {
     return remaining;
   };
 
+  // Calculate average estimated time for in-progress orders
+  const calculateAverageEstimatedTime = () => {
+    if (orders.length === 0) return 0;
+    return Math.round(orders.reduce((sum, order) => sum + (order.orderDetails.estimatedTime || 0), 0) / orders.length);
+  };
+
+  // Calculate average progress for in-progress orders
+  const calculateAverageProgress = () => {
+    if (orders.length === 0) return 0;
+    return Math.round(orders.reduce((sum, order) => sum + (order.progress || 0), 0) / orders.length);
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <AdminSidebar />
@@ -169,7 +181,7 @@ const InProgressOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {orders.length > 0 ? Math.round(orders.reduce((sum, order) => sum + order.orderDetails.estimatedTime, 0) / orders.length) : 0} phút
+                {calculateAverageEstimatedTime()} phút
               </div>
               <p className="text-xs text-muted-foreground">thời gian ước tính</p>
             </CardContent>
@@ -182,7 +194,7 @@ const InProgressOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {orders.length > 0 ? Math.round(orders.reduce((sum, order) => sum + order.progress, 0) / orders.length) : 0}%
+                {calculateAverageProgress()}%
               </div>
               <p className="text-xs text-muted-foreground">hoàn thành</p>
             </CardContent>
