@@ -56,6 +56,8 @@ const Menu = () => {
   const [filters, setFilters] = useState({
     priceRange: [16000, 50000]
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // 2 rows × 4 columns = 8 items per page
 
   // Add custom styles for range slider
   React.useEffect(() => {
@@ -127,6 +129,17 @@ const Menu = () => {
     
     return matchesSearch && matchesCategory && matchesPrice;
   });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = filteredItems.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, activeCategory, filters]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -392,46 +405,85 @@ const Menu = () => {
         <div className="flex-1 p-2 sm:p-4 lg:p-6">
           <div className="space-y-3 sm:space-y-4 lg:space-y-6">
 
-            {/* Menu Items Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 lg:gap-6">
-              {filteredItems.map((item) => (
-                <Card key={item.id} className="group overflow-hidden hover:shadow-lg transition-all duration-200 border border-gray-200">
+            {/* Menu Items Grid - Tall Rectangular Design */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-4">
+              {currentItems.map((item) => (
+                <Card key={item.id} className="group overflow-hidden hover:shadow-lg transition-all duration-200 border border-gray-200 rounded-xl">
                   <div className="relative">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-24 sm:h-32 md:h-40 lg:h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-32 sm:h-36 lg:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex items-center gap-1 bg-black/80 text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full">
-                      <Thermometer className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                      <span className="text-xs sm:text-xs">{item.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}</span>
+                    <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/80 text-white px-1.5 py-0.5 rounded-full">
+                      <Thermometer className="h-2.5 w-2.5" />
+                      <span className="text-xs">{item.temperature === 'nóng' ? 'Nóng' : 'Lạnh'}</span>
                     </div>
                   </div>
-                  <CardHeader className="pb-1 px-2 pt-2 sm:pb-2 sm:px-3 sm:pt-3">
-                    <CardTitle className="text-sm sm:text-base lg:text-lg group-hover:text-gray-900 transition-colors line-clamp-1 leading-tight">
+                  
+                  <CardHeader className="pb-3 px-4 pt-4">
+                    <CardTitle className="text-base font-semibold group-hover:text-gray-900 transition-colors line-clamp-1 leading-tight">
                       {item.name}
                     </CardTitle>
-                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-tight sm:leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed">{item.description}</p>
                   </CardHeader>
-                  <CardContent className="pt-0 px-2 pb-2 sm:px-3 sm:pb-3">
+                  
+                  <CardContent className="pt-0 px-4 pb-4">
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900">
+                        <span className="text-base font-bold text-gray-900">
                           {item.price.toLocaleString('vi-VN')}đ
                         </span>
-                        <span className="text-xs text-gray-500 hidden sm:block">Mỗi ly</span>
+                        <span className="text-sm text-gray-500">Mỗi ly</span>
                       </div>
                       <button 
                         onClick={() => handleViewDetails(item)}
-                        className="text-white hover:text-gray-200 transition-colors p-2.5 sm:p-3.5 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center"
+                        className="text-white hover:text-gray-200 transition-colors p-2.5 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center"
                       >
-                        <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <Eye className="h-4 w-4" />
                       </button>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
+
+            {/* Pagination */}
+            {filteredItems.length > 0 && totalPages > 1 && (
+              <div className="flex items-center justify-center space-x-2 py-6">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Trước
+                </button>
+                
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        currentPage === page
+                          ? 'bg-gray-900 text-white'
+                          : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+                
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Sau
+                </button>
+              </div>
+            )}
 
             {filteredItems.length === 0 && (
               <div className="text-center py-12">
