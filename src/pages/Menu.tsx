@@ -495,20 +495,24 @@ const Menu = () => {
           </div>
         )}
 
-        {/* Floating Cart Button */}
-        <Button 
-          className="fixed bottom-6 right-6 bg-gray-900 hover:bg-gray-800 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 z-40"
-          onClick={() => navigate('/checkout')}
-        >
+        {/* Floating Cart Button - Circular Design */}
+        <div className="fixed bottom-4 right-4 z-40">
           <div className="relative">
-            <ShoppingCart className="h-6 w-6" />
+            <Button 
+              className="group relative bg-gray-900 hover:bg-gray-800 text-white rounded-full w-11 h-11 sm:w-12 sm:h-12 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border-0 p-0 flex items-center justify-center"
+              onClick={() => navigate('/checkout')}
+            >
+              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:scale-110" />
+            </Button>
+            
+            {/* Item count badge - positioned outside the button */}
             {getTotalItems() > 0 && (
-              <Badge className="absolute -top-2 -right-2 bg-red-600 text-white text-xs min-w-[20px] h-5 flex items-center justify-center">
-                {getTotalItems()}
-              </Badge>
+              <div className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold min-w-[16px] h-4 sm:min-w-[18px] sm:h-[18px] flex items-center justify-center rounded-full shadow-lg border-2 border-white">
+                {getTotalItems() > 99 ? '99+' : getTotalItems()}
+              </div>
             )}
           </div>
-        </Button>
+        </div>
       </div>
     </div>
   );
