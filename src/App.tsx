@@ -9,6 +9,8 @@ import { OrderProvider } from "@/contexts/OrderContext";
 import { RecipeProvider } from "@/contexts/RecipeContext";
 import { AddonProvider } from "@/contexts/AddonContext";
 import { InventoryProvider } from "@/contexts/InventoryContext";
+import { PromoProvider } from "@/contexts/PromoContext";
+import { EventProvider } from "@/contexts/EventContext";
 import Menu from "./pages/Menu";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -17,9 +19,11 @@ import AdminMenu from "./pages/admin/products/Menu";
 import AdminInventory from "./pages/admin/products/Inventory";
 import AdminRecipes from "./pages/admin/products/Recipes";
 import AdminAddons from "./pages/admin/products/Addons";
-import AdminEvents from "./pages/admin/AdminEvents";
-import AdminActivities from "./pages/admin/events/Activities";
-import AdminCoupons from "./pages/admin/events/Coupons";
+import AdminPromoCodes from "./pages/admin/events/PromoCodes";
+import AdminEvents from "./pages/admin/events/Events";
+import AdminEventsRedirect from "./pages/admin/AdminEvents";
+import OrderHistory from "./pages/admin/history/OrderHistory";
+import SystemHistory from "./pages/admin/history/SystemHistory";
 import { ConfirmedOrders, InProgressOrders, CancelledOrders } from "./pages/admin/orders";
 import CompletedOrders from "./pages/admin/orders/CompletedOrders";
 import History from "./pages/admin/History";
@@ -36,6 +40,8 @@ const App = () => (
             <RecipeProvider>
               <AddonProvider>
                 <InventoryProvider>
+                  <PromoProvider>
+                    <EventProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter
@@ -59,14 +65,18 @@ const App = () => (
             <Route path="/admin/orders/in-progress" element={<InProgressOrders />} />
             <Route path="/admin/orders/completed" element={<CompletedOrders />} />
             <Route path="/admin/orders/cancelled" element={<CancelledOrders />} />
-            <Route path="/admin/events" element={<AdminEvents />} />
-            <Route path="/admin/events/activities" element={<AdminActivities />} />
-            <Route path="/admin/events/coupons" element={<AdminCoupons />} />
-            <Route path="/admin/history" element={<History />} />
+            <Route path="/admin/events" element={<AdminEventsRedirect />} />
+            <Route path="/admin/events/activities" element={<AdminEvents />} />
+            <Route path="/admin/events/promocodes" element={<AdminPromoCodes />} />
+            <Route path="/admin/history" element={<OrderHistory />} />
+            <Route path="/admin/history/orders" element={<OrderHistory />} />
+            <Route path="/admin/history/system" element={<SystemHistory />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           </BrowserRouter>
+                    </EventProvider>
+                  </PromoProvider>
                 </InventoryProvider>
               </AddonProvider>
             </RecipeProvider>

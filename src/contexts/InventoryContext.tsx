@@ -4,12 +4,24 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 export interface InventoryItem {
   id: number;
   name: string;
-  unit: string;
-  stock: number;
-  minStock: number;
+  price: number; // Giá tiền
+  units: string[]; // Đơn vị (có thể chọn nhiều)
+  primaryUnit: string; // Đơn vị chính (đơn vị lớn nhất)
+  stock: number; // Số lượng (luôn lưu bằng đơn vị nhỏ nhất)
+  category: 'Thực phẩm' | 'Gia vị'; // Danh mục
+  origin: string; // Xuất xứ
+  productionDate: string; // Ngày sản xuất
+  expiryDate: string; // Hạn sử dụng
   status: 'active' | 'inactive';
-  category: string;
 }
+
+// Unit conversion system
+const UNIT_CONVERSIONS: { [key: string]: number } = {
+  'g': 1,      // Gram (base unit)
+  'kg': 1000,  // Kilogram = 1000g
+  'ml': 1,     // Milliliter (base unit)
+  'l': 1000    // Liter = 1000ml
+};
 
 // Context interface
 interface InventoryContextType {
@@ -20,6 +32,10 @@ interface InventoryContextType {
   getInventoryItemById: (id: number) => InventoryItem | undefined;
   getActiveInventoryItems: () => InventoryItem[];
   getAvailableInventoryItems: () => InventoryItem[]; // Items with stock > 0 and active
+  convertToBaseUnit: (amount: number, unit: string) => number;
+  convertFromBaseUnit: (amount: number, unit: string) => number;
+  getSmallestUnit: (units: string[]) => string;
+  getLargestUnit: (units: string[]) => string;
 }
 
 // Create context
@@ -29,16 +45,58 @@ const InventoryContext = createContext<InventoryContextType | undefined>(undefin
 export const InventoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   // Initialize with sample data
   const [inventory, setInventory] = useState<InventoryItem[]>([
-    { id: 1, name: "Cà phê đen", unit: "g", stock: 1000, minStock: 100, status: "active", category: "Nguyên liệu chính" },
-    { id: 2, name: "Sữa tươi", unit: "ml", stock: 2000, minStock: 200, status: "active", category: "Nguyên liệu phụ" },
-    { id: 3, name: "Đường", unit: "g", stock: 500, minStock: 50, status: "active", category: "Nguyên liệu phụ" },
-    { id: 4, name: "Đá viên", unit: "viên", stock: 100, minStock: 20, status: "active", category: "Nguyên liệu phụ" },
-    { id: 5, name: "Kem tươi", unit: "ml", stock: 800, minStock: 80, status: "active", category: "Nguyên liệu phụ" },
-    { id: 6, name: "Vanilla", unit: "ml", stock: 200, minStock: 20, status: "active", category: "Nguyên liệu phụ" },
-    { id: 7, name: "Chocolate", unit: "g", stock: 300, minStock: 30, status: "active", category: "Nguyên liệu phụ" },
-    { id: 8, name: "Trà xanh", unit: "g", stock: 0, minStock: 50, status: "inactive", category: "Nguyên liệu chính" },
-    { id: 9, name: "Mật ong", unit: "ml", stock: 150, minStock: 15, status: "active", category: "Nguyên liệu phụ" },
-    { id: 10, name: "Lá bạc hà", unit: "lá", stock: 50, minStock: 10, status: "active", category: "Nguyên liệu phụ" }
+    { 
+      id: 1, 
+      name: "Cà phê đen", 
+      price: 150000, 
+      units: ["g", "kg"], 
+      primaryUnit: "kg",
+      stock: 1000000, // 1000g = 1kg
+      category: "Thực phẩm", 
+      origin: "Việt Nam", 
+      productionDate: "2024-01-15", 
+      expiryDate: "2025-01-15", 
+      status: "active" 
+    },
+    { 
+      id: 2, 
+      name: "Sữa tươi", 
+      price: 25000, 
+      units: ["ml", "l"], 
+      primaryUnit: "l",
+      stock: 2000000, // 2000ml = 2l
+      category: "Thực phẩm", 
+      origin: "Việt Nam", 
+      productionDate: "2024-01-20", 
+      expiryDate: "2024-02-20", 
+      status: "active" 
+    },
+    { 
+      id: 3, 
+      name: "Đường", 
+      price: 20000, 
+      units: ["g", "kg"], 
+      primaryUnit: "kg",
+      stock: 500000, // 500g = 0.5kg
+      category: "Gia vị", 
+      origin: "Việt Nam", 
+      productionDate: "2024-01-10", 
+      expiryDate: "2026-01-10", 
+      status: "active" 
+    },
+    { 
+      id: 4, 
+      name: "Kem tươi", 
+      price: 35000, 
+      units: ["ml", "l"], 
+      primaryUnit: "l",
+      stock: 800000, // 800ml = 0.8l
+      category: "Thực phẩm", 
+      origin: "Việt Nam", 
+      productionDate: "2024-01-18", 
+      expiryDate: "2024-02-18", 
+      status: "active" 
+    }
   ]);
 
   // Add new inventory item
@@ -78,6 +136,38 @@ export const InventoryProvider: React.FC<{ children: ReactNode }> = ({ children 
     return inventory.filter(item => item.status === 'active' && item.stock > 0);
   };
 
+  // Convert amount to base unit (smallest unit)
+  const convertToBaseUnit = (amount: number, unit: string) => {
+    return amount * (UNIT_CONVERSIONS[unit] || 1);
+  };
+
+  // Convert amount from base unit to target unit
+  const convertFromBaseUnit = (amount: number, unit: string) => {
+    return amount / (UNIT_CONVERSIONS[unit] || 1);
+  };
+
+  // Get smallest unit from array of units
+  const getSmallestUnit = (units: string[]) => {
+    if (units.length === 0) return 'g';
+    
+    // Priority: g < kg, ml < l
+    const unitPriority = { 'g': 1, 'ml': 1, 'kg': 2, 'l': 2 };
+    return units.reduce((smallest, current) => 
+      unitPriority[current] < unitPriority[smallest] ? current : smallest
+    );
+  };
+
+  // Get largest unit from array of units
+  const getLargestUnit = (units: string[]) => {
+    if (units.length === 0) return 'kg';
+    
+    // Priority: kg > g, l > ml
+    const unitPriority = { 'g': 1, 'ml': 1, 'kg': 2, 'l': 2 };
+    return units.reduce((largest, current) => 
+      unitPriority[current] > unitPriority[largest] ? current : largest
+    );
+  };
+
   const value: InventoryContextType = {
     inventory,
     addInventoryItem,
@@ -85,7 +175,11 @@ export const InventoryProvider: React.FC<{ children: ReactNode }> = ({ children 
     deleteInventoryItem,
     getInventoryItemById,
     getActiveInventoryItems,
-    getAvailableInventoryItems
+    getAvailableInventoryItems,
+    convertToBaseUnit,
+    convertFromBaseUnit,
+    getSmallestUnit,
+    getLargestUnit
   };
 
   return (

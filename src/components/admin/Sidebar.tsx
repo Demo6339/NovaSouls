@@ -56,10 +56,18 @@ const menuItems = [
     path: "/admin/events",
     subItems: [
       { icon: Activity, label: "Hoạt động", path: "/admin/events/activities" },
-      { icon: Tag, label: "Mã giảm giá", path: "/admin/events/coupons" },
+      { icon: Tag, label: "Mã giảm giá", path: "/admin/events/promocodes" },
     ]
   },
-  { icon: History, label: "Lịch sử", path: "/admin/history" },
+  { 
+    icon: History, 
+    label: "Lịch sử", 
+    path: "/admin/history",
+    subItems: [
+      { icon: Clock, label: "Đơn hàng", path: "/admin/history/orders" },
+      { icon: Settings, label: "Hệ thống", path: "/admin/history/system" },
+    ]
+  },
 ];
 
 interface AdminSidebarProps {}
@@ -85,6 +93,11 @@ const AdminSidebar = ({}: AdminSidebarProps) => {
     if (location.pathname.startsWith('/admin/events')) {
       setExpandedItems(prev => 
         prev.includes('/admin/events') ? prev : [...prev, '/admin/events']
+      );
+    }
+    if (location.pathname.startsWith('/admin/history')) {
+      setExpandedItems(prev => 
+        prev.includes('/admin/history') ? prev : [...prev, '/admin/history']
       );
     }
   }, [location.pathname]);

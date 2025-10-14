@@ -13,7 +13,13 @@ import { useInventory } from "@/contexts/InventoryContext";
 
 const AdminRecipes = () => {
   const { recipes, addRecipe } = useRecipes();
-  const { getAvailableInventoryItems } = useInventory();
+  const { 
+    getAvailableInventoryItems, 
+    convertToBaseUnit, 
+    convertFromBaseUnit, 
+    getSmallestUnit, 
+    getLargestUnit 
+  } = useInventory();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newRecipe, setNewRecipe] = useState({
     name: "",
@@ -30,7 +36,7 @@ const AdminRecipes = () => {
       ingredientId: "",
       ingredientName: "",
       amount: 0,
-      unit: "g"
+      unit: "g" // Mặc định là đơn vị nhỏ nhất
     };
     setNewRecipe(prev => ({
       ...prev,
@@ -50,6 +56,7 @@ const AdminRecipes = () => {
     const selectedIngredient = availableIngredients.find(ing => ing.id.toString() === selectedIngredientId);
     
     if (selectedIngredient) {
+      const smallestUnit = getSmallestUnit(selectedIngredient.units);
       setNewRecipe(prev => ({
         ...prev,
         ingredients: prev.ingredients.map(ing => 
@@ -58,7 +65,7 @@ const AdminRecipes = () => {
                 ...ing, 
                 ingredientId: selectedIngredientId,
                 ingredientName: selectedIngredient.name,
-                unit: selectedIngredient.unit
+                unit: smallestUnit
               } 
             : ing
         )
@@ -182,7 +189,7 @@ const AdminRecipes = () => {
                               {availableIngredients.length > 0 ? (
                                 availableIngredients.map((ing, index) => (
                                   <SelectItem key={`${ing.id}-${index}`} value={ing.id.toString()}>
-                                    {ing.name} (Còn: {ing.stock} {ing.unit})
+                                    {ing.name} (Còn: {convertFromBaseUnit(ing.stock, getSmallestUnit(ing.units)).toFixed(2)} {getSmallestUnit(ing.units)})
                                   </SelectItem>
                                 ))
                               ) : (
@@ -195,18 +202,26 @@ const AdminRecipes = () => {
                         </div>
                         
                         <div>
-                          <Label htmlFor={`amount-${ingredient.id}`}>Số lượng</Label>
+                          <Label htmlFor={`amount-${ingredient.id}`}>
+                            Số lượng ({ingredient.unit})
+                          </Label>
                           <Input
                             id={`amount-${ingredient.id}`}
                             type="number"
                             min="0"
                             step="0.1"
-                            max={ingredient.ingredientId ? availableIngredients.find(ing => ing.id.toString() === ingredient.ingredientId)?.stock || 0 : undefined}
+                            max={ingredient.ingredientId ? (() => {
+                              const selectedIngredient = availableIngredients.find(ing => ing.id.toString() === ingredient.ingredientId);
+                              if (!selectedIngredient) return 0;
+                              return convertFromBaseUnit(selectedIngredient.stock, getSmallestUnit(selectedIngredient.units));
+                            })() : undefined}
                             value={ingredient.amount}
                             onChange={(e) => {
                               const value = parseFloat(e.target.value) || 0;
                               const selectedIngredient = availableIngredients.find(ing => ing.id.toString() === ingredient.ingredientId);
-                              const maxAmount = selectedIngredient?.stock || 0;
+                              if (!selectedIngredient) return;
+                              
+                              const maxAmount = convertFromBaseUnit(selectedIngredient.stock, getSmallestUnit(selectedIngredient.units));
                               
                               if (value <= maxAmount) {
                                 setNewRecipe(prev => ({
@@ -219,11 +234,16 @@ const AdminRecipes = () => {
                             }}
                             placeholder="Nhập số lượng"
                           />
-                          {ingredient.ingredientId && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Tối đa: {availableIngredients.find(ing => ing.id.toString() === ingredient.ingredientId)?.stock || 0} {ingredient.unit}
-                            </p>
-                          )}
+                          {ingredient.ingredientId && (() => {
+                            const selectedIngredient = availableIngredients.find(ing => ing.id.toString() === ingredient.ingredientId);
+                            if (!selectedIngredient) return null;
+                            const maxAmount = convertFromBaseUnit(selectedIngredient.stock, getSmallestUnit(selectedIngredient.units));
+                            return (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                Tối đa: {maxAmount.toFixed(2)} {getSmallestUnit(selectedIngredient.units)}
+                              </p>
+                            );
+                          })()}
                         </div>
                         
                         <div>
@@ -243,12 +263,10 @@ const AdminRecipes = () => {
                               <SelectValue placeholder="Chọn đơn vị" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="g">g</SelectItem>
-                              <SelectItem value="ml">ml</SelectItem>
-                              <SelectItem value="kg">kg</SelectItem>
-                              <SelectItem value="viên">viên</SelectItem>
-                              <SelectItem value="lá">lá</SelectItem>
-                              <SelectItem value="cái">cái</SelectItem>
+                              <SelectItem value="g">Gram (g)</SelectItem>
+                              <SelectItem value="ml">Mililit (ml)</SelectItem>
+                              <SelectItem value="kg">Kilogram (kg)</SelectItem>
+                              <SelectItem value="l">Lít (l)</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
