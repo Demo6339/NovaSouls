@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 
 // Order interfaces
 export interface OrderItem {
@@ -89,7 +89,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [orders, setOrders] = useState<Order[]>([]);
 
   // Calculate statistics
-  const calculateStats = (): OrderStats => {
+  const calculateStats = useCallback((): OrderStats => {
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
@@ -120,14 +120,14 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       todayRevenue,
       averageOrderValue
     };
-  };
+  }, [orders]);
 
   const [stats, setStats] = useState<OrderStats>(calculateStats());
 
   // Update stats when orders change
   useEffect(() => {
     setStats(calculateStats());
-  }, [orders]);
+  }, [orders, calculateStats]);
 
   // Add new order
   const addOrder = (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt' | 'updatedAt' | 'status'>): string => {

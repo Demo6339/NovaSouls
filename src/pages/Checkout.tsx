@@ -217,7 +217,7 @@ const Checkout = () => {
     setShowConfirmation(false);
   };
 
-  const handleInputChange = (field: string, value: string | any) => {
+  const handleInputChange = (field: string, value: string | number) => {
     if (field === 'address') {
       setFormData(prev => ({
         ...prev,

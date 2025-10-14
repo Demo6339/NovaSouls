@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Package, Plus, ArrowUpDown, Eye, Edit, Trash2, Power, PowerOff } from "lucide-react";
-import { useInventory } from "@/contexts/InventoryContext";
+import { useInventory, InventoryItem } from "@/contexts/InventoryContext";
 
 const AdminInventory = () => {
   const { 
@@ -129,12 +129,12 @@ const AdminInventory = () => {
     }
   };
 
-  const handleViewDetail = (item: any) => {
+  const handleViewDetail = (item: InventoryItem) => {
     setSelectedItem(item.id);
     setShowDetailModal(true);
   };
 
-  const handleEditItem = (item: any) => {
+  const handleEditItem = (item: InventoryItem) => {
     const smallestUnit = getSmallestUnit(item.units);
     const stockInSmallestUnit = convertFromBaseUnit(item.stock, smallestUnit);
     

@@ -16,12 +16,32 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Filter, Download, Eye, Calendar, Clock, User, CreditCard, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+  addons?: string[];
+}
+
+interface Order {
+  id: string;
+  customerName: string;
+  customerPhone: string;
+  customerAddress: string;
+  status: string;
+  totalAmount: number;
+  orderDate: string;
+  items: OrderItem[];
+  paymentMethod: string;
+  notes?: string;
+}
+
 const OrderHistory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Dữ liệu mẫu cho lịch sử đơn hàng
   const orderHistory = [
@@ -144,7 +164,7 @@ const OrderHistory = () => {
   };
 
 
-  const handleViewDetail = (order: any) => {
+  const handleViewDetail = (order: Order) => {
     setSelectedOrder(order);
     setShowDetailModal(true);
   };
@@ -353,7 +373,7 @@ const OrderHistory = () => {
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground mb-3">Chi tiết món ăn</h3>
                   <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {selectedOrder.items.map((item: any, index: number) => (
+                    {selectedOrder.items.map((item: OrderItem, index: number) => (
                       <div key={index} className="flex justify-between items-center p-3 bg-muted rounded-lg">
                         <div className="flex-1">
                           <span className="font-medium">{item.name}</span>

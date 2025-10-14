@@ -18,7 +18,7 @@ export interface MenuItem {
 export interface MenuCategory {
   id: string;
   name: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   items: MenuItem[];
 }
 

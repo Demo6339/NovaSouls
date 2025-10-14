@@ -24,9 +24,10 @@ import AdminEvents from "./pages/admin/events/Events";
 import AdminEventsRedirect from "./pages/admin/AdminEvents";
 import OrderHistory from "./pages/admin/history/OrderHistory";
 import SystemHistory from "./pages/admin/history/SystemHistory";
-import { ConfirmedOrders, InProgressOrders, CancelledOrders } from "./pages/admin/orders";
+import ConfirmedOrders from "./pages/admin/orders/ConfirmedOrders";
+import InProgressOrders from "./pages/admin/orders/InProgressOrders";
+import CancelledOrders from "./pages/admin/orders/CancelledOrders";
 import CompletedOrders from "./pages/admin/orders/CompletedOrders";
-import History from "./pages/admin/History";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

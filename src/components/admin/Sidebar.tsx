@@ -70,9 +70,7 @@ const menuItems = [
   },
 ];
 
-interface AdminSidebarProps {}
-
-const AdminSidebar = ({}: AdminSidebarProps) => {
+const AdminSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
