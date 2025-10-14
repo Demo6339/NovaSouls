@@ -14,10 +14,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, X } from "lucide-react";
 import { useMenu } from "@/contexts/MenuContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useAddons } from "@/contexts/AddonContext";
+import { useRecipes } from "@/contexts/RecipeContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 const AdminMenu = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,13 +34,17 @@ const AdminMenu = () => {
     image: "",
     category: "",
     temperature: "lạnh" as "nóng" | "lạnh",
-    stock: 0,
     status: "active" as "active" | "inactive",
-    purchaseCount: 0,
-    stockStatus: "còn hàng" as "còn hàng" | "gần hết" | "đã hết"
+    addons: [] as string[],
+    recipes: [] as string[]
   });
   
   const { allItems, deleteItem, addItem, updateItem } = useMenu();
+  const { getActiveAddons } = useAddons();
+  const { getActiveRecipes } = useRecipes();
+  
+  const activeAddons = getActiveAddons();
+  const activeRecipes = getActiveRecipes();
 
   // Filter products based on search query
   const filteredProducts = allItems.filter(item =>
@@ -46,7 +53,7 @@ const AdminMenu = () => {
   );
 
   const handleAddItem = () => {
-    if (newItem.name && newItem.description && newItem.price > 0 && newItem.category && newItem.stock >= 0) {
+    if (newItem.name && newItem.description && newItem.price > 0 && newItem.category) {
       addItem(newItem);
       setNewItem({
         name: "",
@@ -55,10 +62,9 @@ const AdminMenu = () => {
         image: "",
         category: "",
         temperature: "lạnh",
-        stock: 0,
         status: "active",
-        purchaseCount: 0,
-        stockStatus: "còn hàng"
+        addons: [],
+        recipes: []
       });
       setShowAddModal(false);
     }
@@ -97,6 +103,9 @@ const AdminMenu = () => {
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Thêm món mới</DialogTitle>
+                <DialogDescription>
+                  Điền thông tin để thêm món chính mới vào thực đơn
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,27 +171,14 @@ const AdminMenu = () => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="image">URL hình ảnh</Label>
-                    <Input
-                      id="image"
-                      value={newItem.image}
-                      onChange={(e) => setNewItem({...newItem, image: e.target.value})}
-                      placeholder="Nhập URL hình ảnh"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="stock">Tồn kho *</Label>
-                    <Input
-                      id="stock"
-                      type="number"
-                      min="0"
-                      value={newItem.stock}
-                      onChange={(e) => setNewItem({...newItem, stock: parseInt(e.target.value) || 0})}
-                      placeholder="Nhập số lượng tồn kho"
-                    />
-                  </div>
+                <div>
+                  <Label htmlFor="image">URL hình ảnh</Label>
+                  <Input
+                    id="image"
+                    value={newItem.image}
+                    onChange={(e) => setNewItem({...newItem, image: e.target.value})}
+                    placeholder="Nhập URL hình ảnh"
+                  />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -198,31 +194,90 @@ const AdminMenu = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label htmlFor="stock-status">Trạng thái tồn kho</Label>
-                    <Select value={newItem.stockStatus} onValueChange={(value: "còn hàng" | "gần hết" | "đã hết") => setNewItem({...newItem, stockStatus: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn trạng thái tồn kho" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="còn hàng">Còn hàng</SelectItem>
-                        <SelectItem value="gần hết">Gần hết</SelectItem>
-                        <SelectItem value="đã hết">Đã hết</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
                 
                 <div>
-                  <Label htmlFor="purchase-count">Lượt mua</Label>
-                  <Input
-                    id="purchase-count"
-                    type="number"
-                    min="0"
-                    value={newItem.purchaseCount}
-                    onChange={(e) => setNewItem({...newItem, purchaseCount: parseInt(e.target.value) || 0})}
-                    placeholder="Số lượng đã bán"
-                  />
+                  <Label htmlFor="addons">Món thêm</Label>
+                  <Select onValueChange={(value) => {
+                    if (!newItem.addons.includes(value)) {
+                      setNewItem({...newItem, addons: [...newItem.addons, value]});
+                    }
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn món thêm" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activeAddons.length > 0 ? (
+                        activeAddons.map((addon) => (
+                          <SelectItem key={addon.id} value={addon.name}>
+                            {addon.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-addons" disabled>
+                          Chưa có món thêm nào
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {newItem.addons.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {newItem.addons.map((addon, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {addon}
+                          <X 
+                            className="h-3 w-3 cursor-pointer" 
+                            onClick={() => setNewItem({
+                              ...newItem, 
+                              addons: newItem.addons.filter((_, i) => i !== index)
+                            })}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <Label htmlFor="recipes">Công thức</Label>
+                  <Select onValueChange={(value) => {
+                    if (!newItem.recipes.includes(value)) {
+                      setNewItem({...newItem, recipes: [...newItem.recipes, value]});
+                    }
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn công thức" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activeRecipes.length > 0 ? (
+                        activeRecipes.map((recipe) => (
+                          <SelectItem key={recipe.id} value={recipe.name}>
+                            {recipe.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-recipes" disabled>
+                          Chưa có công thức nào
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {newItem.recipes.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {newItem.recipes.map((recipe, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {recipe}
+                          <X 
+                            className="h-3 w-3 cursor-pointer" 
+                            onClick={() => setNewItem({
+                              ...newItem, 
+                              recipes: newItem.recipes.filter((_, i) => i !== index)
+                            })}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex justify-end gap-2 pt-4">
@@ -264,7 +319,6 @@ const AdminMenu = () => {
                     <TableHead>Sản phẩm</TableHead>
                     <TableHead>Danh mục</TableHead>
                     <TableHead>Giá</TableHead>
-                    <TableHead>Tồn kho</TableHead>
                     <TableHead>Trạng thái</TableHead>
                     <TableHead className="text-right">Thao tác</TableHead>
                   </TableRow>
@@ -292,7 +346,6 @@ const AdminMenu = () => {
                       <TableCell className="font-medium">
                         {product.price.toLocaleString('vi-VN')}đ
                       </TableCell>
-                      <TableCell>{product.stock || 0}</TableCell>
                       <TableCell>
                         <Badge className={product.status === 'active' ? "bg-green-500" : "bg-red-500"}>
                           {product.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
@@ -349,14 +402,10 @@ const AdminMenu = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 gap-4 text-sm">
                     <div>
                       <span className="text-muted-foreground">Giá:</span>
                       <p className="font-medium">{product.price.toLocaleString('vi-VN')}đ</p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Tồn kho:</span>
-                      <p className="font-medium">{product.stock || 0}</p>
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 pt-2 border-t">
@@ -390,6 +439,9 @@ const AdminMenu = () => {
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Chỉnh sửa món</DialogTitle>
+                <DialogDescription>
+                  Cập nhật thông tin món chính trong thực đơn
+                </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -455,27 +507,14 @@ const AdminMenu = () => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="edit-image">URL hình ảnh</Label>
-                    <Input
-                      id="edit-image"
-                      value={editingItem.image}
-                      onChange={(e) => setEditingItem({...editingItem, image: e.target.value})}
-                      placeholder="Nhập URL hình ảnh"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="edit-stock">Tồn kho *</Label>
-                    <Input
-                      id="edit-stock"
-                      type="number"
-                      min="0"
-                      value={editingItem.stock || 0}
-                      onChange={(e) => setEditingItem({...editingItem, stock: parseInt(e.target.value) || 0})}
-                      placeholder="Nhập số lượng tồn kho"
-                    />
-                  </div>
+                <div>
+                  <Label htmlFor="edit-image">URL hình ảnh</Label>
+                  <Input
+                    id="edit-image"
+                    value={editingItem.image}
+                    onChange={(e) => setEditingItem({...editingItem, image: e.target.value})}
+                    placeholder="Nhập URL hình ảnh"
+                  />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -491,31 +530,90 @@ const AdminMenu = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div>
-                    <Label htmlFor="edit-stock-status">Trạng thái tồn kho</Label>
-                    <Select value={editingItem.stockStatus || 'còn hàng'} onValueChange={(value: "còn hàng" | "gần hết" | "đã hết") => setEditingItem({...editingItem, stockStatus: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Chọn trạng thái tồn kho" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="còn hàng">Còn hàng</SelectItem>
-                        <SelectItem value="gần hết">Gần hết</SelectItem>
-                        <SelectItem value="đã hết">Đã hết</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
                 
                 <div>
-                  <Label htmlFor="edit-purchase-count">Lượt mua</Label>
-                  <Input
-                    id="edit-purchase-count"
-                    type="number"
-                    min="0"
-                    value={editingItem.purchaseCount || 0}
-                    onChange={(e) => setEditingItem({...editingItem, purchaseCount: parseInt(e.target.value) || 0})}
-                    placeholder="Số lượng đã bán"
-                  />
+                  <Label htmlFor="edit-addons">Món thêm</Label>
+                  <Select onValueChange={(value) => {
+                    if (!editingItem.addons?.includes(value)) {
+                      setEditingItem({...editingItem, addons: [...(editingItem.addons || []), value]});
+                    }
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn món thêm" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activeAddons.length > 0 ? (
+                        activeAddons.map((addon) => (
+                          <SelectItem key={addon.id} value={addon.name}>
+                            {addon.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-addons" disabled>
+                          Chưa có món thêm nào
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {editingItem.addons && editingItem.addons.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {editingItem.addons.map((addon, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {addon}
+                          <X 
+                            className="h-3 w-3 cursor-pointer" 
+                            onClick={() => setEditingItem({
+                              ...editingItem, 
+                              addons: editingItem.addons?.filter((_, i) => i !== index) || []
+                            })}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <Label htmlFor="edit-recipes">Công thức</Label>
+                  <Select onValueChange={(value) => {
+                    if (!editingItem.recipes?.includes(value)) {
+                      setEditingItem({...editingItem, recipes: [...(editingItem.recipes || []), value]});
+                    }
+                  }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn công thức" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activeRecipes.length > 0 ? (
+                        activeRecipes.map((recipe) => (
+                          <SelectItem key={recipe.id} value={recipe.name}>
+                            {recipe.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-recipes" disabled>
+                          Chưa có công thức nào
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {editingItem.recipes && editingItem.recipes.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {editingItem.recipes.map((recipe, index) => (
+                        <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                          {recipe}
+                          <X 
+                            className="h-3 w-3 cursor-pointer" 
+                            onClick={() => setEditingItem({
+                              ...editingItem, 
+                              recipes: editingItem.recipes?.filter((_, i) => i !== index) || []
+                            })}
+                          />
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex justify-end gap-2 pt-4">

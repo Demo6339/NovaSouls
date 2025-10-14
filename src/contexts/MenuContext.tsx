@@ -9,10 +9,9 @@ export interface MenuItem {
   image: string;
   category: string;
   temperature: 'nóng' | 'lạnh';
-  stock: number;
   status: 'active' | 'inactive';
-  purchaseCount: number; // Doanh số thật từ đơn hàng
-  stockStatus: 'còn hàng' | 'gần hết' | 'đã hết'; // Trạng thái tồn kho
+  addons: string[]; // Danh sách món thêm
+  recipes: string[]; // Danh sách công thức
 }
 
 // Category interface
@@ -53,8 +52,8 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const newItem: MenuItem = {
       ...item,
       id: newId,
-      purchaseCount: item.purchaseCount || 0,
-      stockStatus: item.stockStatus || 'còn hàng'
+      addons: item.addons || [],
+      recipes: item.recipes || []
     };
 
     setCategories(prev => prev.map(cat => 

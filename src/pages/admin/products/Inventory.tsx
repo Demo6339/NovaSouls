@@ -11,37 +11,14 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Package } from "lucide-react";
-import { useMenu } from "@/contexts/MenuContext";
-import { useMemo } from "react";
-
-// Inventory item interface
-interface InventoryItem {
-  id: number;
-  name: string;
-  unit: string;
-  stock: number;
-  minStock: number;
-  status: 'good' | 'low';
-}
+import { useInventory } from "@/contexts/InventoryContext";
 
 const AdminInventory = () => {
-  const { allItems } = useMenu();
-
-  // Generate inventory from menu items
-  const inventory = useMemo((): InventoryItem[] => {
-    return allItems.map(item => ({
-      id: item.id,
-      name: item.name,
-      unit: 'cái',
-      stock: item.stock || 0,
-      minStock: Math.max(1, Math.floor((item.stock || 0) * 0.2)), // 20% of current stock as minimum
-      status: (item.stock || 0) <= Math.max(1, Math.floor((item.stock || 0) * 0.2)) ? 'low' : 'good'
-    }));
-  }, [allItems]);
+  const { inventory } = useInventory();
 
   // Calculate statistics
   const totalItems = inventory.length;
-  const lowStockItems = inventory.filter(item => item.status === 'low').length;
+  const lowStockItems = inventory.filter(item => item.stock <= item.minStock).length;
   const totalValue = inventory.reduce((sum, item) => sum + (item.stock * 1000), 0); // Assuming 1000đ per unit
 
   const formatCurrency = (amount: number) => {
@@ -120,8 +97,8 @@ const AdminInventory = () => {
                       <TableCell>{item.stock}</TableCell>
                       <TableCell>{item.minStock}</TableCell>
                       <TableCell>
-                        <Badge className={item.status === 'good' ? 'bg-green-500' : 'bg-destructive'}>
-                          {item.status === 'good' ? 'Đủ hàng' : 'Sắp hết'}
+                        <Badge className={item.stock > item.minStock ? 'bg-green-500' : 'bg-destructive'}>
+                          {item.stock > item.minStock ? 'Đủ hàng' : 'Sắp hết'}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -145,8 +122,8 @@ const AdminInventory = () => {
                       <h3 className="font-medium text-sm">{item.name}</h3>
                       <p className="text-xs text-muted-foreground">{item.unit}</p>
                     </div>
-                    <Badge className={item.status === 'good' ? 'bg-green-500' : 'bg-destructive'}>
-                      {item.status === 'good' ? 'Đủ hàng' : 'Sắp hết'}
+                    <Badge className={item.stock > item.minStock ? 'bg-green-500' : 'bg-destructive'}>
+                      {item.stock > item.minStock ? 'Đủ hàng' : 'Sắp hết'}
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
