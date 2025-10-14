@@ -11,6 +11,8 @@ import { AddonProvider } from "@/contexts/AddonContext";
 import { InventoryProvider } from "@/contexts/InventoryContext";
 import { PromoProvider } from "@/contexts/PromoContext";
 import { EventProvider } from "@/contexts/EventContext";
+import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Menu from "./pages/Menu";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -43,6 +45,7 @@ const App = () => (
                 <InventoryProvider>
                   <PromoProvider>
                     <EventProvider>
+                      <AdminAuthProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter
@@ -55,27 +58,28 @@ const App = () => (
             <Route path="/" element={<Menu />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/products" element={<AdminProducts />} />
-            <Route path="/admin/products/menu" element={<AdminMenu />} />
-            <Route path="/admin/products/inventory" element={<AdminInventory />} />
-            <Route path="/admin/products/recipes" element={<AdminRecipes />} />
-            <Route path="/admin/products/addons" element={<AdminAddons />} />
-            <Route path="/admin/orders" element={<ConfirmedOrders />} />
-            <Route path="/admin/orders/confirmed" element={<ConfirmedOrders />} />
-            <Route path="/admin/orders/in-progress" element={<InProgressOrders />} />
-            <Route path="/admin/orders/completed" element={<CompletedOrders />} />
-            <Route path="/admin/orders/cancelled" element={<CancelledOrders />} />
-            <Route path="/admin/events" element={<AdminEventsRedirect />} />
-            <Route path="/admin/events/activities" element={<AdminEvents />} />
-            <Route path="/admin/events/promocodes" element={<AdminPromoCodes />} />
-            <Route path="/admin/history" element={<OrderHistory />} />
-            <Route path="/admin/history/orders" element={<OrderHistory />} />
-            <Route path="/admin/history/system" element={<SystemHistory />} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+            <Route path="/admin/products/menu" element={<ProtectedRoute><AdminMenu /></ProtectedRoute>} />
+            <Route path="/admin/products/inventory" element={<ProtectedRoute><AdminInventory /></ProtectedRoute>} />
+            <Route path="/admin/products/recipes" element={<ProtectedRoute><AdminRecipes /></ProtectedRoute>} />
+            <Route path="/admin/products/addons" element={<ProtectedRoute><AdminAddons /></ProtectedRoute>} />
+            <Route path="/admin/orders" element={<ProtectedRoute><ConfirmedOrders /></ProtectedRoute>} />
+            <Route path="/admin/orders/confirmed" element={<ProtectedRoute><ConfirmedOrders /></ProtectedRoute>} />
+            <Route path="/admin/orders/in-progress" element={<ProtectedRoute><InProgressOrders /></ProtectedRoute>} />
+            <Route path="/admin/orders/completed" element={<ProtectedRoute><CompletedOrders /></ProtectedRoute>} />
+            <Route path="/admin/orders/cancelled" element={<ProtectedRoute><CancelledOrders /></ProtectedRoute>} />
+            <Route path="/admin/events" element={<ProtectedRoute><AdminEventsRedirect /></ProtectedRoute>} />
+            <Route path="/admin/events/activities" element={<ProtectedRoute><AdminEvents /></ProtectedRoute>} />
+            <Route path="/admin/events/promocodes" element={<ProtectedRoute><AdminPromoCodes /></ProtectedRoute>} />
+            <Route path="/admin/history" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
+            <Route path="/admin/history/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
+            <Route path="/admin/history/system" element={<ProtectedRoute><SystemHistory /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           </BrowserRouter>
+                      </AdminAuthProvider>
                     </EventProvider>
                   </PromoProvider>
                 </InventoryProvider>

@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import {
   LayoutDashboard,
   Package,
@@ -23,6 +24,7 @@ import {
   CheckCircle2,
   Clock,
   XCircle,
+  LogOut,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -73,6 +75,7 @@ const menuItems = [
 const AdminSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout } = useAdminAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
@@ -152,6 +155,11 @@ const AdminSidebar = () => {
 
   const isSubItemActive = (subItem: { path: string; section?: string; subsection?: string }) => {
     return location.pathname === subItem.path;
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -330,6 +338,18 @@ const AdminSidebar = () => {
             );
           })}
         </nav>
+
+        {/* Logout Button */}
+        <div className="px-4 pb-4">
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="w-full flex items-center gap-3 text-muted-foreground hover:text-foreground hover:bg-destructive/10 hover:border-destructive/20"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="font-medium">Đăng xuất</span>
+          </Button>
+        </div>
       </div>
     </>
   );
