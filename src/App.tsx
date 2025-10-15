@@ -31,6 +31,7 @@ import InProgressOrders from "./pages/admin/orders/InProgressOrders";
 import CancelledOrders from "./pages/admin/orders/CancelledOrders";
 import CompletedOrders from "./pages/admin/orders/CompletedOrders";
 import { SupabaseDemo } from "./components/SupabaseDemo";
+import { DatabasePermissionTest } from "./components/DatabasePermissionTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/menu" element={<Menu />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/supabase-demo" element={<SupabaseDemo />} />
+            <Route path="/database-test" element={<DatabasePermissionTest />} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
             <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
             <Route path="/admin/products/menu" element={<ProtectedRoute><AdminMenu /></ProtectedRoute>} />

@@ -68,13 +68,8 @@ const Checkout = () => {
     localStorage.setItem('checkoutFormData', JSON.stringify(formData));
   }, [formData]);
 
-  // Mock discount codes
-  const discountCodes = {
-    'WELCOME10': { type: 'percentage', value: 10, description: 'Giảm 10% cho khách hàng mới' },
-    'SAVE20': { type: 'percentage', value: 20, description: 'Giảm 20% cho đơn hàng trên 500k' },
-    'FREESHIP': { type: 'fixed', value: 30000, description: 'Miễn phí ship' },
-    'VIP50': { type: 'percentage', value: 50, description: 'Giảm 50% cho khách VIP' }
-  };
+  // Discount codes - empty for clean start
+  const discountCodes = {};
 
   // Validation functions
   const validateField = (field: string, value: string) => {
@@ -541,7 +536,7 @@ const Checkout = () => {
                             <Input
                               value={formData.discountCode}
                               onChange={(e) => handleInputChange('discountCode', e.target.value)}
-                              placeholder="Nhập mã giảm giá (tùy chọn)"
+                              placeholder="Mã giảm giá (chưa có)"
                               className={`flex-1 border-gray-300 focus:border-gray-900 ${discountError && !discountApplied ? 'border-red-500 focus:border-red-500' : ''}`}
                               disabled={discountApplied}
                             />

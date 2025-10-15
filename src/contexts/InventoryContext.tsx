@@ -43,61 +43,8 @@ const InventoryContext = createContext<InventoryContextType | undefined>(undefin
 
 // Provider component
 export const InventoryProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Initialize with sample data
-  const [inventory, setInventory] = useState<InventoryItem[]>([
-    { 
-      id: 1, 
-      name: "Cà phê đen", 
-      price: 150000, 
-      units: ["g", "kg"], 
-      primaryUnit: "kg",
-      stock: 1000000, // 1000g = 1kg
-      category: "Thực phẩm", 
-      origin: "Việt Nam", 
-      productionDate: "2024-01-15", 
-      expiryDate: "2025-01-15", 
-      status: "active" 
-    },
-    { 
-      id: 2, 
-      name: "Sữa tươi", 
-      price: 25000, 
-      units: ["ml", "l"], 
-      primaryUnit: "l",
-      stock: 2000000, // 2000ml = 2l
-      category: "Thực phẩm", 
-      origin: "Việt Nam", 
-      productionDate: "2024-01-20", 
-      expiryDate: "2024-02-20", 
-      status: "active" 
-    },
-    { 
-      id: 3, 
-      name: "Đường", 
-      price: 20000, 
-      units: ["g", "kg"], 
-      primaryUnit: "kg",
-      stock: 500000, // 500g = 0.5kg
-      category: "Gia vị", 
-      origin: "Việt Nam", 
-      productionDate: "2024-01-10", 
-      expiryDate: "2026-01-10", 
-      status: "active" 
-    },
-    { 
-      id: 4, 
-      name: "Kem tươi", 
-      price: 35000, 
-      units: ["ml", "l"], 
-      primaryUnit: "l",
-      stock: 800000, // 800ml = 0.8l
-      category: "Thực phẩm", 
-      origin: "Việt Nam", 
-      productionDate: "2024-01-18", 
-      expiryDate: "2024-02-18", 
-      status: "active" 
-    }
-  ]);
+  // Initialize with empty array - no mock data
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
 
   // Add new inventory item
   const addInventoryItem = (item: Omit<InventoryItem, 'id'>) => {

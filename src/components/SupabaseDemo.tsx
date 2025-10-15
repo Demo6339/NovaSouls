@@ -57,27 +57,8 @@ export const SupabaseDemo: React.FC = () => {
   };
 
   const addSampleProduct = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .insert({
-          name: 'Cà phê đen',
-          description: 'Cà phê đen truyền thống',
-          price: 25000,
-          category: 'coffee',
-          is_available: true,
-          stock_quantity: 100
-        })
-        .select();
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setProducts(prev => [...prev, ...(data || [])]);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    }
+    // Sample product creation removed - no mock data
+    setError('Sample product creation has been disabled. Please add products through the admin panel.');
   };
 
   if (loading) {
@@ -127,9 +108,10 @@ export const SupabaseDemo: React.FC = () => {
             <h2 className="text-xl font-semibold">Sản phẩm</h2>
             <button
               onClick={addSampleProduct}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed transition-colors"
+              disabled
             >
-              Thêm sản phẩm mẫu
+              Thêm sản phẩm mẫu (Đã tắt)
             </button>
           </div>
 
