@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, Settings } from 'lucide-react';
+import SupabaseConnectionTest from '@/components/SupabaseConnectionTest';
 
 const AdminLogin = () => {
   const { login } = useAdminAuth();
@@ -14,6 +15,7 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showTestPanel, setShowTestPanel] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,16 @@ const AdminLogin = () => {
     try {
       const result = await login(email, password);
       if (result.success) {
-        // Redirect will be handled by ProtectedRoute
+        // Set a flag so AdminAuthContext knows this is a reload/redirect and
+        // doesn't clear the saved admin session in the beforeunload handler.
+        try {
+          sessionStorage.setItem('pageRefreshed', 'true');
+        } catch (e) {
+          // ignore sessionStorage errors in restrictive environments
+        }
+
+        // Redirect to admin dashboard; ProtectedRoute will allow access when
+        // AdminAuthContext finds the stored session after reload.
         window.location.href = '/admin';
       } else {
         setError(result.message);
@@ -116,13 +127,29 @@ const AdminLogin = () => {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-2">
               <p className="text-sm text-muted-foreground">
                 Hệ thống quản trị NovaSouls
               </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowTestPanel(!showTestPanel)}
+                className="text-xs"
+              >
+                <Settings className="w-3 h-3 mr-1" />
+                {showTestPanel ? 'Ẩn' : 'Hiện'} Test Panel
+              </Button>
             </div>
           </CardContent>
         </Card>
+
+        {showTestPanel && (
+          <div className="mt-6">
+            <SupabaseConnectionTest />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -85,10 +85,15 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
         setIsAuthenticated(true);
         
         // Log admin activity
-        await supabase.rpc('log_admin_activity', {
-          action_name: 'admin_login',
-          details: { email: data.user.email, login_time: new Date().toISOString() }
-        });
+        try {
+          await supabase.from('activity_logs').insert({
+            action: 'admin_login',
+            details: { email: data.user.email, login_time: new Date().toISOString() },
+            user_id: data.user.id
+          });
+        } catch (logError) {
+          console.error('Error logging admin activity:', logError);
+        }
         
         return { success: true, message: 'Đăng nhập thành công' };
       } else {
@@ -106,10 +111,15 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
     try {
       // Log admin activity
       if (user) {
-        await supabase.rpc('log_admin_activity', {
-          action_name: 'admin_logout',
-          details: { email: user.email, logout_time: new Date().toISOString() }
-        });
+        try {
+          await supabase.from('activity_logs').insert({
+            action: 'admin_logout',
+            details: { email: user.email, logout_time: new Date().toISOString() },
+            user_id: user.id
+          });
+        } catch (logError) {
+          console.error('Error logging admin logout:', logError);
+        }
       }
     } catch (error) {
       console.error('Error logging logout:', error);

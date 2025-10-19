@@ -206,6 +206,48 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_users: {
+        Row: {
+          id: string
+          email: string
+          password_hash: string
+          name: string
+          role: string
+          is_active: boolean | null
+          last_login: string | null
+          login_attempts: number | null
+          locked_until: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          email: string
+          password_hash: string
+          name: string
+          role?: string
+          is_active?: boolean | null
+          last_login?: string | null
+          login_attempts?: number | null
+          locked_until?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          email?: string
+          password_hash?: string
+          name?: string
+          role?: string
+          is_active?: boolean | null
+          last_login?: string | null
+          login_attempts?: number | null
+          locked_until?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           id: string
