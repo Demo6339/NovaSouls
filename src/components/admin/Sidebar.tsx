@@ -75,7 +75,7 @@ const menuItems = [
 const AdminSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAdminAuth();
+  const { logout, user } = useAdminAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
@@ -157,8 +157,8 @@ const AdminSidebar = () => {
     return location.pathname === subItem.path;
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 
@@ -338,6 +338,32 @@ const AdminSidebar = () => {
             );
           })}
         </nav>
+
+        {/* User Info */}
+        {user && (
+          <div className="px-4 pb-4 border-t border-border/30 pt-4">
+            <div className="bg-secondary/50 rounded-lg p-3 mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium text-primary">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {user.email}
+                  </p>
+                  <p className="text-xs text-primary capitalize">
+                    {user.role}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Logout Button */}
         <div className="px-4 pb-4">

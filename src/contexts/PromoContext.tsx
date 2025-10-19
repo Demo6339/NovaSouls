@@ -33,59 +33,7 @@ interface PromoContextType {
 const PromoContext = createContext<PromoContextType | undefined>(undefined);
 
 export const PromoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([
-    {
-      id: 1,
-      code: "WELCOME10",
-      name: "Chào mừng khách hàng mới",
-      description: "Giảm giá 10% cho đơn hàng đầu tiên",
-      type: "percentage",
-      value: 10,
-      minOrderAmount: 50000,
-      maxDiscountAmount: 50000,
-      usageLimit: 100,
-      usedCount: 15,
-      startDate: "2024-01-01",
-      endDate: "2024-12-31",
-      status: "active",
-      applicableItems: [],
-      eventId: 1
-    },
-    {
-      id: 2,
-      code: "SAVE20K",
-      name: "Tiết kiệm 20k",
-      description: "Giảm giá 20,000 VNĐ cho đơn hàng từ 100k",
-      type: "fixed",
-      value: 20000,
-      minOrderAmount: 100000,
-      usageLimit: 50,
-      usedCount: 8,
-      startDate: "2024-02-01",
-      endDate: "2024-02-29",
-      status: "active",
-      applicableItems: [],
-      eventId: 2
-    },
-    {
-      id: 3,
-      code: "GIFTCOKE",
-      name: "Tặng kèm Coca Cola",
-      description: "Tặng kèm 1 chai Coca Cola 330ml",
-      type: "gift",
-      value: 0,
-      giftItem: "Coca Cola 330ml",
-      giftQuantity: 1,
-      minOrderAmount: 150000,
-      usageLimit: 30,
-      usedCount: 5,
-      startDate: "2024-03-01",
-      endDate: "2024-03-31",
-      status: "active",
-      applicableItems: [],
-      eventId: 3
-    }
-  ]);
+  const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
 
   const addPromoCode = (promo: Omit<PromoCode, 'id' | 'usedCount'>) => {
     const newId = Math.max(...promoCodes.map(p => p.id), 0) + 1;

@@ -33,56 +33,7 @@ interface EventContextType {
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: 1,
-      name: "Khuyến mãi chào mừng năm mới",
-      description: "Chương trình khuyến mãi đặc biệt chào đón năm mới với nhiều ưu đãi hấp dẫn",
-      type: "seasonal",
-      startDate: "2024-01-01",
-      endDate: "2024-01-31",
-      status: "active",
-      targetAudience: "all",
-      conditions: "Áp dụng cho tất cả khách hàng",
-      benefits: "Giảm giá 10% cho đơn hàng đầu tiên, tặng kèm đồ uống miễn phí",
-      applicableItems: [],
-      promoCodeIds: [1],
-      priority: 8,
-      isFeatured: true
-    },
-    {
-      id: 2,
-      name: "Tháng lễ tình nhân",
-      description: "Chương trình đặc biệt dành cho các cặp đôi trong tháng 2",
-      type: "special",
-      startDate: "2024-02-01",
-      endDate: "2024-02-29",
-      status: "active",
-      targetAudience: "all",
-      conditions: "Áp dụng cho đơn hàng từ 2 món trở lên",
-      benefits: "Giảm giá 20,000 VNĐ, tặng kèm chocolate",
-      applicableItems: [],
-      promoCodeIds: [2],
-      priority: 9,
-      isFeatured: true
-    },
-    {
-      id: 3,
-      name: "Khách hàng VIP",
-      description: "Chương trình dành riêng cho khách hàng VIP",
-      type: "promotion",
-      startDate: "2024-03-01",
-      endDate: "2024-03-31",
-      status: "upcoming",
-      targetAudience: "vip_customers",
-      conditions: "Chỉ áp dụng cho khách hàng VIP",
-      benefits: "Giảm giá 15% và ưu tiên giao hàng",
-      applicableItems: [],
-      promoCodeIds: [],
-      priority: 10,
-      isFeatured: false
-    }
-  ]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   const addEvent = (event: Omit<Event, 'id'>) => {
     const newId = Math.max(...events.map(e => e.id), 0) + 1;

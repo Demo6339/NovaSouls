@@ -26,14 +26,19 @@ const AdminLogin = () => {
       return;
     }
 
-    const success = login(email, password);
-    if (success) {
-      // Redirect will be handled by ProtectedRoute
-      window.location.href = '/admin';
-    } else {
-      setError('Email hoặc mật khẩu không đúng');
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        // Redirect will be handled by ProtectedRoute
+        window.location.href = '/admin';
+      } else {
+        setError(result.message);
+      }
+    } catch (error) {
+      setError('Đã xảy ra lỗi khi đăng nhập');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
