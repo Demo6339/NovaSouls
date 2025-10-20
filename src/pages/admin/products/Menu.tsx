@@ -39,7 +39,7 @@ const AdminMenu = () => {
     recipes: [] as string[]
   });
   
-  const { allItems, deleteItem, addItem, updateItem } = useMenu();
+  const { allItems, deleteItem, addItem, updateItem, categories } = useMenu();
   const { getActiveAddons } = useAddons();
   const { getActiveRecipes } = useRecipes();
   
@@ -143,24 +143,24 @@ const AdminMenu = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="category">Danh mục *</Label>
-                    <Select value={newItem.category} onValueChange={(value) => setNewItem({...newItem, category: value})}>
-                      <SelectTrigger>
+                    <Label htmlFor="category-select">Danh mục *</Label>
+                    <Select id="category-select" name="category-select" value={newItem.category} onValueChange={(value) => setNewItem({...newItem, category: value})}>
+                      <SelectTrigger aria-label="Chọn danh mục">
                         <SelectValue placeholder="Chọn danh mục" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="soju">Soju</SelectItem>
-                        <SelectItem value="cocktail">Cocktail</SelectItem>
-                        <SelectItem value="coffee">Coffee</SelectItem>
-                        <SelectItem value="juice">Nước hoa quả</SelectItem>
-                        <SelectItem value="soft-drinks">Nước ngọt</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label htmlFor="temperature">Nhiệt độ</Label>
-                    <Select value={newItem.temperature} onValueChange={(value: "nóng" | "lạnh") => setNewItem({...newItem, temperature: value})}>
-                      <SelectTrigger>
+                    <Label htmlFor="temperature-select">Nhiệt độ</Label>
+                    <Select id="temperature-select" name="temperature-select" value={newItem.temperature} onValueChange={(value: "nóng" | "lạnh") => setNewItem({...newItem, temperature: value})}>
+                      <SelectTrigger aria-label="Chọn nhiệt độ">
                         <SelectValue placeholder="Chọn nhiệt độ" />
                       </SelectTrigger>
                       <SelectContent>
@@ -172,20 +172,22 @@ const AdminMenu = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="image">URL hình ảnh</Label>
+                  <Label htmlFor="image-input">URL hình ảnh</Label>
                   <Input
-                    id="image"
+                    id="image-input"
+                    name="image"
                     value={newItem.image}
                     onChange={(e) => setNewItem({...newItem, image: e.target.value})}
                     placeholder="Nhập URL hình ảnh"
+                    autoComplete="off"
                   />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="status">Trạng thái</Label>
-                    <Select value={newItem.status} onValueChange={(value: "active" | "inactive") => setNewItem({...newItem, status: value})}>
-                      <SelectTrigger>
+                    <Label htmlFor="status-select">Trạng thái</Label>
+                    <Select id="status-select" name="status-select" value={newItem.status} onValueChange={(value: "active" | "inactive") => setNewItem({...newItem, status: value})}>
+                      <SelectTrigger aria-label="Chọn trạng thái">
                         <SelectValue placeholder="Chọn trạng thái" />
                       </SelectTrigger>
                       <SelectContent>
@@ -197,13 +199,13 @@ const AdminMenu = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="addons">Món thêm</Label>
-                  <Select onValueChange={(value) => {
+                  <Label htmlFor="addon-select">Món thêm</Label>
+                  <Select id="addon-select" name="addon-select" onValueChange={(value) => {
                     if (!newItem.addons.includes(value)) {
                       setNewItem({...newItem, addons: [...newItem.addons, value]});
                     }
                   }}>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Chọn món thêm">
                       <SelectValue placeholder="Chọn món thêm" />
                     </SelectTrigger>
                     <SelectContent>
@@ -239,13 +241,13 @@ const AdminMenu = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="recipes">Công thức</Label>
-                  <Select onValueChange={(value) => {
+                  <Label htmlFor="recipe-select">Công thức</Label>
+                  <Select id="recipe-select" name="recipe-select" onValueChange={(value) => {
                     if (!newItem.recipes.includes(value)) {
                       setNewItem({...newItem, recipes: [...newItem.recipes, value]});
                     }
                   }}>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Chọn công thức">
                       <SelectValue placeholder="Chọn công thức" />
                     </SelectTrigger>
                     <SelectContent>
@@ -485,11 +487,11 @@ const AdminMenu = () => {
                         <SelectValue placeholder="Chọn danh mục" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="soju">Soju</SelectItem>
-                        <SelectItem value="cocktail">Cocktail</SelectItem>
-                        <SelectItem value="coffee">Coffee</SelectItem>
-                        <SelectItem value="juice">Nước hoa quả</SelectItem>
-                        <SelectItem value="soft-drinks">Nước ngọt</SelectItem>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>

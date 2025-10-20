@@ -22,8 +22,45 @@ export interface MenuCategory {
   items: MenuItem[];
 }
 
-// Initialize with empty array - no mock data
-const initialMenuData: MenuCategory[] = [];
+// Initialize with default categories
+const initialMenuData: MenuCategory[] = [
+  {
+    id: "main-dishes",
+    name: "Món chính",
+    icon: () => null,
+    items: []
+  },
+  {
+    id: "soju",
+    name: "Soju",
+    icon: () => null,
+    items: []
+  },
+  {
+    id: "cocktail",
+    name: "Cocktail",
+    icon: () => null,
+    items: []
+  },
+  {
+    id: "coffee",
+    name: "Coffee",
+    icon: () => null,
+    items: []
+  },
+  {
+    id: "juice",
+    name: "Nước hoa quả",
+    icon: () => null,
+    items: []
+  },
+  {
+    id: "soft-drinks",
+    name: "Nước ngọt",
+    icon: () => null,
+    items: []
+  }
+];
 
 // Context interface
 interface MenuContextType {

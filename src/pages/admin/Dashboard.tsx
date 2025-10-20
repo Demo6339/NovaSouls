@@ -1,13 +1,11 @@
 import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package, Calendar } from "lucide-react";
 import RevenueChart from "@/components/RevenueChart";
-import { useOrders } from "@/contexts/OrderContext";
-import { useMemo } from "react";
-
+import { useDashboardStats } from "@/hooks/useDashboardStats";
 
 const AdminDashboard = () => {
-  const { stats, orders } = useOrders();
+  const stats = useDashboardStats();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -16,65 +14,42 @@ const AdminDashboard = () => {
     }).format(amount);
   };
 
-  // Calculate today's orders
-  const todayOrders = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return orders.filter(order => {
-      const orderDate = new Date(order.createdAt);
-      orderDate.setHours(0, 0, 0, 0);
-      return orderDate.getTime() === today.getTime();
-    }).length;
-  }, [orders]);
-
-  // Calculate unique customers
-  const uniqueCustomers = useMemo(() => {
-    const customerPhones = new Set(orders.map(order => order.customerInfo.phone));
-    return customerPhones.size;
-  }, [orders]);
-
-  // Calculate today's revenue
-  const todayRevenue = useMemo(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return orders
-      .filter(order => {
-        const orderDate = new Date(order.createdAt);
-        orderDate.setHours(0, 0, 0, 0);
-        return orderDate.getTime() === today.getTime() && 
-               order.status === 'completed' && 
-               order.currentState === 'payment_received';
-      })
-      .reduce((sum, order) => sum + order.orderDetails.totalAmount, 0);
-  }, [orders]);
+  const formatGrowth = (value: number) => {
+    const formattedValue = value.toFixed(1);
+    return value > 0 ? `+${formattedValue}%` : `${formattedValue}%`;
+  };
 
   const dashboardStats = [
     {
-      title: "Tổng doanh thu",
-      value: formatCurrency(stats.totalRevenue),
-      change: "0%",
-      trend: "up" as const,
+      title: "Doanh thu hôm nay",
+      value: formatCurrency(stats.revenue.today),
+      change: formatGrowth(stats.revenue.growth.daily),
+      trend: stats.revenue.growth.daily >= 0 ? "up" as const : "down" as const,
+      description: "So với hôm qua",
       icon: DollarSign
     },
     {
       title: "Đơn hàng hôm nay",
-      value: todayOrders.toString(),
-      change: "0%",
-      trend: "up" as const,
+      value: stats.orders.today.toString(),
+      change: formatGrowth(stats.orders.growth.daily),
+      trend: stats.orders.growth.daily >= 0 ? "up" as const : "down" as const,
+      description: "So với hôm qua",
       icon: ShoppingCart
     },
     {
       title: "Khách hàng",
-      value: uniqueCustomers.toString(),
-      change: "0%",
+      value: stats.customers.total.toString(),
+      change: `${stats.customers.returningRate.toFixed(1)}%`,
       trend: "up" as const,
+      description: "Tỷ lệ khách quay lại",
       icon: Users
     },
     {
-      title: "Sản phẩm",
-      value: "0",
-      change: "0%",
-      trend: "up" as const,
+      title: "Tỷ lệ hoàn thành",
+      value: `${stats.orders.successRate.toFixed(1)}%`,
+      change: formatGrowth(stats.orders.growth.monthly),
+      trend: stats.orders.growth.monthly >= 0 ? "up" as const : "down" as const,
+      description: "So với tháng trước",
       icon: Package
     }
   ];
@@ -85,9 +60,28 @@ const AdminDashboard = () => {
       
       <main className="flex-1 p-4 lg:p-8 pt-16 lg:pt-8">
         {/* Header */}
-        <div className="mb-6 lg:mb-8">
-          <h1 className="text-2xl lg:text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
-          <p className="text-muted-foreground">Theo dõi hoạt động kinh doanh</p>
+        <div className="flex justify-between items-center mb-6 lg:mb-8">
+          <div>
+            <h1 className="text-2xl lg:text-4xl font-bold text-foreground mb-2">Tổng quan</h1>
+            <p className="text-muted-foreground">Theo dõi hoạt động kinh doanh</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Card className="bg-primary/5">
+              <CardContent className="py-2 px-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    {new Date().toLocaleDateString('vi-VN', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -95,6 +89,8 @@ const AdminDashboard = () => {
           {dashboardStats.map((stat, index) => {
             const Icon = stat.icon;
             const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
+            const trendColor = stat.trend === "up" ? "text-green-500" : "text-red-500";
+            
             return (
               <Card key={index} className="animate-fade-up" style={{ animationDelay: `${index * 50}ms` }}>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
