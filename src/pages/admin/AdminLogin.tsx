@@ -31,17 +31,11 @@ const AdminLogin = () => {
     try {
       const result = await login(email, password);
       if (result.success) {
-        // Set a flag so AdminAuthContext knows this is a reload/redirect and
-        // doesn't clear the saved admin session in the beforeunload handler.
-        try {
-          sessionStorage.setItem('pageRefreshed', 'true');
-        } catch (e) {
-          // ignore sessionStorage errors in restrictive environments
-        }
-
-        // Redirect to admin dashboard; ProtectedRoute will allow access when
-        // AdminAuthContext finds the stored session after reload.
-        window.location.href = '/admin';
+        // Đợi một chút để đảm bảo state được cập nhật
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Chuyển hướng đến trang admin
+        window.location.replace('/admin');
       } else {
         setError(result.message);
       }

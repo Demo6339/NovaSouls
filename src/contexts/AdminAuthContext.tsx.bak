@@ -1,0 +1,395 @@
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+// Interface definitions
+interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
+interface AdminAuthResponse {
+  success: boolean;
+  message: string;
+  user?: AdminUser;
+}
+
+interface AdminAuthContextType {
+  isAuthenticated: boolean;
+  user: AdminUser | null;
+  login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
+}
+
+interface AdminAuthProviderProps {
+  children: ReactNode;
+}
+
+// Create context
+const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+
+interface AdminAuthResponse {
+  success: boolean;
+  message: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+  };
+}
+
+// Extend SupabaseClient to include our custom RPC functions
+declare module '@supabase/supabase-js' {
+  interface SupabaseClient {
+    rpc(
+      fn: 'authenticate_admin',
+      params: { email_input: string; password_input: string }
+    ): Promise<{ data: AdminAuthResponse | null; error: Error | null }>;
+    rpc(
+      fn: 'get_admin_by_email',
+      params: { email_input: string }
+    ): Promise<{ data: AdminUser | null; error: Error | null }>;
+  }
+}
+
+interface AdminUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
+interface AdminAuthContextType {
+  isAuthenticated: boolean;
+  user: AdminUser | null;
+  login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  logout: () => void;
+  isLoading: boolean;
+}
+
+const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+
+interface AdminAuthProviderProps {
+  children: ReactNode;
+}
+
+export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<AdminUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Kiểm tra và khôi phục session khi khởi động
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        console.log('Khởi tạo trạng thái xác thực...');
+        
+        // Kiểm tra session trong localStorage
+        const sessionStr = localStorage.getItem('adminSession');
+        if (!sessionStr) {
+          console.log('Không có session');
+          setIsLoading(false);
+          return;
+        }
+
+        // Parse session
+        const session = JSON.parse(sessionStr);
+        console.log('Đã tìm thấy session:', session);
+
+        // Kiểm tra session hợp lệ
+        if (!session.email || !session.id) {
+          console.log('Session không hợp lệ');
+          localStorage.removeItem('adminSession');
+          setIsLoading(false);
+          return;
+        }
+
+        // Kiểm tra hết hạn
+        const loginTime = new Date(session.loginTime);
+        const now = new Date();
+        const hoursDiff = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+        
+        if (hoursDiff > 24) {
+          console.log('Session hết hạn');
+          localStorage.removeItem('adminSession');
+          setIsLoading(false);
+          return;
+        }
+
+        // Xác thực với server
+        const { data, error } = await supabase
+          .rpc('get_admin_by_email', { email_input: session.email });
+
+        if (!error && data) {
+          console.log('Xác thực thành công');
+          setUser(data);
+          setIsAuthenticated(true);
+        } else {
+          console.log('Xác thực thất bại:', error);
+          localStorage.removeItem('adminSession');
+        }
+      } catch (error) {
+        console.error('Lỗi khởi tạo auth:', error);
+        localStorage.removeItem('adminSession');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
+        }
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        localStorage.removeItem('adminSession');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  const login = async (email: string, password: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      setIsLoading(true);
+      console.log('Đang đăng nhập...'); // Debug log
+      
+      const { data, error } = await supabase
+        .rpc('authenticate_admin', { 
+          email_input: email, 
+          password_input: password 
+        });
+
+      if (error) {
+        console.error('Lỗi đăng nhập:', error);
+        return { success: false, message: 'Đã xảy ra lỗi khi đăng nhập' };
+      }
+
+      console.log('Kết quả đăng nhập:', data); // Debug log
+
+      if (data?.success && data.user) {
+        // Lưu thông tin session với đầy đủ dữ liệu
+        const sessionData = {
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.name,
+          role: data.user.role,
+          loginTime: new Date().toISOString(),
+          isAuthenticated: true
+        };
+        
+        try {
+          // Lưu vào localStorage
+          localStorage.setItem('adminSession', JSON.stringify(sessionData));
+          console.log('Đã lưu session vào localStorage'); // Debug log
+          
+          // Cập nhật state
+          setUser(data.user);
+          setIsAuthenticated(true);
+          
+          // Ghi log hoạt động
+          await supabase.from('activity_logs').insert({
+            action: 'admin_login',
+            details: { 
+              email: data.user.email, 
+              login_time: new Date().toISOString(),
+              device: navigator.userAgent
+            },
+            user_id: data.user.id
+          });
+
+          console.log('Trạng thái sau khi đăng nhập:', {
+            user: data.user,
+            isAuthenticated: true
+          }); // Debug log
+          
+          return { success: true, message: 'Đăng nhập thành công' };
+        } catch (error) {
+          console.error('Lỗi khi lưu session:', error);
+          return { success: false, message: 'Lỗi khi lưu thông tin đăng nhập' };
+        }
+      } else {
+        return { success: false, message: data?.message || 'Thông tin đăng nhập không chính xác' };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, message: 'Đã xảy ra lỗi khi đăng nhập' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Log admin activity before clearing session
+      if (user) {
+        try {
+          await supabase.from('activity_logs').insert({
+            action: 'admin_logout',
+            details: { 
+              email: user.email, 
+              logout_time: new Date().toISOString(),
+              device: navigator.userAgent,
+              type: 'manual_logout'
+            },
+            user_id: user.id
+          });
+        } catch (logError) {
+          console.error('Error logging admin logout:', logError);
+        }
+      }
+    } catch (error) {
+      console.error('Error logging logout:', error);
+    } finally {
+      // Clear all session data
+      localStorage.removeItem('adminSession');
+      sessionStorage.removeItem('adminLoginRedirect');
+      sessionStorage.removeItem('pageRefreshed');
+      
+      // Reset context state
+      setUser(null);
+      setIsAuthenticated(false);
+      
+      // Redirect to login page
+      window.location.href = '/admin/login';
+    }
+  };
+
+  // Auto logout when leaving admin routes
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (isAuthenticated && !window.location.pathname.startsWith('/admin')) {
+        logout();
+      }
+    };
+
+    const checkCurrentPath = () => {
+      if (isAuthenticated && !window.location.pathname.startsWith('/admin')) {
+        logout();
+      }
+    };
+
+    // Handle tab close/browser close
+    const handleBeforeUnload = () => {
+      // Clear session on actual close (not refresh)
+      const isRefresh = sessionStorage.getItem('pageRefreshed');
+      if (!isRefresh) {
+        localStorage.removeItem('adminSession');
+      }
+      sessionStorage.removeItem('pageRefreshed');
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    // Check immediately
+    checkCurrentPath();
+
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isAuthenticated, user]);
+
+  // Session management effects
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    // Check session validity periodically (every 5 minutes)
+    const sessionCheckInterval = setInterval(() => {
+      const sessionData = localStorage.getItem('adminSession');
+      if (sessionData) {
+        try {
+          const session = JSON.parse(sessionData);
+          const loginTime = new Date(session.loginTime);
+          const now = new Date();
+          const hoursDiff = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+          
+          // Logout if session is older than 24 hours
+          if (hoursDiff > 24) {
+            console.log('Session expired');
+            logout();
+            return;
+          }
+          
+          // Verify session is still valid with backend
+          supabase
+            .rpc('get_admin_by_email', { email_input: session.email })
+            .then(({ data, error }) => {
+              if (error || !data) {
+                console.log('Session invalid');
+                logout();
+              }
+            });
+        } catch (e) {
+          console.error('Error checking session:', e);
+          logout();
+        }
+      } else {
+        logout();
+      }
+    }, 5 * 60 * 1000); // Check every 5 minutes
+
+    return () => {
+      clearInterval(sessionCheckInterval);
+    };
+  }, [isAuthenticated]);
+
+  // Theo dõi thay đổi authentication state
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      console.log('Trạng thái xác thực đã thay đổi:', { isAuthenticated, user });
+    }
+  }, [isAuthenticated, user]);
+
+  // Xử lý khi unload trang
+  useEffect(() => {
+    const handleUnload = (e: BeforeUnloadEvent) => {
+      if (isAuthenticated) {
+        // Đảm bảo session được lưu trước khi tải lại
+        try {
+          const session = {
+            id: user?.id,
+            email: user?.email,
+            name: user?.name,
+            role: user?.role,
+            loginTime: new Date().toISOString(),
+            isAuthenticated: true
+          };
+          localStorage.setItem('adminSession', JSON.stringify(session));
+        } catch (error) {
+          console.error('Lỗi lưu session:', error);
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+    return () => window.removeEventListener('beforeunload', handleUnload);
+  }, [isAuthenticated, user]);
+
+  const value: AdminAuthContextType = {
+    isAuthenticated,
+    user,
+    login,
+    logout,
+    isLoading
+  };
+
+  return (
+    <AdminAuthContext.Provider value={value}>
+      {children}
+    </AdminAuthContext.Provider>
+  );
+};
+
+export const useAdminAuth = () => {
+  const context = useContext(AdminAuthContext);
+  if (context === undefined) {
+    throw new Error('useAdminAuth must be used within an AdminAuthProvider');
+  }
+  return context;
+};
